@@ -1,0 +1,15 @@
+/* Triệt tiêu mọi khoảng trắng thừa của trình duyệt */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Ép Leaflet phải chiếm toàn bộ không gian được giao */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+}
