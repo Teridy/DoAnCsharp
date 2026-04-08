@@ -1,0 +1,30 @@
+/* ═══════════════════════════════════════════
+   🌅 PENDING REQUEST — Dark Tropical Theme
+   ═══════════════════════════════════════════ */
+
+.pending-container { padding: 0; background: transparent; }
+.pending-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+.pending-header h1 { margin: 0; color: var(--text-primary); font-size: 24px; font-weight: 900; }
+
+.pending-count { background: var(--danger); color: white; padding: 4px 12px; border-radius: var(--radius-full); font-size: 13px; font-weight: 800; animation: pulse 2s infinite; }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+thead th { background: var(--bg-dark-3); color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
+tbody td { padding: 14px 18px; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border-subtle); font-weight: 500; }
+tbody tr:hover { background: var(--bg-card-hover); }
+
+.approve-btn { background: var(--accent-gradient); color: white; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; font-family: var(--font-family); transition: var(--transition-normal); }
+.approve-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(6,214,160,0.3); }
+
+.reject-btn { background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid rgba(255,71,87,0.2); padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; font-family: var(--font-family); transition: var(--transition-normal); }
+.reject-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+.status-pending { background: rgba(254,202,87,0.15); color: var(--warning-dark); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
+.status-approved { background: rgba(6,214,160,0.15); color: var(--accent); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
+.status-rejected { background: rgba(255,71,87,0.15); color: var(--danger); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
+
+.no-data { text-align: center; padding: 60px; color: var(--text-muted); }
+.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.pagination button { padding: 8px 16px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-secondary); border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition-normal); font-family: var(--font-family); }
+.pagination button.active { background: var(--primary-gradient); color: white; }
+.pagination button:disabled { color: var(--text-muted); cursor: not-allowed; }

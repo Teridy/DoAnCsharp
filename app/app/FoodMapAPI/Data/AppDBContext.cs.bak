@@ -1,0 +1,35 @@
+using Microsoft.EntityFrameworkCore;
+using FoodMapAPI.Models;
+
+namespace FoodMapAPI.Data
+{
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        } // ✅ Dấu đóng ngoặc của Constructor phải ở đây
+
+        public DbSet<NarrationPoint> narration_points { get; set; }
+        public DbSet<FoodPlaces> food_places { get; set; }
+        public DbSet<Category> categories { get; set; }
+        public DbSet<Image> images { get; set; }
+        public DbSet<Favorite> favorites { get; set; }
+        public DbSet<User> users { get; set; } 
+        public DbSet<NarrationTranslation> narration_translations { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure table mappings
+            modelBuilder.Entity<NarrationPoint>().ToTable("narration_points");
+            modelBuilder.Entity<FoodPlaces>().ToTable("food_places");
+            modelBuilder.Entity<Category>().ToTable("categories");
+            modelBuilder.Entity<Image>().ToTable("images");
+            modelBuilder.Entity<Favorite>().ToTable("favorites");
+            modelBuilder.Entity<User>().ToTable("users"); 
+            modelBuilder.Entity<NarrationTranslation>().ToTable("narration_translations");  
+        }
+    } 
+}
