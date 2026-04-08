@@ -1,38 +1,22 @@
-/* ═══════════════════════════════════════════
-   🌅 SELLER TRANSLATION — Dark Tropical Theme
-   ═══════════════════════════════════════════ */
+.translation-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
 
-.translation-container { padding: 0; background: transparent; }
-.translation-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
-.translation-header h1 { margin: 0; color: var(--text-primary); font-size: 24px; font-weight: 900; }
+.translation-item {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-.add-btn { background: var(--primary-gradient); color: white; border: none; padding: 11px 22px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; font-family: var(--font-family); box-shadow: 0 4px 15px var(--primary-glow); transition: var(--transition-normal); }
-.add-btn:hover { transform: translateY(-2px); }
-
-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
-thead th { background: var(--bg-dark-3); color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
-tbody td { padding: 14px 18px; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border-subtle); font-weight: 500; }
-tbody tr:hover { background: var(--bg-card-hover); }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
-.modal-box { background: var(--bg-dark-3); border: 1px solid var(--border-light); border-radius: var(--radius-xl); width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.5); animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: var(--primary-gradient); border-radius: var(--radius-xl) var(--radius-xl) 0 0; color: white; }
-.modal-content { padding: 24px; }
-.modal-actions { display: flex; gap: 12px; padding: 0 24px 24px; justify-content: flex-end; }
-
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-secondary); }
-.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border-light); border-radius: var(--radius-md); font-size: 14px; color: var(--text-primary); background: rgba(255,255,255,0.04); outline: none; font-family: var(--font-family); }
-.form-group input:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-
-.save-btn { background: var(--primary-gradient); color: white; border: none; padding: 11px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: var(--font-family); }
-.cancel-btn { background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid rgba(255,71,87,0.2); padding: 11px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: var(--font-family); }
-.close-btn { width: 36px; height: 36px; border: none; border-radius: var(--radius-sm); background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; }
-
-.icon-btn { width: 36px; height: 36px; border: none; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition-normal); color: white; }
-.icon-btn.edit-btn { background: var(--secondary); }
-.icon-btn.delete-btn { background: var(--danger); }
-.icon-btn:hover { transform: scale(1.15); }
-
-.lang-badge { padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; background: rgba(0,180,216,0.15); color: var(--secondary); }
-.no-data { text-align: center; padding: 60px; color: var(--text-muted); }
+.lang-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

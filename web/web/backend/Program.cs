@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("http://localhost:6173")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -54,6 +54,12 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    try {
+        await context.Database.ExecuteSqlRawAsync("ALTER TABLE update_requests ADD COLUMN IF NOT EXISTS admin_note text;");
+        await context.Database.ExecuteSqlRawAsync("ALTER TABLE tours ADD COLUMN IF NOT EXISTS description text;");
+        await context.Database.ExecuteSqlRawAsync("UPDATE tours SET description = '' WHERE description IS NULL;");
+    } catch { }
 
     // Dùng AnyAsync thay vì Any
     if (!await context.UsersWeb.AnyAsync(u => u.UserRole == "Admin"))

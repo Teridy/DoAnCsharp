@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Headphones, Volume2 } from "lucide-react";
 import styles from "../css/SellerAudioManager.module.css";
 
-const API = "http://localhost:5050";
+const API = "http://localhost:6050";
 
 const LANGS = [
   { code: "en", label: "🇬🇧 English" },

@@ -67,7 +67,7 @@ const [categories, setCategories] = useState([]);
 
 // Hàm tải danh sách danh mục từ database
 const loadCategories = () => {
-  fetch("http://localhost:5050/api/Categories", {
+  fetch("http://localhost:6050/api/Categories", {
     headers: {
       Authorization: "Bearer " + token
     }
@@ -91,7 +91,7 @@ useEffect(() => {
     const handleDelete = async (id) => {
       if (window.confirm("Bạn có chắc chắn muốn xóa?")) {
         try {
-          await fetch(`http://localhost:5050/api/NarrationPoint/${id}`, {
+          await fetch(`http://localhost:6050/api/NarrationPoint/${id}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + token }
           });
@@ -104,7 +104,7 @@ useEffect(() => {
     };
 
 const loadPois = () => {
-  return fetch("http://localhost:5050/api/NarrationPoint", {
+  return fetch("http://localhost:6050/api/NarrationPoint", {
     headers: { Authorization: "Bearer " + token }
   })
     .then(res => res.json())
@@ -178,7 +178,7 @@ const mapStatusToIsActive = (status) => status === "Active";
 
       // Gửi đến API mới (FoodPlaceController)
     const res = await fetch(
-  `http://localhost:5050/api/NarrationPoint${editingPoi ? `/${editingPoi.id}` : ""}`,
+  `http://localhost:6050/api/NarrationPoint${editingPoi ? `/${editingPoi.id}` : ""}`,
   {
     method: editingPoi ? "PUT" : "POST",
     headers: { Authorization: "Bearer " + token },
@@ -219,7 +219,7 @@ const isPoiActive = poi.isActive === true || poi.is_active === true;
     priority: poi.priority ?? "",
     status: isPoiActive ? "Active" : "Closed",
     image: null, 
-    imagePreview: poi.imageWeb ? `http://localhost:5050${poi.imageWeb}` : "",
+    imagePreview: poi.imageWeb ? `http://localhost:6050${poi.imageWeb}` : "",
     // PHẢI BỔ SUNG CÁC DÒNG NÀY (giả sử API trả về kèm thông tin FoodPlace)
     categoryId: poi.foodInfo?.categoryId ?? "",
     priceRange: poi.foodInfo?.priceRange ?? "",
@@ -299,7 +299,7 @@ const isPoiActive = poi.isActive === true || poi.is_active === true;
 
                 <div className="poi-col poi-col-image">
                   {poi.imageWeb ? (
-                    <img src={`http://localhost:5050${poi.imageWeb}`} alt="POI" style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "4px" }} />
+                    <img src={`http://localhost:6050${poi.imageWeb}`} alt="POI" style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "4px" }} />
                   ) : (
                     "Không có ảnh"
                   )}
@@ -398,7 +398,7 @@ const isPoiActive = poi.isActive === true || poi.is_active === true;
                     <label>Ảnh hiện tại</label>
                     <div className="detail-image">
                       {selectedPoi.imageWeb ? (
-                        <img src={`http://localhost:5050${selectedPoi.imageWeb}`} alt="POI" style={{ width: "100%", maxHeight: "150px", objectFit: "contain", borderRadius: "8px" }} />
+                        <img src={`http://localhost:6050${selectedPoi.imageWeb}`} alt="POI" style={{ width: "100%", maxHeight: "150px", objectFit: "contain", borderRadius: "8px" }} />
                       ) : (
                         <p style={{ color: "#888", fontStyle: "italic" }}>Không có ảnh minh họa</p>
                       )}

@@ -17,7 +17,7 @@ function PendingRequest({ onActionComplete }) {
 
     const fetchRequests = async () => {
         try {
-            const res = await fetch("http://localhost:5050/api/requests/pending", {
+            const res = await fetch("http://localhost:6050/api/requests/pending", {
                 headers: { Authorization: "Bearer " + token }
             });
             const data = await res.json();
@@ -31,7 +31,7 @@ function PendingRequest({ onActionComplete }) {
 
     const handleApprove = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5050/api/requests/${id}/approve`, {
+            const res = await fetch(`http://localhost:6050/api/requests/${id}/approve`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -49,7 +49,7 @@ function PendingRequest({ onActionComplete }) {
     const handleReject = async (id) => {
         if (!window.confirm("Bạn có chắc muốn từ chối yêu cầu này?")) return;
         try {
-            const res = await fetch(`http://localhost:5050/api/requests/${id}/reject`, {
+            const res = await fetch(`http://localhost:6050/api/requests/${id}/reject`, {
                 method: "PUT",
                 headers: { "Authorization": "Bearer " + token }
             });
@@ -111,7 +111,7 @@ function PendingRequest({ onActionComplete }) {
                     src={
                         newData.image_url?.startsWith("data:")
                         ? newData.image_url
-                        : `http://localhost:5050${newData.image_url}`
+                        : `http://localhost:6050${newData.image_url}`
                     }
                     alt="Preview"
                 />

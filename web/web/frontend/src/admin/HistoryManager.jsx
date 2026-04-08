@@ -42,7 +42,7 @@ function HistoryManager() {
 
     const loadHistory = async () => {
         try {
-            const res = await fetch("http://localhost:5050/api/History", {
+            const res = await fetch("http://localhost:6050/api/History", {
                 headers: { Authorization: "Bearer " + token }
             });
             if (!res.ok) throw new Error();
@@ -65,7 +65,7 @@ const handleLoadMore = () => {
 };
     const loadStats = async () => {
         try {
-            const res = await fetch("http://localhost:5050/api/History/stats", {
+            const res = await fetch("http://localhost:6050/api/History/stats", {
                 headers: { Authorization: "Bearer " + token }
             });
             if (!res.ok) {
@@ -85,7 +85,7 @@ const handleLoadMore = () => {
 
     const loadHeatmap = async () => {
         try {
-            const res = await fetch("http://localhost:5050/api/History/heatmap", {
+            const res = await fetch("http://localhost:6050/api/History/heatmap", {
                 headers: { Authorization: "Bearer " + token }
             });
             if (!res.ok) return;

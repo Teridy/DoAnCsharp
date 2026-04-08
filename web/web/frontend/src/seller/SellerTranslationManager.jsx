@@ -16,9 +16,9 @@ const SellerTranslationManager = ({ activeStall }) => {
     setLoading(true);
     try {
       const [resLang, resTrans, resPending] = await Promise.all([
-        fetch("http://localhost:5050/api/Language"),
-        fetch(`http://localhost:5050/api/Translation/by-point/${poiId}`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`http://localhost:5050/api/requests/pending`, { headers: { Authorization: `Bearer ${token}` } })
+        fetch("http://localhost:6050/api/Language"),
+        fetch(`http://localhost:6050/api/Translation/by-point/${poiId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`http://localhost:6050/api/requests/pending`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
       setLanguages(await resLang.json());
       setTranslations(await resTrans.json());
@@ -42,7 +42,7 @@ const SellerTranslationManager = ({ activeStall }) => {
       status: "Pending"
     };
     try {
-      const res = await fetch("http://localhost:5050/api/requests", {
+      const res = await fetch("http://localhost:6050/api/requests", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(requestData)

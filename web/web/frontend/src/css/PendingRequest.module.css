@@ -1,30 +1,238 @@
-/* ═══════════════════════════════════════════
-   🌅 PENDING REQUEST — Dark Tropical Theme
-   ═══════════════════════════════════════════ */
+.container {
+    padding: 24px;
+    background: #f8fafc;
+    border-radius: 12px;
+    min-height: 100vh;
+}
 
-.pending-container { padding: 0; background: transparent; }
-.pending-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
-.pending-header h1 { margin: 0; color: var(--text-primary); font-size: 24px; font-weight: 900; }
+.headerArea {
+    margin-bottom: 24px;
+}
 
-.pending-count { background: var(--danger); color: white; padding: 4px 12px; border-radius: var(--radius-full); font-size: 13px; font-weight: 800; animation: pulse 2s infinite; }
+.headerArea h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
-thead th { background: var(--bg-dark-3); color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
-tbody td { padding: 14px 18px; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border-subtle); font-weight: 500; }
-tbody tr:hover { background: var(--bg-card-hover); }
+.subtitle {
+    color: #64748b;
+    margin-top: 4px;
+    font-size: 0.9rem;
+}
 
-.approve-btn { background: var(--accent-gradient); color: white; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; font-family: var(--font-family); transition: var(--transition-normal); }
-.approve-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(6,214,160,0.3); }
+/* Table Style */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
 
-.reject-btn { background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid rgba(255,71,87,0.2); padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; font-family: var(--font-family); transition: var(--transition-normal); }
-.reject-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+.table th {
+    padding: 12px 16px;
+    color: #64748b;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
 
-.status-pending { background: rgba(254,202,87,0.15); color: var(--warning-dark); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
-.status-approved { background: rgba(6,214,160,0.15); color: var(--accent); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
-.status-rejected { background: rgba(255,71,87,0.15); color: var(--danger); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
+.tableRow {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
 
-.no-data { text-align: center; padding: 60px; color: var(--text-muted); }
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
-.pagination button { padding: 8px 16px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-secondary); border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition-normal); font-family: var(--font-family); }
-.pagination button.active { background: var(--primary-gradient); color: white; }
-.pagination button:disabled { color: var(--text-muted); cursor: not-allowed; }
+.tableRow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.table td {
+    padding: 16px;
+    vertical-align: middle; /* Căn giữa theo chiều dọc cho toàn bộ hàng */
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table td:first-child { border-left: 1px solid #f1f5f9; border-radius: 12px 0 0 12px; }
+.table td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 12px 12px 0; }
+
+/* Requester Info */
+.requesterCol {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: #334155;
+}
+
+.userIcon {
+    width: 32px;
+    height: 32px;
+    background: #6366f1;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* Badge */
+.badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badgeStall { background: #e0e7ff; color: #4338ca; }
+.badgeAudio { background: #fef3c7; color: #92400e; }
+
+/* Preview Card - PHẦN QUAN TRỌNG ĐỂ KHÔNG LẤN KHUNG */
+.previewCard {
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    max-width: 600px; /* Giới hạn độ rộng tối đa của cột nội dung */
+}
+
+.stallInfo {
+    display: flex;
+    gap: 16px; /* Khoảng cách giữa ảnh và text */
+    align-items: flex-start;
+}
+
+/* Image Wrapper */
+.imagePreviewWrapper {
+    flex: 0 0 140px; /* Cố định độ rộng phần ảnh là 140px */
+}
+
+.imagePreviewWrapper img {
+    width: 140px;
+    height: 90px;
+    object-fit: cover; /* Giúp ảnh không bị méo */
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    display: block;
+}
+
+.infoLabel {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Info Text Side */
+.infoGrid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+}
+
+.infoRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.highlightText {
+    color: #4f46e5;
+    font-weight: 600;
+    background: #eef2ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.statusOpen { color: #10b981; font-weight: bold; }
+.statusClosed { color: #f43f5e; font-weight: bold; }
+
+/* Translation Info */
+.translationInfo {
+    border-left: 3px solid #6366f1;
+    padding-left: 12px;
+}
+
+/* Audio Info */
+.audioInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.audioTitle {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.audioUrlText {
+    font-size: 12px;
+    color: #64748b;
+    word-break: break-all;
+}
+
+/* Action Buttons */
+.actionCol {
+    width: 130px;
+}
+
+.btnGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.approveBtn, .rejectBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.approveBtn {
+    background: #10b981;
+    color: white;
+}
+
+.approveBtn:hover {
+    background: #059669;
+}
+
+.rejectBtn {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+}
+
+.rejectBtn:hover {
+    background: #ffe4e6;
+}
+
+/* Utility */
+.icon {
+    color: #94a3b8;
+}

@@ -1,47 +1,374 @@
-/* ═══════════════════════════════════════════
-   🌅 TRANSLATION MANAGER — Dark Tropical Theme
-   ═══════════════════════════════════════════ */
+.translation-container{
+  padding:35px;
+  background:linear-gradient(135deg,#f3f5f9,#dce4f0);
+  min-height:100vh;
+  font-family:Inter,Segoe UI,sans-serif;
+}
 
-.translation-container { padding: 0; background: transparent; }
-.translation-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
-.translation-header h1 { margin: 0; color: var(--text-primary); font-size: 24px; font-weight: 900; }
+/* HEADER */
 
-.add-btn { background: var(--primary-gradient); color: white; border: none; padding: 11px 22px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; font-family: var(--font-family); box-shadow: 0 4px 15px var(--primary-glow); transition: var(--transition-normal); }
-.add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); filter: brightness(1.1); }
+.translation-header{
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  padding:25px;
+  border-radius:16px;
+  color:white;
+  font-size:26px;
+  font-weight:700;
+  margin-bottom:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
-thead th { background: var(--bg-dark-3); color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
-tbody td { padding: 14px 18px; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border-subtle); font-weight: 500; }
-tbody tr:hover { background: var(--bg-card-hover); }
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+/* TOOLBAR */
 
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
-.modal-box { background: var(--bg-dark-3); border: 1px solid var(--border-light); border-radius: var(--radius-xl); width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.5); animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: var(--primary-gradient); border-radius: var(--radius-xl) var(--radius-xl) 0 0; color: white; }
-.modal-header h2 { font-size: 20px; font-weight: 900; margin: 0; }
-.modal-content { padding: 24px; }
-.modal-actions { display: flex; gap: 12px; padding: 0 24px 24px; justify-content: flex-end; }
+.translation-toolbar{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
 
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-secondary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border-light); border-radius: var(--radius-md); font-size: 14px; color: var(--text-primary); background: rgba(255,255,255,0.04); transition: var(--transition-normal); outline: none; font-family: var(--font-family); }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+.search-box{
+  padding:10px 15px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  width:250px;
+}
 
-.save-btn { background: var(--primary-gradient); color: white; border: none; padding: 11px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: var(--font-family); box-shadow: 0 4px 15px var(--primary-glow); transition: var(--transition-normal); }
-.save-btn:hover { transform: translateY(-2px); }
-.cancel-btn { background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid rgba(255,71,87,0.2); padding: 11px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: var(--font-family); transition: var(--transition-normal); }
-.cancel-btn:hover { background: var(--danger); color: white; }
-.close-btn { width: 36px; height: 36px; border: none; border-radius: var(--radius-sm); background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; transition: var(--transition-normal); }
-.close-btn:hover { background: rgba(255,255,255,0.35); }
+.add-btn{
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  color:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+}
 
-.icon-btn { width: 36px; height: 36px; border: none; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition-normal); color: white; }
-.icon-btn.edit-btn { background: var(--secondary); }
-.icon-btn.delete-btn { background: var(--danger); }
-.icon-btn:hover { transform: scale(1.15); }
+/* TABLE CARD */
 
-.lang-badge { padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; background: rgba(0,180,216,0.15); color: var(--secondary); }
+.table-wrapper{
+  background:white;
+  border-radius:16px;
+  padding:10px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
 
-.no-data { text-align: center; padding: 60px; color: var(--text-muted); }
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
-.pagination button { padding: 8px 16px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-secondary); border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition-normal); font-family: var(--font-family); }
-.pagination button.active { background: var(--primary-gradient); color: white; }
-.pagination button:disabled { color: var(--text-muted); cursor: not-allowed; }
+.translation-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.translation-table th{
+  text-align:left;
+  padding:15px;
+  font-size:14px;
+  color:#64748b;
+  border-bottom:1px solid #eee;
+}
+
+.translation-table td{
+  padding:16px;
+  border-bottom:1px solid #f1f5f9;
+}
+
+.translation-table tr:hover{
+  background:#f8fafc;
+}
+
+/* STATUS */
+
+.status{
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.complete{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.draft{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+/* ACTION */
+
+
+.header-add-btn{
+  background:rgba(255,255,255,0.2);
+  border:none;
+  padding:10px 16px;
+  border-radius:10px;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  backdrop-filter:blur(5px);
+}
+
+.header-add-btn:hover{
+  background:rgba(255,255,255,0.3);
+}
+/* OVERLAY */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  
+}
+
+/* BOX */
+
+.modal-box{
+  width:420px;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  animation:popup 0.25s ease;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+/* HEADER */
+
+.modal-header{
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  padding:18px 22px;
+  font-size:18px;
+  font-weight:600;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.close-btn{
+  background:rgba(255,255,255,0.25);
+  border:none;
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  cursor:pointer;
+  color:white;
+}
+
+/* CONTENT */
+
+.modal-content{
+  padding:25px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.modal-content label{
+  font-size:13px;
+  font-weight:600;
+  color:#374151;
+}
+
+/* INPUT STYLE */
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  background:#f9fafb;
+  font-size:14px;
+  outline:none;
+}
+
+.modal-content textarea{
+  resize:none;
+  height:70px;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus{
+  border-color:#6366f1;
+  background:white;
+}
+
+/* ACTION */
+
+.modal-actions{
+  padding:18px 25px;
+  border-top:1px solid #eee;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+
+/* BUTTON */
+
+.save-btn{
+  background:#22c55e;
+  border:none;
+  color:white;
+  padding:8px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+
+
+/* ANIMATION */
+
+@keyframes popup{
+  from{
+    transform:scale(0.9);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+.icon-save-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:10px;
+  background:#22c55e;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  transition:0.2s;
+}
+
+.icon-save-btn:hover{
+  transform:translateY(-2px);
+  background:#16a34a;
+}
+/* Container bọc các nút */
+.action-group {
+    display: flex;
+    gap: 8px; /* Khoảng cách giữa 2 nút */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style chung cho nút thao tác */
+.action-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+}
+
+/* Nút xem màu xanh lá nhạt */
+.view-btn {
+    background-color: #10b981; 
+}
+.view-btn:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+}
+
+/* Nút xóa màu đỏ nhạt/hồng */
+.delete-btn {
+    background-color: #ef4444;
+}
+.delete-btn:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* Thu nhỏ icon bên trong */
+.action-btn svg, .action-btn i {
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+}
+/* Container cho phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 25px;
+  padding: 15px 0;
+}
+
+/* Style chung cho các nút (số trang, Trước, Sau) */
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hiệu ứng khi di chuột qua nút */
+.pagination button:hover:not(:disabled) {
+  border-color: #007bff;
+  color: #007bff;
+  background-color: #f0f7ff;
+}
+
+/* Style cho trang đang được chọn (Active) */
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Style cho các nút bị vô hiệu hóa (Khi ở trang đầu hoặc trang cuối) */
+.pagination button:disabled {
+  background-color: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+  border-color: #eee;
+}
+
+/* Nút Trước/Sau có thể làm nổi bật hơn một chút */
+.pagination button:first-child,
+.pagination button:last-child {
+  font-weight: 600;
+  background-color: #fcfcfc;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 480px) {
+  .pagination {
+    gap: 4px;
+  }
+  .pagination button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

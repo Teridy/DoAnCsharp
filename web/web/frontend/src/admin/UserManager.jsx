@@ -48,7 +48,7 @@ const [newUser, setNewUser] = useState({
 });
   // ===== Load users =====
   const loadUsers = () => {
-    fetch("http://localhost:5050/api/User",{
+    fetch("http://localhost:6050/api/User",{
       headers:{
         Authorization:"Bearer " + token
       }
@@ -61,7 +61,7 @@ const [newUser, setNewUser] = useState({
   // ===== Save user =====
   const updateUser = async () => {
 
-    await fetch(`http://localhost:5050/api/User/${selectedUser.userName}`,{
+    await fetch(`http://localhost:6050/api/User/${selectedUser.userName}`,{
       method:"PUT",
       headers:{
         "Content-Type":"application/json",
@@ -84,7 +84,7 @@ const [newUser, setNewUser] = useState({
   };
 const addUser = async () => {
 
-  await fetch("http://localhost:5050/api/User",{
+  await fetch("http://localhost:6050/api/User",{
     method:"POST",
     headers:{
       "Content-Type":"application/json",

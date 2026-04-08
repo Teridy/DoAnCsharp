@@ -1,194 +1,235 @@
-/* ═══════════════════════════════════════════
-   🌅 REGISTER PAGE — Tropical Sunset Theme
-   ═══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap');
 
-.register-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-dark-1);
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── HERO (Register) ── */
-.register-page .hero {
-  position: relative;
-  flex: 1;
-  min-height: 600px;
-  background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        .register-page {
+          font-family: 'Be Vietnam Pro', sans-serif;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
 
-.register-page .hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 180, 216, 0.4) 0%,
-    rgba(10, 15, 26, 0.85) 60%,
-    rgba(10, 15, 26, 0.95) 100%
-  );
-}
+        /* NAVBAR */
+        .navbar {
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 60px;
+          height: 70px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
 
-.register-page .hero-text {
-  color: white;
-  text-align: left;
-  flex: 1;
-  max-width: 440px;
-}
+        .navbar-brand {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          cursor: pointer;
+          user-select: none;
+        }
 
-.register-page .hero-text h1 {
-  font-size: 3.2rem;
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 16px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #CCF0FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -1px;
-}
+        .navbar-actions { display: flex; gap: 12px; }
 
-.register-page .hero-text p {
-  font-size: 1.1rem;
-  opacity: 0.8;
-  line-height: 1.7;
-  font-weight: 500;
-}
+        .btn-outline {
+          padding: 8px 20px;
+          border: 2px solid #e8542a;
+          color: #e8542a;
+          background: transparent;
+          border-radius: 6px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .btn-outline:hover { background: #e8542a; color: #fff; }
 
-/* ── REGISTER CARD — Glassmorphism ── */
-.register-card {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
-  padding: 40px 40px 36px;
-  width: 440px;
-  flex-shrink: 0;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
+        .btn-primary {
+          padding: 8px 20px;
+          background: #e8542a;
+          color: #fff;
+          border: 2px solid #e8542a;
+          border-radius: 6px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .btn-primary:hover { background: #c94220; border-color: #c94220; }
 
-.card-header {
-  text-align: center;
-  margin-bottom: 24px;
-}
-.card-header .icon {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  display: inline-block;
-  animation: float 3s ease-in-out infinite;
-}
-.card-header h2 {
-  font-size: 1.7rem;
-  font-weight: 900;
-  color: var(--text-primary);
-  margin-bottom: 6px;
-}
-.card-header p {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
+        /* HERO */
+               .hero {
+          position: relative;
+          height: calc(100vh - 70px);
+          min-height: 500px;
+          background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80');
+          background-size: cover;
+          background-position: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
-/* ── 2-column Form Grid ── */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 16px;
-  margin-bottom: 20px;
-}
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
+        .hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0,0,0,0.5);
+        }
 
-.form-group label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 80px;
+          width: 100%;
+          max-width: 1100px;
+        }
 
-.form-group input {
-  width: 100%;
-  padding: 13px 16px;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--radius-md);
-  font-size: 0.9rem;
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
-  transition: var(--transition-normal);
-  outline: none;
-  font-family: var(--font-family);
-}
-.form-group input:focus {
-  border-color: var(--secondary);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px var(--secondary-glow);
-}
-.form-group input::placeholder {
-  color: var(--text-muted);
-}
+        /* HERO TEXT */
+        .hero-text {
+          color: #fff;
+          text-align: center;
+          flex: 1;
+          max-width: 440px;
+        }
 
-/* ── Register Button ── */
-.btn-register {
-  width: 100%;
-  padding: 15px;
-  background: var(--secondary-gradient);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  box-shadow: 0 8px 25px var(--secondary-glow);
-  font-family: var(--font-family);
-}
-.btn-register:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px var(--secondary-glow);
-  filter: brightness(1.1);
-}
-.btn-register:active {
-  transform: translateY(0) scale(0.98);
-}
-.btn-register:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+        .hero-text h1 {
+          font-size: 3.2rem;
+          font-weight: 800;
+          line-height: 1.15;
+          margin-bottom: 14px;
+          text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+        }
 
-/* ── Footer Note ── */
-.card-footer-note {
-  text-align: center;
-  margin-top: 22px;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-.card-footer-note a {
-  color: var(--secondary);
-  font-weight: 700;
-  cursor: pointer;
-}
-.card-footer-note a:hover {
-  text-decoration: underline;
-  color: var(--secondary-light);
-}
+        .hero-text p {
+          font-size: 1.15rem;
+          opacity: 0.9;
+          text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+          line-height: 1.6;
+        }
 
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .register-page .hero-content { flex-direction: column; gap: 36px; padding: 24px 20px; }
-  .register-page .hero-text h1 { font-size: 2.2rem; }
-  .register-card { width: 100%; max-width: 460px; }
-}
+        /* REGISTER CARD */
+        .register-card {
+          background: rgba(255,255,255,0.97);
+          backdrop-filter: blur(12px);
+          border-radius: 16px;
+          padding: 40px 40px 36px;
+          width: 420px;
+          flex-shrink: 0;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
 
-@media (max-width: 480px) {
-  .form-grid { grid-template-columns: 1fr; }
-}
+        .card-header { text-align: center; margin-bottom: 24px; }
+        .card-header .icon { font-size: 2rem; margin-bottom: 8px; }
+        .card-header h2 {
+          font-size: 1.6rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 4px;
+        }
+        .card-header p { font-size: 0.875rem; color: #888; }
+
+        .divider {
+          height: 2px;
+          background: linear-gradient(to right, transparent, #e8542a, transparent);
+          margin-bottom: 24px;
+          opacity: 0.5;
+        }
+
+        /* 2-column grid for the 4 fields */
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px 16px;
+          margin-bottom: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; }
+
+        .form-group label {
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: #555;
+          margin-bottom: 7px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+          width: 100%;
+          padding: 11px 14px;
+          border: 1.5px solid #e5e5e5;
+          border-radius: 8px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 0.9rem;
+          color: #1a1a1a;
+          background: #fafafa;
+          transition: all 0.2s;
+          outline: none;
+        }
+        .form-group input:focus {
+          border-color: #e8542a;
+          background: #fff;
+          box-shadow: 0 0 0 3px rgba(232,84,42,0.1);
+        }
+        .form-group input::placeholder { color: #bbb; }
+
+        .btn-register {
+          width: 100%;
+          padding: 13px;
+          background: #e8542a;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 1rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 4px 16px rgba(232,84,42,0.35);
+        }
+        .btn-register:hover { background: #c94220; box-shadow: 0 6px 20px rgba(232,84,42,0.45); }
+        .btn-register:active { transform: scale(0.99); }
+        .btn-register:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .card-footer-note {
+          text-align: center;
+          margin-top: 20px;
+          font-size: 0.875rem;
+          color: #888;
+        }
+        .card-footer-note a {
+          color: #e8542a;
+          font-weight: 600;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        .card-footer-note a:hover { text-decoration: underline; }
+
+        /* FOOTER */
+        .footer {
+          text-align: center;
+          padding: 24px 20px;
+          background: #111;
+          color: rgba(255,255,255,0.7);
+          font-size: 0.875rem;
+        }
+
+        @media (max-width: 900px) {
+          .navbar { padding: 0 20px; }
+          .hero { padding: 40px 20px; }
+          .hero-content { flex-direction: column; gap: 36px; }
+          .hero-text h1 { font-size: 2rem; }
+          .register-card { width: 100%; max-width: 440px; }
+        }
+
+        @media (max-width: 480px) {
+          .form-grid { grid-template-columns: 1fr; }
+        }

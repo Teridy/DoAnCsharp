@@ -25,7 +25,7 @@ function TranslationManager() {
   const token = sessionStorage.getItem("token");
 
   const loadTranslations = () => {
-    fetch("http://localhost:5050/api/Translation", {
+    fetch("http://localhost:6050/api/Translation", {
       headers: { Authorization: "Bearer " + token }
     })
       .then(res => res.json())
@@ -37,7 +37,7 @@ function TranslationManager() {
   };
 
   const loadLanguages = () => {
-    fetch("http://localhost:5050/api/Language", {
+    fetch("http://localhost:6050/api/Language", {
       headers: { Authorization: "Bearer " + token }
     })
       .then(res => res.json())
@@ -74,7 +74,7 @@ function TranslationManager() {
       TranslatedName: newTranslation.translatedName 
     };
 
-    const response = await fetch("http://localhost:5050/api/Translation", {
+    const response = await fetch("http://localhost:6050/api/Translation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +106,7 @@ function TranslationManager() {
     };
 
     const response = await fetch(
-      `http://localhost:5050/api/Translation/${selectedTranslation.id}`,
+      `http://localhost:6050/api/Translation/${selectedTranslation.id}`,
       {
         method: "PUT",
         headers: {
@@ -133,7 +133,7 @@ function TranslationManager() {
   const deleteTranslation = async (id) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa bản dịch này không?")) return;
     try {
-      const response = await fetch(`http://localhost:5050/api/Translation/${id}`, {
+      const response = await fetch(`http://localhost:6050/api/Translation/${id}`, {
         method: "DELETE",
         headers: { Authorization: "Bearer " + token }
       });

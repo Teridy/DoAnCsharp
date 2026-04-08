@@ -1,129 +1,574 @@
-/* ═══════════════════════════════════════════
-   🌅 TOUR MANAGER — Dark Tropical Theme
-   ═══════════════════════════════════════════ */
+/* =========================================
+   TOUR MANAGER COMPONENT - UPDATED STYLES
+========================================= */
 
-.tour-container { padding: 0; background: transparent; }
+.tour-container {
+  padding: 40px;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f5f7fa;
+  min-height: 100vh;
+  color: #333;
+}
 
+/* =========================================
+   HEADER SECTION - TIÊU ĐỀ + NÚT TẠO TOUR
+========================================= */
 .tour-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 28px; padding: 24px 28px;
-  background: var(--bg-card); border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Đổi thành center để cân giữa nút và chữ */
+  margin-bottom: 40px;
+  gap: 20px;
+  
+  /* Thêm background gradient tím, padding và bo góc giống Hình 1 */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(90, 75, 255, 0.15);
 }
-.tour-header h1 { margin: 0; color: var(--text-primary); font-size: 24px; font-weight: 900; }
 
-.tour-add-btn {
-  background: var(--primary-gradient); color: white; border: none;
-  padding: 11px 22px; border-radius: var(--radius-md);
-  cursor: pointer; font-weight: 700; font-family: var(--font-family);
-  box-shadow: 0 4px 15px var(--primary-glow); transition: var(--transition-normal);
+.tour-header h2 {
+  margin: 0 0 6px 0;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #ffffff; /* Đổi chữ sang màu trắng */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.tour-add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); filter: brightness(1.1); }
 
-/* Tour Cards Grid */
+.tour-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85); /* Chữ phụ màu trắng trong suốt nhẹ */
+}
+
+/* NÚT TẠO TOUR CHÍNH */
+.btn-create-tour {
+  padding: 12px 24px;
+  border-radius: 10px; /* Bo góc vuông vức hơn giống Hình 1 */
+  
+  background: linear-gradient(135deg, #667eea, #764ba2); /* Nền trắng trong suốt */
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(5px); /* Làm mờ nhẹ nền phía sau */
+}
+.btn-create-tour:hover {
+  background: rgba(255, 255, 255, 0.25); /* Sáng lên khi hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-create-tour:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   TOUR GRID - DANH SÁCH TOUR
+========================================= */
 .tour-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
 }
 
+/* TOUR CARD - CHI TIẾT MỖI TOUR */
 .tour-card {
-  background: var(--bg-card); border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg); padding: 24px;
-  transition: var(--transition-normal); position: relative; overflow: hidden;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
+  position: relative;
 }
-.tour-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--primary-gradient); opacity: 0; transition: var(--transition-normal);
+
+.tour-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  border-color: #ddd;
+  transform: translateY(-4px);
 }
-.tour-card:hover { transform: translateY(-4px); border-color: var(--border-light); box-shadow: var(--shadow-md); }
-.tour-card:hover::before { opacity: 1; }
 
-.tour-card-name { font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px 0; }
-.tour-card-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 16px 0; }
-.tour-card-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-
+/* Badge Status */
 .tour-badge {
-  padding: 5px 12px; border-radius: var(--radius-full);
-  font-size: 12px; font-weight: 700;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #ffc069;
+  color: #f57c00;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
 }
 
-.tour-card-actions { display: flex; gap: 8px; margin-top: 16px; }
-
-/* Tour Table (if used) */
-.tour-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
-.tour-table thead th { background: var(--bg-dark-3); color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
-.tour-table tbody td { padding: 14px 18px; font-size: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border-subtle); font-weight: 500; }
-.tour-table tbody tr:hover { background: var(--bg-card-hover); }
-
-/* Color swatch */
-.color-swatch {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 2px solid var(--border-light); display: inline-block;
+.tour-badge.draft {
+  background: #e0e0e0;
+  color: #666;
 }
 
-/* Modal */
-.tour-modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+/* TÊN TOUR */
+.tour-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: #2d3436;
+  font-weight: 700;
 }
-.tour-modal-box {
-  background: var(--bg-dark-3); border: 1px solid var(--border-light);
-  border-radius: var(--radius-xl); width: 90%; max-width: 600px;
-  max-height: 85vh; overflow-y: auto;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+/* MÔ TẢ */
+.tour-desc {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #636e72;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.tour-modal-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 20px 24px; background: var(--primary-gradient);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0; color: white;
+
+/* THỜI LƯỢNG */
+.tour-duration {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  color: #636e72;
 }
-.tour-modal-header h2 { font-size: 20px; font-weight: 900; margin: 0; }
-.tour-modal-content { padding: 24px; }
-.tour-modal-actions { display: flex; gap: 12px; padding: 0 24px 24px; justify-content: flex-end; }
 
-/* Form */
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-secondary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-group input, .form-group textarea, .form-group select {
-  width: 100%; padding: 12px 16px; border: 1.5px solid var(--border-light);
-  border-radius: var(--radius-md); font-size: 14px; color: var(--text-primary);
-  background: rgba(255,255,255,0.04); transition: var(--transition-normal);
-  outline: none; font-family: var(--font-family);
+.tour-duration strong {
+  color: #7b5cff;
+  font-size: 16px;
 }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
 
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* =========================================
+   POI LIST TRONG CARD
+========================================= */
+.tour-poi-list {
+  margin: 15px 0;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
 
-/* Buttons */
-.save-btn { background: var(--primary-gradient); color: white; border: none; padding: 11px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: var(--font-family); box-shadow: 0 4px 15px var(--primary-glow); transition: var(--transition-normal); }
-.save-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); }
-.cancel-btn { background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid rgba(255,71,87,0.2); padding: 11px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: var(--font-family); transition: var(--transition-normal); }
-.cancel-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+.poi-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7b5cff;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
 
-.close-btn { width: 36px; height: 36px; border: none; border-radius: var(--radius-sm); background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition-normal); color: white; }
-.close-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.05); }
+.poi-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
-.icon-btn { width: 36px; height: 36px; border: none; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition-normal); color: white; }
-.icon-btn.edit-btn { background: var(--secondary); }
-.icon-btn.delete-btn { background: var(--danger); }
-.icon-btn:hover { transform: scale(1.15); box-shadow: var(--shadow-md); }
+.poi-tag {
+  background: #f3f0ff;
+  color: #5a4bff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #e0d7ff;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
 
-.no-data { text-align: center; padding: 60px; font-size: 16px; color: var(--text-muted); }
+.tour-card:hover .poi-tag {
+  background: #7b5cff;
+  color: white;
+}
 
-/* POI list in tour */
-.poi-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.poi-chip { background: rgba(255,107,53,0.1); color: var(--primary); padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; }
+/* =========================================
+   ACTIONS (VIEW, EDIT, DELETE)
+========================================= */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
 
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
-.pagination button { padding: 8px 16px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-secondary); font-size: 14px; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition-normal); font-family: var(--font-family); }
-.pagination button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
-.pagination button.active { background: var(--primary-gradient); color: white; border-color: var(--primary); }
-.pagination button:disabled { color: var(--text-muted); cursor: not-allowed; }
+.actions button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
+.btn-view {
+  background: #f0f3ff;
+  color: #5a4bff;
+}
+
+.btn-edit {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.btn-delete {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.actions button:hover {
+  filter: brightness(0.92);
+  transform: translateY(-1px);
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* =========================================
+   MODAL OVERLAY
+========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6); /* Đổi màu nền tối sang trọng hơn */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+}
+
+/* =========================================
+   MODAL
+========================================= */
+.modal {
+  background: white;
+  border-radius: 20px;
+  width: 600px; /* Thu gọn từ 800px xuống 600px để form cân đối, không bị loãng */
+  max-width: 95%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  animation: modalPopUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  pointer-events: auto;
+}
+
+/* MODAL HEADER - TÍM */
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* NÚT ĐÓNG (X) */
+.close-x-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.close-x-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* MODAL BODY */
+.modal-body {
+  padding: 30px;
+  overflow-y: auto;
+  flex: 1;
+  width: 100%; 
+  box-sizing: border-box; /* Fix lỗi thanh cuộn lọt thỏm vào giữa */
+}
+
+.create-form {
+  padding: 30px;
+}
+
+/* =========================================
+   FORM FIELDS
+========================================= */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 15px;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #2d3748;
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #667eea;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #a0aec0;
+}
+
+/* POI GRID TRONG FORM */
+.poi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.poi-card {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Căn giữa dọc */
+  border: 2px solid #e2e8f0;
+  transition: all 0.2s ease;
+  gap: 12px; /* Khoảng cách an toàn giữa text và nút tick */
+}
+
+.poi-card:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.poi-card.active {
+  border-color: #667eea;
+  background: #ebf4ff;
+}
+
+.poi-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d3748;
+  flex: 1;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.poi-card input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0; /* KHÔNG cho checkbox bị bóp méo khi chữ dài */
+  accent-color: #667eea;
+}
+
+/* =========================================
+   MODAL ACTIONS
+========================================= */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #edf2f7;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid #dfe6e9;
+  background: white;
+  color: #636e72;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+.btn-submit {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-close {
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid #dfe6e9;
+  background: white;
+  color: #636e72;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-close:hover {
+  background: #f5f7fa;
+}
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+.error {
+  background: #ffe5e5;
+  color: #d60000;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #d60000;
+  font-weight: 500;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-body::-webkit-scrollbar-track {
+  background: transparent;
+  margin-bottom: 20px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+/* =========================================
+   ANIMATIONS
+========================================= */
+@keyframes modalPopUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
 @media (max-width: 768px) {
-  .tour-grid { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
+  .tour-container {
+    padding: 20px;
+  }
+
+  .tour-header {
+    flex-direction: column;
+  }
+
+  .tour-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn-create-tour {
+    width: 100%;
+    text-align: center;
+  }
+
+  .tour-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    width: 100%;
+  }
+
+  .poi-grid {
+    grid-template-columns: 1fr; /* Trền mobile thì cho list POI nằm dọc hết */
+  } 
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+  }
 }

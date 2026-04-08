@@ -1,262 +1,189 @@
-/* ═══════════════════════════════════════════
-   🌅 HOME PAGE — Tropical Sunset Theme
-   ═══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap');
 
-.home-page {
-  min-height: 100vh;
-  background: var(--bg-dark-1);
-  overflow-x: hidden;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── NAVBAR ── */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 60px;
-  height: 72px;
-  background: rgba(10, 15, 26, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-subtle);
-  transition: var(--transition-normal);
-}
+        .home-page {
+          font-family: 'Be Vietnam Pro', sans-serif;
+          background: #f8f9fa;
+        }
 
-.navbar-brand {
-  font-size: 1.3rem;
-  font-weight: 900;
-  color: var(--text-primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  user-select: none;
-  letter-spacing: -0.3px;
-}
-.navbar-brand:hover {
-  color: var(--primary);
-}
+        /* NAVBAR */
+        .navbar {
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 60px;
+          height: 70px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
 
-.navbar-actions {
-  display: flex;
-  gap: 12px;
-}
+        .navbar-brand {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          user-select: none;
+        }
 
-.btn-outline {
-  padding: 10px 24px;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-  background: transparent;
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  font-family: var(--font-family);
-}
-.btn-outline:hover {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 8px 25px var(--primary-glow);
-  transform: translateY(-1px);
-}
+        .navbar-actions { display: flex; gap: 12px; }
 
-.btn-primary {
-  padding: 10px 24px;
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  font-family: var(--font-family);
-  box-shadow: 0 4px 15px var(--primary-glow);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px var(--primary-glow);
-  filter: brightness(1.1);
-}
+        .btn-outline {
+          padding: 8px 20px;
+          border: 2px solid #e8542a;
+          color: #e8542a;
+          background: transparent;
+          border-radius: 6px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .btn-outline:hover { background: #e8542a; color: #fff; }
 
-.btn-danger {
-  padding: 10px 24px;
-  background: linear-gradient(135deg, #FF4757, #FF6B81);
-  color: white;
-  border: none;
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  font-family: var(--font-family);
-}
-.btn-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--danger-glow);
-}
+        .btn-primary {
+          padding: 8px 20px;
+          background: #e8542a;
+          color: #fff;
+          border: 2px solid #e8542a;
+          border-radius: 6px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .btn-primary:hover { background: #c94220; border-color: #c94220; }
 
-/* ── HERO ── */
-.hero {
-  position: relative;
-  height: 100vh;
-  min-height: 600px;
-  background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
+        .btn-danger {
+          padding: 8px 20px;
+          background: #dc3545;
+          color: #fff;
+          border: 2px solid #dc3545;
+          border-radius: 6px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .btn-danger:hover { background: #b02a37; border-color: #b02a37; }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 53, 0.6) 0%,
-    rgba(247, 147, 30, 0.4) 30%,
-    rgba(10, 15, 26, 0.8) 100%
-  );
-}
+        /* HERO */
+        .hero {
+          position: relative;
+          height: 70vh;
+          min-height: 420px;
+          background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80');
+          background-size: cover;
+          background-position: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+        }
 
-.hero-text {
-  position: relative;
-  text-align: center;
-  z-index: 2;
-  animation: fadeIn 1s ease-out;
-}
+        .hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0,0,0,0.5);
+        }
 
-.hero-text h1 {
-  font-size: 4rem;
-  font-weight: 900;
-  margin-bottom: 16px;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-  line-height: 1.1;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFE0CC 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+        .hero-text {
+          position: relative;
+          text-align: center;
+          z-index: 2;
+        }
 
-.hero-text p {
-  font-size: 1.25rem;
-  opacity: 0.9;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
+        .hero-text h1 {
+          font-size: 3.2rem;
+          font-weight: 800;
+          margin-bottom: 14px;
+          text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+          line-height: 1.15;
+        }
 
-/* ── HERO CONTENT (Login page layout) ── */
-.hero-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 80px;
-  padding: 0 60px;
-  width: 100%;
-  max-width: 1200px;
-}
+        .hero-text p {
+          font-size: 1.15rem;
+          opacity: 0.9;
+          text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+        }
 
-/* ── STORES / FEATURES ── */
-.stores-section {
-  padding: 100px 60px;
-  background: var(--bg-dark-2);
-}
+        /* STORE LIST */
+        .stores-section {
+          padding: 80px 60px;
+          background: #f8f9fa;
+        }
 
-.stores-section h2 {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--text-primary);
-  margin-bottom: 60px;
-  letter-spacing: -0.5px;
-}
+        .stores-section h2 {
+          text-align: center;
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 50px;
+        }
 
-.stores-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+        .stores-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 30px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
 
-.store-card {
-  background: var(--bg-card);
-  padding: 32px;
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--border-subtle);
-  cursor: pointer;
-  transition: var(--transition-normal);
-  position: relative;
-  overflow: hidden;
-}
-.store-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--primary-gradient);
-  opacity: 0;
-  transition: var(--transition-normal);
-}
-.store-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-lg), 0 0 40px var(--primary-glow);
-}
-.store-card:hover::before {
-  opacity: 1;
-}
+        .store-card {
+          background: #fff;
+          padding: 28px;
+          border-radius: 18px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+          cursor: pointer;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border-top: 4px solid #e8542a;
+        }
 
-.store-card h3 {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 12px;
-}
+        .store-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 16px 40px rgba(232,84,42,0.15);
+        }
 
-.store-card p {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
+        .store-card h3 {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #e8542a;
+          margin-bottom: 10px;
+        }
 
-.stores-empty {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 1rem;
-  padding: 80px 0;
-}
+        .store-card p {
+          font-size: 0.9rem;
+          color: #666;
+          line-height: 1.6;
+        }
 
-/* ── FOOTER ── */
-.footer {
-  text-align: center;
-  padding: 28px 20px;
-  background: var(--bg-dark-1);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-top: 1px solid var(--border-subtle);
-  letter-spacing: 0.3px;
-}
+        .stores-empty {
+          text-align: center;
+          color: #aaa;
+          font-size: 1rem;
+          padding: 60px 0;
+        }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .navbar { padding: 0 20px; }
-  .hero-text h1 { font-size: 2.5rem; }
-  .hero-content { flex-direction: column; gap: 40px; padding: 0 20px; }
-  .stores-section { padding: 60px 20px; }
-}
+        /* FOOTER */
+        .footer {
+          text-align: center;
+          padding: 24px 20px;
+          background: #111;
+          color: rgba(255,255,255,0.7);
+          font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+          .navbar { padding: 0 20px; }
+          .hero-text h1 { font-size: 2rem; }
+          .stores-section { padding: 60px 20px; }
+        }

@@ -25,7 +25,7 @@ function TourManager() {
   // ================= LOAD DATA =================
   const loadTours = async () => {
     try {
-      const res = await fetch("http://localhost:5050/api/Tour", {
+      const res = await fetch("http://localhost:6050/api/Tour", {
         headers: { Authorization: "Bearer " + token }
       });
       const data = await res.json();
@@ -37,7 +37,7 @@ function TourManager() {
 
   const loadPois = async () => {
     try {
-      const res = await fetch("http://localhost:5050/api/NarrationPoint");
+      const res = await fetch("http://localhost:6050/api/NarrationPoint");
       const data = await res.json();
       setPois(data);
     } catch {
@@ -66,8 +66,8 @@ function TourManager() {
 
     // Xác định đang là Edit hay Create để chọn API và Method phù hợp
     const url = editingTourId 
-      ? `http://localhost:5050/api/Tour/${editingTourId}` 
-      : "http://localhost:5050/api/Tour";
+      ? `http://localhost:6050/api/Tour/${editingTourId}` 
+      : "http://localhost:6050/api/Tour";
     const method = editingTourId ? "PUT" : "POST";
 
     try {
@@ -117,7 +117,7 @@ function TourManager() {
     }
 
     try {
-      await fetch(`http://localhost:5050/api/Tour/${id}`, {
+      await fetch(`http://localhost:6050/api/Tour/${id}`, {
         method: "DELETE",
         headers: { Authorization: "Bearer " + token }
       });

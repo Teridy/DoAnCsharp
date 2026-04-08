@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "../css/AudioManager.module.css";
 
-const API = "http://localhost:5050";
+const API = "http://localhost:6050";
 
 // ── TTS ──
 const speakText = (text) => {

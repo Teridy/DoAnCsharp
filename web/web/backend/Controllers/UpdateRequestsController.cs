@@ -10,7 +10,6 @@ using System.Text.Json.Serialization;
 public class UpdateRequestsController : ControllerBase
 {
     private readonly AppDbContext _context;
-
     public UpdateRequestsController(AppDbContext context)
     {
         _context = context;
@@ -87,21 +86,26 @@ public class UpdateRequestsController : ControllerBase
                 Console.WriteLine($"[DEBUG] newData.status = '{newData.status}'");
                 Console.WriteLine($"[DEBUG] request.EntityId = {request.EntityId}");
 
-                string? imagePath = null;
+                string? localPath = null;
+                string? supaUrl = null;
 
-                // Xử lý Image Base64
+                // ✅ Xử lý ảnh base64 từ seller
                 if (!string.IsNullOrEmpty(newData.image_url) && newData.image_url.StartsWith("data:image"))
                 {
                     var base64Data = newData.image_url.Split(',')[1];
                     var bytes = Convert.FromBase64String(base64Data);
+
+                    // ✅ 1. Lưu local cho admin
                     var fileName = Guid.NewGuid() + ".png";
                     var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-
                     if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+                    await System.IO.File.WriteAllBytesAsync(Path.Combine(folder, fileName), bytes, CancellationToken.None);
+                    localPath = "/images/" + fileName;
 
-                    var filePath = Path.Combine(folder, fileName);
-                    await System.IO.File.WriteAllBytesAsync(filePath, bytes, CancellationToken.None);
-                    imagePath = "/images/" + fileName;
+                    // ✅ 2. Upload lên Supabase Storage cho mobile (temporarily disabled)
+                    // using var supaStream = new MemoryStream(bytes);
+                    // supaUrl = await _storage.UploadAsync(supaStream, fileName, "image/png");
+                    supaUrl = null;
                 }
 
                 var statusEnum = MapStringToStatus(newData.status);
@@ -121,11 +125,12 @@ public class UpdateRequestsController : ControllerBase
                             .FirstOrDefaultAsync(p => p.Id == stall.NarrationPointsId, CancellationToken.None);
                         if (poi != null) poi.IsActive = true;
                     }
-                    // Claim stall không cần lưu ảnh mới vào images
+                    // Claim stall không cần lưu ảnh mới
                 }
                 // CASE 2: CREATE NEW STALL
                 else if (request.EntityId == 0)
                 {
+                    var approvedStatus = Stall.StallStatus.Active;
                     var newPoi = new NarrationPoint
                     {
                         Name = newData.stallName,
@@ -133,41 +138,39 @@ public class UpdateRequestsController : ControllerBase
                         Longitude = newData.longitude,
                         ActivationRadius = newData.activationRadius,
                         Priority = newData.priority,
-                        ImageWeb = imagePath,
-                        IsActive = (statusEnum == Stall.StallStatus.Active)
+                        ImageWeb = localPath,
+                        IsActive = true
                     };
                     _context.NarrationPoints.Add(newPoi);
                     await _context.SaveChangesAsync(CancellationToken.None); // ← Save để có newPoi.Id
 
-                    // ✅ THÊM MỚI: Lưu ảnh vào bảng images cho mobile app
-                    if (!string.IsNullOrEmpty(imagePath))
+                    // ✅ Lưu Supabase URL vào bảng images cho mobile
+                    if (!string.IsNullOrEmpty(supaUrl))
                     {
                         _context.Images.Add(new Image
                         {
                             NarrationPointId = newPoi.Id,
-                            ImageUrl = imagePath
+                            ImageUrl = supaUrl
                         });
                     }
 
-                    var newStall = new Stall
+                    _context.Stalls.Add(new Stall
                     {
                         CategoriesId = newData.categories_id,
                         NarrationPointsId = newPoi.Id,
-                        Status = statusEnum,
+                        Status = approvedStatus,
                         OwnerId = request.RequesterId,
-                        ImageUrl = imagePath
-                    };
-                    _context.Stalls.Add(newStall);
+                        ImageUrl = localPath
+                    });
 
-                    var newFood = new FoodPlace
+                    _context.FoodPlaces.Add(new FoodPlace
                     {
                         NarrationPointId = newPoi.Id,
                         CategoryId = newData.categories_id,
                         PriceRange = newData.priceRange,
                         OpeningHours = newData.openingHours,
                         Description = newData.description
-                    };
-                    _context.FoodPlaces.Add(newFood);
+                    });
                 }
                 // CASE 3: UPDATE EXISTING STALL
                 else
@@ -178,7 +181,7 @@ public class UpdateRequestsController : ControllerBase
                     {
                         stall.CategoriesId = newData.categories_id;
                         stall.Status = statusEnum;
-                        if (!string.IsNullOrEmpty(imagePath)) stall.ImageUrl = imagePath;
+                        if (!string.IsNullOrEmpty(localPath)) stall.ImageUrl = localPath;
 
                         var poi = await _context.NarrationPoints
                             .FirstOrDefaultAsync(p => p.Id == stall.NarrationPointsId, CancellationToken.None);
@@ -188,14 +191,19 @@ public class UpdateRequestsController : ControllerBase
                             poi.Latitude = newData.latitude;
                             poi.Longitude = newData.longitude;
                             poi.IsActive = (statusEnum == Stall.StallStatus.Active);
-                             if (!string.IsNullOrEmpty(imagePath)) poi.ImageWeb = imagePath;
-                            // ✅ THÊM MỚI: Lưu ảnh vào bảng images cho mobile app
-                            if (!string.IsNullOrEmpty(imagePath))
+
+                            // ✅ Cập nhật ảnh admin
+                            if (!string.IsNullOrEmpty(localPath)) poi.ImageWeb = localPath;
+
+                            // ✅ Xóa ảnh cũ, lưu Supabase URL mới vào bảng images
+                            if (!string.IsNullOrEmpty(supaUrl))
                             {
+                                var oldImages = _context.Images.Where(i => i.NarrationPointId == poi.Id);
+                                _context.Images.RemoveRange(oldImages);
                                 _context.Images.Add(new Image
                                 {
                                     NarrationPointId = poi.Id,
-                                    ImageUrl = imagePath
+                                    ImageUrl = supaUrl
                                 });
                             }
                         }
@@ -299,32 +307,41 @@ public class UpdateRequestsController : ControllerBase
         if (image == null || image.Length == 0)
             return BadRequest(new { error = "Không có file ảnh" });
 
-        var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-
-        var ext = Path.GetExtension(image.FileName);
-        var fileName = Guid.NewGuid() + ext;
-        var filePath = Path.Combine(folder, fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        byte[] fileBytes;
+        using (var ms = new MemoryStream())
         {
-            await image.CopyToAsync(stream, CancellationToken.None);
+            await image.CopyToAsync(ms, CancellationToken.None);
+            fileBytes = ms.ToArray();
         }
 
-        var path = "/images/" + fileName;
+        // ✅ 1. Lưu local cho admin
+        var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+        var ext = Path.GetExtension(image.FileName);
+        var fileName = Guid.NewGuid() + ext;
+        await System.IO.File.WriteAllBytesAsync(Path.Combine(folder, fileName), fileBytes, CancellationToken.None);
+        var localPath = "/images/" + fileName;
 
-        // ✅ Lưu vào bảng images để app đọc được (giữ nguyên cũ)
+        // ✅ 2. Upload lên Supabase Storage cho mobile
+        string? supaUrl = null;
         if (narrationPointId > 0)
         {
+            // using var supaStream = new MemoryStream(fileBytes);
+            // supaUrl = await _storage.UploadAsync(supaStream, fileName, image.ContentType);
+            supaUrl = null;
+
+            // ✅ 3. Xóa ảnh cũ, lưu Supabase URL mới vào bảng images
+            var oldImages = _context.Images.Where(i => i.NarrationPointId == narrationPointId);
+            _context.Images.RemoveRange(oldImages);
             _context.Images.Add(new Image
             {
                 NarrationPointId = narrationPointId,
-                ImageUrl = path
+                ImageUrl = supaUrl
             });
             await _context.SaveChangesAsync(CancellationToken.None);
         }
 
-        return Ok(new { path });
+        return Ok(new { path = localPath });
     }
 
     // --- DTOs ---

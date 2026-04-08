@@ -22,7 +22,7 @@ function AdminDashboard() {
       navigate("/login");
       return;
     }
- fetch("http://localhost:5050/api/admin/overview", {
+ fetch("http://localhost:6050/api/admin/overview", {
       headers: { Authorization: "Bearer " + token }
     })
       .then(res => res.json())
