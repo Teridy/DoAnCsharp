@@ -225,8 +225,9 @@ function App() {
   const [showEntryModeModal, setShowEntryModeModal] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-  // Dùng 10.0.2.2 cho giả lập Android Studio thay vì localhost
-  const API_BASE = "http://10.0.2.2:6111/api"; 
+  // Dùng 10.0.2.2 cho giả lập Android Studio, dùng localhost cho Chrome Desktop
+  const isDesktopBrowser = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const API_BASE = isDesktopBrowser ? "http://localhost:6111/api" : "http://10.0.2.2:6111/api"; 
   const t = translations[lang] || translations["vi"];
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
