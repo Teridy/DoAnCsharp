@@ -1,3 +1,4 @@
+import { API_BASE, API } from "../config";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserManager from "./UserManager";
@@ -7,6 +8,7 @@ import TranslationManager from "./TranslationManager";
 import HistoryManager from "./HistoryManager";
 import TourManager from "./TourManager";
 import PendingRequest from "./PendingRequest";
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import "../css/AdminDashboard.css";
 
 function AdminDashboard() {
@@ -22,7 +24,7 @@ function AdminDashboard() {
       navigate("/login");
       return;
     }
- fetch("http://localhost:6050/api/admin/overview", {
+ fetch(`${API_BASE}/api/admin/overview`, {
       headers: { Authorization: "Bearer " + token }
     })
       .then(res => res.json())
@@ -36,6 +38,7 @@ function AdminDashboard() {
 
   const menuItems = [
     { id: "overview", label: "Tổng quan", icon: "📊" },
+    { id: "analytics", label: "Analytics", icon: "📈" },
     { id: "users", label: "Người dùng", icon: "👥" },
     { id: "requests", label: "Duyệt yêu cầu", icon: "🛡️" },
     { id: "poi", label: "POI", icon: "📍" },
@@ -122,13 +125,24 @@ function AdminDashboard() {
               </div>
             </div>
 
-          </div> // Kết thúc stats-grid
+            {/* Visitor Stats */}
+            <div className="stat-card visitors" onClick={() => setActiveTab("analytics")} style={{ cursor: 'pointer' }}>
+              <div className="stat-icon">📈</div>
+              <div className="stat-info">
+                <h3>Visitors</h3>
+                <div className="stat-number">{overview.visitorsToday ?? 0}</div>
+                <div className="stat-label">Hôm nay · Tổng: {overview.visitorsTotal ?? 0}</div>
+              </div>
+            </div>
+
+          </div>
         )}
-      </div> // Kết thúc content-wrapper
+      </div>
     );
   }
 
   // Các tabs khác giữ nguyên
+  if (activeTab === "analytics") return <AnalyticsDashboard />;
   if (activeTab === "requests") return <PendingRequest/>;
   if (activeTab === "users") return <UserManager />;
   if (activeTab === "poi") return <PoiManager />;

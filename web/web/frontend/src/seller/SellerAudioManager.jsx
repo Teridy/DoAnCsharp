@@ -1,16 +1,22 @@
+import { API_BASE, API } from "../config";
 import { useState, useEffect } from "react";
 import { Headphones, Volume2 } from "lucide-react";
 import styles from "../css/SellerAudioManager.module.css";
 
-const API = "http://localhost:6050";
+
 
 const LANGS = [
   { code: "en", label: "🇬🇧 English" },
   { code: "zh", label: "🇨🇳 中文" },
 ];
 
-// ── TTS ──
-const speakText = (text) => {
+// ── TTS (toggle play/stop) ──
+const speakText = (text, btnEl) => {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (btnEl) btnEl.innerHTML = '\uD83D\uDD0A Nghe thử';
+    return;
+  }
   if (!text) return alert("Không có nội dung để đọc!");
   const doSpeak = () => {
     const voices = window.speechSynthesis.getVoices();
@@ -23,6 +29,8 @@ const speakText = (text) => {
       voices.find(v => v.lang === lang) ||
       voices.find(v => v.lang.startsWith(lang.split("-")[0]));
     if (voice) { utterance.voice = voice; utterance.lang = voice.lang; }
+    utterance.onstart = () => { if (btnEl) btnEl.innerHTML = '\u23F9 Dừng'; };
+    utterance.onend = () => { if (btnEl) btnEl.innerHTML = '\uD83D\uDD0A Nghe thử'; };
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   };
@@ -94,8 +102,8 @@ function VietnameseTab({ token, narrationPointId }) {
             <h3 className={styles.editorTitle}>Nội dung thuyết minh Tiếng Việt</h3>
             <p className={styles.editorHint}>Nội dung này sẽ được TTS đọc khi khách đến gần địa điểm của bạn.</p>
           </div>
-          <button type="button" onClick={() => speakText(text)} className={styles.listenBtn}>
-            <Volume2 size={14} /> Nghe thử
+          <button type="button" onClick={(e) => speakText(text, e.currentTarget)} className={styles.listenBtn}>
+            🔊 Nghe thử
           </button>
         </div>
 
@@ -175,7 +183,7 @@ function TranslationTab({ token, narrationPointId }) {
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
         body: JSON.stringify({
           entityType: "Translation",
-          entityId: narrationPointId, 
+          entityId: narrationPointId,
           newDataJson: JSON.stringify({
             languageCode: activeLang,
             translatedName,
@@ -241,8 +249,8 @@ function TranslationTab({ token, narrationPointId }) {
                     TTS sẽ đọc nội dung này khi khách dùng {LANGS.find(l => l.code === activeLang)?.label}.
                   </p>
                 </div>
-                <button type="button" onClick={() => speakText(text)} className={styles.listenBtn}>
-                  <Volume2 size={14} /> Nghe thử
+                <button type="button" onClick={(e) => speakText(text, e.currentTarget)} className={styles.listenBtn}>
+                  🔊 Nghe thử
                 </button>
               </div>
               <textarea

@@ -18,13 +18,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
            .EnableSensitiveDataLogging()
            .EnableDetailedErrors()
 );
-// 2. Cấu hình CORS
+// 2. Cấu hình CORS (cho phép ngrok + localhost)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:6173")
+            policy.AllowAnyOrigin()
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -59,6 +59,22 @@ using (var scope = app.Services.CreateScope())
         await context.Database.ExecuteSqlRawAsync("ALTER TABLE update_requests ADD COLUMN IF NOT EXISTS admin_note text;");
         await context.Database.ExecuteSqlRawAsync("ALTER TABLE tours ADD COLUMN IF NOT EXISTS description text;");
         await context.Database.ExecuteSqlRawAsync("UPDATE tours SET description = '' WHERE description IS NULL;");
+        // Tạo bảng visitor_logs nếu chưa có
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE TABLE IF NOT EXISTS visitor_logs (
+                id SERIAL PRIMARY KEY,
+                session_id TEXT DEFAULT '',
+                device_type TEXT DEFAULT '',
+                user_agent TEXT DEFAULT '',
+                ip_address TEXT DEFAULT '',
+                page_visited TEXT DEFAULT '',
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            );
+        ");
+        // Force reset admin password to "123456" on every startup
+        var adminHash = BCrypt.Net.BCrypt.HashPassword("123456");
+        await context.Database.ExecuteSqlRawAsync(
+            $"UPDATE users_web SET hashpass = '{adminHash}' WHERE user_role = 'Admin'");
     } catch { }
 
     // Dùng AnyAsync thay vì Any
@@ -85,13 +101,71 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors("AllowFrontend");
+
+// 📊 Visitor Tracking — tự động log mọi request GET vào visitor_logs
+app.UseMiddleware<VisitorTrackingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseStaticFiles();
+
+// Serve frontend static files từ wwwroot
+app.UseDefaultFiles();
+var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+provider.Mappings[".apk"] = "application/vnd.android.package-archive";
+app.UseStaticFiles(new StaticFileOptions
+{
+    ContentTypeProvider = provider
+});
+
+// SPA fallback: mọi route không phải API → trả về index.html
+app.MapFallbackToFile("index.html");
+
 app.Run();
+
+// ══════════════════════════════════════
+// ── Visitor Tracking Middleware ──
+// ══════════════════════════════════════
+public class VisitorTrackingMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public VisitorTrackingMiddleware(RequestDelegate next) => _next = next;
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var path = context.Request.Path.Value ?? "/";
+        if (context.Request.Method == "GET"
+            && !path.StartsWith("/api/")
+            && !path.Contains(".")
+            && !path.StartsWith("/_"))
+        {
+            try
+            {
+                using var scope = context.RequestServices.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var userAgent = context.Request.Headers["User-Agent"].ToString();
+                var deviceType = userAgent.Contains("Mobile") ? "Mobile"
+                    : userAgent.Contains("Android") ? "Mobile"
+                    : userAgent.Contains("iPhone") ? "Mobile"
+                    : "Desktop";
+
+                db.VisitorLogs.Add(new VisitorLog
+                {
+                    SessionId = context.Connection.Id ?? Guid.NewGuid().ToString(),
+                    DeviceType = deviceType,
+                    UserAgent = userAgent.Length > 200 ? userAgent[..200] : userAgent,
+                    IpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    PageVisited = path,
+                    CreatedAt = DateTime.UtcNow
+                });
+                await db.SaveChangesAsync();
+            }
+            catch { /* Không block request nếu logging lỗi */ }
+        }
+
+        await _next(context);
+    }
+}

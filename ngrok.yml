@@ -1,0 +1,9 @@
+version: "3"
+agent:
+  authtoken: 3CLdFAOmwg18Tr9ulhKg4bDzaOW_4PuDSgai9UvgGAXotBvgP
+tunnels:
+  web:
+    addr: 6500
+    proto: http
+    domain: roundup-browse-unequal.ngrok-free.dev
+    inspect: true

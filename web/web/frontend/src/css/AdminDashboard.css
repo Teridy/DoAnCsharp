@@ -193,6 +193,16 @@
         background: linear-gradient(135deg, #ffd9a0 0%, #ffbb88 100%);
         color: #a84a00;
       }
+
+      .stat-card.visitors .stat-icon{
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+      }
+
+      .stat-card.requests .stat-icon{
+        background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+        color: #991b1b;
+      }
    .stat-info{
   display:flex;
   flex-direction:column;

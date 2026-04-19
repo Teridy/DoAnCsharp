@@ -221,13 +221,21 @@ function App() {
 
   // CÁC BIẾN QUẢN LÝ CHẾ ĐỘ MAP
   const [isVirtualTour, setIsVirtualTour] = useState(false); 
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  // REF
+  const mapRef = useRef(null);
   const [currentShopId, setCurrentShopId] = useState(null); 
   const [showEntryModeModal, setShowEntryModeModal] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [showGPSChoiceModal, setShowGPSChoiceModal] = useState(false);
 
-  // Dùng 10.0.2.2 cho giả lập Android Studio, dùng localhost cho Chrome Desktop
+  // Phân biệt 3 môi trường: Desktop Browser / Giả lập Android / Điện thoại thật
   const isDesktopBrowser = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const API_BASE = isDesktopBrowser ? "http://localhost:6111/api" : "http://10.0.2.2:6111/api"; 
+  const isRealPhone = window.location.protocol === 'file:' && !navigator.userAgent.includes('sdk_gphone');
+  const LOCALTUNNEL_URL = "https://roundup-browse-unequal.ngrok-free.dev";
+  const API_BASE = isDesktopBrowser ? "http://localhost:6111/api" : (isRealPhone ? LOCALTUNNEL_URL + "/api" : "http://10.0.2.2:6111/api"); 
+  // URL cho Web API (History endpoint nằm ở Web API port 6050, proxy sẽ route đúng)
+  const WEB_API_BASE = isDesktopBrowser ? "http://localhost:6050" : (isRealPhone ? LOCALTUNNEL_URL : "http://10.0.2.2:6050");
   const t = translations[lang] || translations["vi"];
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -257,11 +265,56 @@ function App() {
     return route;
   }, []);
 
+  // 📊 GHI LỊCH SỬ LÊN SERVER
+  const recordHistory = useCallback((poiId, eventType = 'view') => {
+    fetch(`${WEB_API_BASE}/api/History`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
+        'Bypass-Tunnel-Reminder': 'true'
+      },
+      body: JSON.stringify({
+        narrationPointId: poiId,
+        event_type: eventType,
+        users_id: parseInt(userId) || null
+      })
+    }).catch(() => console.log('History log failed (offline)'));
+  }, [WEB_API_BASE, userId]);
+
   const markAsVisited = useCallback((place) => {
     if (place && place.id && !visitedPlaces.has(place.id)) {
       setVisitedPlaces((prev) => new Set(prev).add(place.id));
+      recordHistory(place.id, 'view');  // ✅ Ghi lịch sử khi xem POI
     }
-  }, [visitedPlaces]);
+  }, [visitedPlaces, recordHistory]);
+
+  // 📝 LOG VISITOR TRACKING THEO APP MOUNT TỪ MOBILE
+  useEffect(() => {
+    const logVisitor = async () => {
+      try {
+        const sessionId = localStorage.getItem('foodmap_device_id') || 'anonymous_mobile';
+        const ua = navigator.userAgent;
+        const deviceType = /Android/i.test(ua) ? 'Mobile' : (/iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop');
+        
+        await fetch(`${WEB_API_BASE}/api/visitor/log`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          },
+          body: JSON.stringify({
+            SessionId: sessionId,
+            DeviceType: deviceType,
+            PageVisited: '/MobileApp'
+          })
+        });
+      } catch (err) {
+        // failed silently
+      }
+    };
+    logVisitor();
+  }, [WEB_API_BASE]);
 
   // HÀM ĐỌC ÂM THANH XỊN (CHỐNG LỖI ANDROID)
   const speak = useCallback((textToSpeak, onEnd) => {
@@ -314,9 +367,13 @@ function App() {
   };
 
   const showChoiceModal = () => {
-    // Sử dụng từ điển thay vì gõ cứng
-    const userChoice = window.confirm(t.confirmGPSMsg);
-    if (userChoice) {
+    // Hiển thị modal chọn chế độ thay vì window.confirm (gây lỗi pop-up trên WebView)
+    setShowGPSChoiceModal(true);
+  };
+
+  const handleGPSChoice = (goVirtual) => {
+    setShowGPSChoiceModal(false);
+    if (goVirtual) {
       setIsVirtualTour(true);
       setCurrentTourIndex(prev => (prev === -1 ? 0 : prev)); 
     } else {
@@ -358,9 +415,11 @@ function App() {
       return serverBaseUrl + path; 
     };
 
-    // Tạo chìa khóa vạn năng (Base64 encoding của User:Pass)
+    // Tạo chìa khóa vạn năng + bypass tunnel warning
       const headers = {
-        "Authorization": "Basic " + btoa("11303626:60-dayfreetrial")
+        "Authorization": "Basic " + btoa("11303626:60-dayfreetrial"),
+        "ngrok-skip-browser-warning": "true",
+        "Bypass-Tunnel-Reminder": "true"
       };
 
     const loadData = async () => {
@@ -490,7 +549,7 @@ function App() {
     setCurrentTourIndex(-1); 
     speakingIndexRef.current = -1; 
     setSelectedPlace(null);
-    setShowEntryModeModal(true); 
+    // Modal đã xóa - chế độ được chọn trực tiếp trên map
   };
 
   const exitTour = () => {
@@ -559,6 +618,46 @@ function App() {
     }
   }, [activeTab, lang]);
 
+  // 1. Kiểm tra môi trường & Cập nhật Location
+  const userLocationRef = useRef(null);
+  useEffect(() => { userLocationRef.current = userLocation; }, [userLocation]);
+
+  useEffect(() => {
+    // --- GPS trước, để có vị trí cho ping ---
+    const locId = navigator.geolocation.watchPosition(
+      (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
+      () => {},
+      { enableHighAccuracy: true }
+    );
+
+    // --- Heartbeat (Real-time Online Tracking) ---
+    let deviceId = localStorage.getItem("foodmap_device_id");
+    if (!deviceId) {
+      deviceId = "device_" + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem("foodmap_device_id", deviceId);
+    }
+    const sendPing = () => {
+      const loc = userLocationRef.current;
+      const params = loc ? `&lat=${loc[0]}&lon=${loc[1]}` : '';
+      fetch(`${API_BASE}/tours/ping?deviceId=${deviceId}${params}`, {
+        method: "POST",
+        headers: { "ngrok-skip-browser-warning": "true", "Bypass-Tunnel-Reminder": "true" }
+      }).catch(() => {});
+    };
+    sendPing();
+    const pingInterval = setInterval(sendPing, 15000);
+
+    try {
+      if (window.Android) setIsMobileDevice(true);
+      else setIsMobileDevice(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    } catch { setIsMobileDevice(false); }
+
+    return () => {
+      navigator.geolocation.clearWatch(locId);
+      clearInterval(pingInterval);
+    };
+  }, [API_BASE]);
+
   // 2. CHẾ ĐỘ SÚNG BẮN TỈA GPS (TÌM ĐÚNG 1 QUÁN GẦN NHẤT)
   useEffect(() => {
     if (activeTab !== "map" || allPlacesBackup.length === 0) return;
@@ -588,6 +687,7 @@ function App() {
               setCurrentShopId(closestPlace.id); 
               setSelectedPlace(closestPlace);    
               speakGPS(closestPlace.name, closestPlace.description);
+              recordHistory(closestPlace.id, 'gps_checkin');  // ✅ Ghi lịch sử GPS check-in
             }
           }
         }
@@ -709,12 +809,40 @@ function App() {
               {selectedPlace && <AutoPan position={[selectedPlace.latitude, selectedPlace.longitude]} />}
             </MapContainer>
 
-            <div style={{ position: "absolute", top: "20px", left: "0", right: "0", display: "flex", justifyContent: "space-between", padding: "0 20px", zIndex: 1000, pointerEvents: "none" }}>
-              <div style={{ backgroundColor: "rgba(255,255,255,0.9)", padding: "10px 16px", borderRadius: "12px", fontWeight: "800", fontSize: "13px", color: "#2D3436", boxShadow: "0 4px 15px rgba(0,0,0,0.1)", backdropFilter: "blur(10px)", pointerEvents: "auto" }}>
-                🚶‍♂️ {t.mapVisited}: {visitedPlaces.size} / {places.length} {t.mapPlaces}
+            {/* === THANH ĐIỀU KHIỂN TRÊN MAP === */}
+            <div style={{ position: "absolute", top: "15px", left: "0", right: "0", padding: "0 15px", zIndex: 1000, pointerEvents: "none" }}>
+              {/* Hàng 1: Thống kê + Thoát Tour */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                <div style={{ backgroundColor: "rgba(255,255,255,0.92)", padding: "8px 14px", borderRadius: "12px", fontWeight: "800", fontSize: "12px", color: "#2D3436", boxShadow: "0 4px 15px rgba(0,0,0,0.1)", backdropFilter: "blur(10px)", pointerEvents: "auto" }}>
+                  🚶‍♂️ {t.mapVisited}: {visitedPlaces.size} / {places.length} {t.mapPlaces}
+                </div>
+                <div style={{ display: "flex", gap: "8px", pointerEvents: "auto" }}>
+                  {selectedTourId && <button onClick={exitTour} style={{ backgroundColor: "#EE4D2D", border: "none", padding: "8px 12px", borderRadius: "10px", fontSize: "11px", fontWeight: "900", color: "white", cursor: "pointer", boxShadow: "0 4px 15px rgba(238,77,45,0.4)" }}>{t.btnExitTour}</button>}
+                </div>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px", pointerEvents: "auto" }}>
-                {selectedTourId && <button onClick={exitTour} style={{ backgroundColor: "#EE4D2D", border: "none", padding: "10px 15px", borderRadius: "12px", fontSize: "12px", fontWeight: "900", color: "white", cursor: "pointer", boxShadow: "0 4px 15px rgba(238, 77, 45, 0.4)" }}>{t.btnExitTour}</button>}
+              {/* Hàng 2: Nút chọn chế độ Tour ảo / GPS thực tế */}
+              <div style={{ display: "flex", gap: "8px", pointerEvents: "auto" }}>
+                <button 
+                  onClick={() => { setIsVirtualTour(true); setCurrentTourIndex(prev => prev === -1 ? 0 : prev); }}
+                  style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", padding: "10px 0", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "12px", cursor: "pointer", transition: "all 0.2s",
+                    backgroundColor: isVirtualTour ? "#4285F4" : "rgba(255,255,255,0.92)",
+                    color: isVirtualTour ? "white" : "#636E72",
+                    boxShadow: isVirtualTour ? "0 4px 15px rgba(66,133,244,0.4)" : "0 2px 10px rgba(0,0,0,0.08)"
+                  }}>
+                  🔄 {t.btnVirtualTour || "Tour ảo"}
+                </button>
+                <button 
+                  onClick={() => { 
+                    setIsVirtualTour(false); setCurrentTourIndex(-1); speakingIndexRef.current = -1; setSelectedPlace(null); setCurrentShopId(null);
+                    if (window.speechSynthesis) window.speechSynthesis.cancel();
+                  }}
+                  style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", padding: "10px 0", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "12px", cursor: "pointer", transition: "all 0.2s",
+                    backgroundColor: !isVirtualTour ? "#00E5FF" : "rgba(255,255,255,0.92)",
+                    color: !isVirtualTour ? "#1A1A1A" : "#636E72",
+                    boxShadow: !isVirtualTour ? "0 4px 15px rgba(0,229,255,0.4)" : "0 2px 10px rgba(0,0,0,0.08)"
+                  }}>
+                  📍 {t.btnRealGPS || "GPS thực tế"}
+                </button>
               </div>
             </div>
 
@@ -807,43 +935,8 @@ function App() {
           </div>
         )}
 
-      {/* --- BẢNG CHỌN CHẾ ĐỘ KHI VÀO MAP --- */}
-      {showEntryModeModal && (
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.7)", zIndex: 20000, display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(10px)" }}>
-          <div style={{ backgroundColor: "white", padding: "30px", borderRadius: "12px", width: "85%", maxWidth: "350px", textAlign: "center", boxShadow: "0 20px 50px rgba(0,0,0,0.3)" }}>
-            <div style={{ fontSize: "50px", marginBottom: "10px" }}>🧭</div>
-            <h3 style={{ fontSize: "22px", fontWeight: "900", margin: "0 0 10px 0" }}>Chọn chế độ khám phá</h3>
-            <p style={{ fontSize: "14px", color: "#636E72", margin: "0 0 25px 0" }}>Bạn muốn tự động xem lộ trình hay sử dụng định vị GPS thực tế?</p>
-            
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {/* NÚT CHỌN TOUR ẢO */}
-              <button onClick={() => { 
-                setIsVirtualTour(true); 
-                setCurrentTourIndex(0); 
-                setShowEntryModeModal(false); 
-              }} style={{ backgroundColor: "#4285F4", color: "white", border: "none", padding: "15px", borderRadius: "12px", fontWeight: "800", cursor: "pointer" }}>
-                🔄 Chạy Tour ảo tự động
-              </button>
+      {/* Modal chọn chế độ đã được chuyển thành nút inline trên map */}
 
-              {/* NÚT CHỌN GPS THẬT */}
-              <button onClick={() => { 
-                // Tẩy não thêm lần nữa cho chắc cốp
-                setIsVirtualTour(false); 
-                setCurrentTourIndex(-1); 
-                speakingIndexRef.current = -1;
-                setSelectedPlace(null);
-                setCurrentShopId(null); 
-                if (window.speechSynthesis) window.speechSynthesis.cancel();
-                
-                setShowEntryModeModal(false); 
-                alert("Chế độ GPS đã bật! Hãy di chuyển hoặc dùng Fake GPS.");
-              }} style={{ backgroundColor: "#00E5FF", color: "#1A1A1A", border: "none", padding: "15px", borderRadius: "12px", fontWeight: "800", cursor: "pointer" }}>
-                📍 Sử dụng GPS thực tế
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* --- PREMIUM BOTTOM NAV --- */}
       <div style={{ position: "absolute", bottom: 0, width: "100%", height: "75px", backgroundColor: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(15px)", borderTop: "1px solid rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-around", alignItems: "center", zIndex: 1000, paddingBottom: "env(safe-area-inset-bottom)" }}>
@@ -863,7 +956,7 @@ function App() {
             speakingIndexRef.current = -1; 
             setSelectedPlace(null);  
             setCurrentShopId(null);  
-            setShowEntryModeModal(true); 
+            // Vào map trực tiếp, không cần modal
           }} 
           style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", color: activeTab === "map" ? "#4285F4" : "#B2BEC3", cursor: "pointer", transition: "0.2s" }}
         >

@@ -1,0 +1,2531 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodMap Quận 4 — Project Initiation Document</title>
+    <style>
+        :root {
+            --primary: #e65100;
+            --primary-light: #ff833a;
+            --primary-dark: #ac1900;
+            --accent: #00838f;
+            --accent-light: #4fb3bf;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --text: #212121;
+            --text-secondary: #616161;
+            --border: #e0e0e0;
+            --code-bg: #263238;
+            --code-text: #eeffff;
+            --success: #2e7d32;
+            --warning: #f57f17;
+            --info: #1565c0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--primary);
+            color: white;
+            padding: 0 2rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+        }
+
+        nav .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: .5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav .nav-links a {
+            color: rgba(255, 255, 255, .85);
+            text-decoration: none;
+            font-size: .82rem;
+            padding: .35rem .7rem;
+            border-radius: 4px;
+            transition: background .2s;
+        }
+
+        nav .nav-links a:hover {
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+        }
+
+        .hero {
+            margin-top: 56px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+            color: white;
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: .5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.15rem;
+            opacity: .9;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .hero .badges {
+            display: flex;
+            justify-content: center;
+            gap: .6rem;
+            flex-wrap: wrap;
+        }
+
+        .hero .badge {
+            background: rgba(255, 255, 255, .2);
+            padding: .3rem .8rem;
+            border-radius: 20px;
+            font-size: .8rem;
+            backdrop-filter: blur(4px);
+        }
+
+        section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section:nth-child(even) {
+            background: var(--surface);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .section-header .section-num {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: box-shadow .2s, transform .2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 1.05rem;
+            margin-bottom: .4rem;
+            color: var(--primary-dark);
+        }
+
+        .card p,
+        .card li {
+            font-size: .9rem;
+            color: var(--text-secondary);
+        }
+
+        .card ul {
+            padding-left: 1.2rem;
+            margin-top: .4rem;
+        }
+
+        .card li {
+            margin-bottom: .2rem;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .95rem;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: .8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: .75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover td {
+            background: #fff3e0;
+        }
+
+        code {
+            background: #eceff1;
+            padding: .15rem .4rem;
+            border-radius: 3px;
+            font-family: 'Cascadia Code', monospace;
+            font-size: .9em;
+            color: #d84315;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.2rem .8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-card .label {
+            font-size: .78rem;
+            color: var(--text-secondary);
+            margin-top: .2rem;
+        }
+
+        .highlight {
+            border-left: 4px solid var(--primary);
+            background: #fff3e0;
+            padding: 1rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .highlight.info {
+            border-color: var(--info);
+            background: #e3f2fd;
+        }
+
+        .highlight.success {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .highlight strong {
+            color: var(--text);
+        }
+
+        .mermaid-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mermaid {
+            min-width: 800px;
+        }
+
+        .function-group {
+            margin-bottom: 3rem;
+            border-left: 3px solid var(--primary-light);
+            padding-left: 1.5rem;
+        }
+
+        .function-group h4 {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .arch-module {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: all .2s;
+        }
+
+        .arch-module:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 12px rgba(230, 81, 0, .15);
+        }
+
+        .arch-module .mod-icon {
+            font-size: 2rem;
+            margin-bottom: .5rem;
+        }
+
+        .arch-module .mod-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .arch-module .mod-desc {
+            font-size: .85rem;
+            color: var(--text-secondary);
+            margin-top: .4rem;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+        }
+
+        .qr-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .qr-box {
+            display: inline-block;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1rem;
+        }
+
+        .qr-box img {
+            width: 200px;
+            height: 200px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 12px 32px;
+            background: #f97316;
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all .2s;
+        }
+
+        .download-btn:hover {
+            background: #ea580c;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--code-bg);
+            color: rgba(255, 255, 255, .6);
+            font-size: .9rem;
+        }
+
+        footer strong {
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .overview-box {
+            background: linear-gradient(135deg, #fff3e0, #fbe9e7);
+            border: 2px solid var(--primary-light);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+        }
+
+        .overview-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .overview-box p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .overview-box ul {
+            padding-left: 1.8rem;
+        }
+
+        .overview-box li {
+            margin-bottom: .6rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .overview-box li strong {
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav .nav-links {
+                display: none;
+            }
+        }
+
+        @media print {
+            nav {
+                position: static;
+            }
+
+            .mermaid-container {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">🍜 FoodMap Q4 — PID</div>
+        <ul class="nav-links">
+            <li><a href="#overview">Tổng quan</a></li>
+            <li><a href="#arch">Kiến trúc</a></li>
+            <li><a href="#func">Chức năng</a></li>
+            <li><a href="#uc-auth">Xác thực</a></li>
+            <li><a href="#uc-poi">POI</a></li>
+            <li><a href="#uc-tour">Tour</a></li>
+            <li><a href="#uc-audio">Audio</a></li>
+            <li><a href="#uc-seller">Seller</a></li>
+            <li><a href="#uc-mobile">Mobile</a></li>
+            <li><a href="#uc-admin">Admin</a></li>
+            <li><a href="#uc-translation">Đa ngôn ngữ</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <h1>🗺️ FoodMap — Hệ Thống Du Lịch Ẩm Thực Quận 4</h1>
+        <p class="subtitle">Hệ thống quản lý và khám phá ẩm thực đường phố Quận 4, TP.HCM — Tích hợp bản đồ tương tác,
+            GPS dẫn đường, hướng dẫn âm thanh đa ngôn ngữ TTS, hệ thống quản trị Admin/Seller và ứng dụng di động
+            Android</p>
+        <div class="badges">
+            <span class="badge">ASP.NET 8 Web API</span>
+            <span class="badge">React + Vite</span>
+            <span class="badge">Supabase PostgreSQL</span>
+            <span class="badge">Android WebView</span>
+            <span class="badge">FPT.AI TTS</span>
+            <span class="badge">Leaflet Maps</span>
+            <span class="badge">JWT Authentication</span>
+            <span class="badge">Real-time Analytics</span>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <section>
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="value">15</div>
+                <div class="label">Controllers</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">3</div>
+                <div class="label">User Roles</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">43</div>
+                <div class="label">API Endpoints</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">15</div>
+                <div class="label">React Pages</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">14</div>
+                <div class="label">DB Tables</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">3</div>
+                <div class="label">Languages</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">2</div>
+                <div class="label">Backend Servers</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">1</div>
+                <div class="label">Android APK</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SYSTEM INTRO -->
+    <section id="intro" style="background: linear-gradient(135deg, #fff8e1, #fff3e0);">
+        <div class="section-header">
+            <div class="icon" style="background:#fff3e0;color:var(--primary);">🍜</div>
+            <div>
+                <div class="section-num">Giới thiệu</div>
+                <h2>Hệ Thống FoodMap Quận 4 — Cái Nhìn Tổng Quan</h2>
+            </div>
+        </div>
+        <p style="font-size:1.15rem; line-height:1.8; color:var(--text-secondary); margin-bottom:2rem;">
+            FoodMap Quận 4 là hệ thống <strong>du lịch ẩm thực số hóa</strong> tại Quận 4, TP.HCM. Hệ thống gồm 3 thành phần chính:
+            <strong>Ứng dụng Mobile Android</strong> cho du khách khám phá ẩm thực trên bản đồ tương tác,
+            <strong>Web Admin</strong> cho quản trị viên và chủ quán quản lý nội dung, và
+            <strong>Backend API</strong> xử lý toàn bộ logic nghiệp vụ. Dưới đây là tổng quan các thành phần và chức năng cốt lõi.
+        </p>
+
+        <!-- 3 SYSTEM COMPONENTS -->
+        <h3 style="font-size:1.4rem; color:var(--primary-dark); margin-bottom:1rem;">📦 Ba thành phần hệ thống</h3>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-bottom:2.5rem;">
+            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #1565c0;">
+                <div style="font-size:1.6rem; margin-bottom:.4rem;">📱</div>
+                <h4 style="color:#1565c0; margin-bottom:.5rem;">Mobile App (Android APK)</h4>
+                <p style="color:var(--text-secondary); font-size:.92rem; line-height:1.6;">
+                    Ứng dụng Android bọc WebView chạy React. Du khách sử dụng không cần đăng nhập —
+                    xem bản đồ ẩm thực Leaflet, chọn Tour tham quan, GPS dẫn đường thời gian thực,
+                    nghe thuyết minh TTS đa ngôn ngữ (Việt/Anh/Trung), yêu thích quán, và du lịch ảo.
+                    Có cơ chế <strong>offline cache</strong> bằng LocalStorage.
+                </p>
+            </div>
+            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #e65100;">
+                <div style="font-size:1.6rem; margin-bottom:.4rem;">🖥️</div>
+                <h4 style="color:#e65100; margin-bottom:.5rem;">Web Admin (React + Vite)</h4>
+                <p style="color:var(--text-secondary); font-size:.92rem; line-height:1.6;">
+                    Trang quản trị dành cho <strong>Admin</strong> và <strong>Seller</strong>.
+                    Admin quản lý toàn bộ: POI, Tour, Audio, Translation, Users, Duyệt yêu cầu, Dashboard Analytics.
+                    Seller đăng ký → nhận quán trống hoặc mở quán mới → cập nhật nội dung → chờ Admin duyệt.
+                    Gồm <strong>15 trang React</strong> với phân quyền JWT.
+                </p>
+            </div>
+            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #2e7d32;">
+                <div style="font-size:1.6rem; margin-bottom:.4rem;">⚙️</div>
+                <h4 style="color:#2e7d32; margin-bottom:.5rem;">Backend & Database</h4>
+                <p style="color:var(--text-secondary); font-size:.92rem; line-height:1.6;">
+                    2 server ASP.NET 8: <strong>Web API (port 6050)</strong> với 15 Controllers và 43 endpoints phục vụ Admin/Seller,
+                    <strong>Mobile API (port 6111)</strong> phục vụ Tourist. Database <strong>Supabase PostgreSQL</strong>
+                    với 14 bảng. Tích hợp <strong>FPT.AI TTS API</strong> (text-to-speech), Unified Proxy + Ngrok Tunnel.
+                </p>
+            </div>
+        </div>
+
+        <!-- CORE FEATURES BY ROLE -->
+        <h3 style="font-size:1.4rem; color:var(--primary-dark); margin-bottom:1rem;">🎯 Chức năng cốt lõi theo vai trò</h3>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.2rem; margin-bottom:2rem;">
+
+            <!-- ADMIN -->
+            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
+                <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;">
+                    <span style="background:#e8eaf6; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">👨‍💼</span>
+                    <h4 style="color:#283593;">Admin — Quản trị viên</h4>
+                </div>
+                <ul style="color:var(--text-secondary); font-size:.9rem; line-height:1.8; padding-left:1.2rem;">
+                    <li><strong>CRUD Điểm ẩm thực (POI)</strong> — tạo/sửa/xóa kèm ảnh, tọa độ GPS, danh mục, cascade delete</li>
+                    <li><strong>Quản lý Tour</strong> — tạo tuyến du lịch gắn nhiều POI bằng Npgsql, gợi ý Tour thông minh</li>
+                    <li><strong>Audio TTS</strong> — tạo thuyết minh bằng FPT.AI, CRUD quản lý file audio</li>
+                    <li><strong>Đa ngôn ngữ</strong> — CRUD bản dịch vi/en/zh cho mỗi POI</li>
+                    <li><strong>Duyệt yêu cầu</strong> — Approve/Reject 4 loại: Claim quán, Mở quán mới, Sửa thông tin (Stall/FoodPlace), Dịch thuật</li>
+                    <li><strong>Quản lý Users</strong> — tạo tài khoản, khóa/mở khóa, phân quyền</li>
+                    <li><strong>Dashboard Analytics</strong> — thống kê tổng quan, heatmap mật độ, visitor chart, active users realtime</li>
+                </ul>
+            </div>
+
+            <!-- SELLER -->
+            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
+                <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;">
+                    <span style="background:#fff8e1; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🏪</span>
+                    <h4 style="color:#f57f17;">Seller — Chủ quán ăn</h4>
+                </div>
+                <ul style="color:var(--text-secondary); font-size:.9rem; line-height:1.8; padding-left:1.2rem;">
+                    <li><strong>Đăng ký tài khoản</strong> — tự tạo tài khoản Seller với BCrypt hash password</li>
+                    <li><strong>Nhận quán trống (Claim)</strong> — xem bản đồ quán vô chủ, bấm nhận → chờ Admin duyệt</li>
+                    <li><strong>Tạo quán mới</strong> — đề xuất mở quán kèm ảnh, vị trí, thông tin → chờ duyệt</li>
+                    <li><strong>Cập nhật Profile quán</strong> — sửa giá, mô tả, giờ mở cửa → tạo update request</li>
+                    <li><strong>Audio TTS riêng</strong> — tạo thuyết minh cho quán mình, file lưu server local</li>
+                    <li><strong>Dịch thuật riêng</strong> — đề xuất bản dịch Anh/Trung cho quán → chờ duyệt</li>
+                </ul>
+            </div>
+
+            <!-- TOURIST -->
+            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
+                <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;">
+                    <span style="background:#e8f5e9; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">📱</span>
+                    <h4 style="color:#2e7d32;">Tourist — Du khách (Mobile App)</h4>
+                </div>
+                <ul style="color:var(--text-secondary); font-size:.9rem; line-height:1.8; padding-left:1.2rem;">
+                    <li><strong>Bản đồ ẩm thực</strong> — xem toàn bộ quán ăn trên Leaflet Map, popup chi tiết kèm ảnh</li>
+                    <li><strong>Chọn Tour & GPS</strong> — chọn tuyến tham quan, bật GPS dẫn đường theo Nearest-Neighbor</li>
+                    <li><strong>Thuyết minh TTS</strong> — khi đến gần quán (≤30m), tự phát audio giới thiệu đa ngôn ngữ</li>
+                    <li><strong>Chọn ngôn ngữ</strong> — chuyển đổi Việt / Anh / Trung cho toàn bộ nội dung</li>
+                    <li><strong>Yêu thích</strong> — toggle icon trái tim để đánh dấu quán ăn yêu thích</li>
+                    <li><strong>Du lịch ảo</strong> — trải nghiệm Tour không cần di chuyển thực tế</li>
+                    <li><strong>Offline Cache</strong> — lưu dữ liệu LocalStorage, sử dụng khi mất mạng</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SYSTEM FLOW -->
+        <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
+            <h4 style="color:var(--primary-dark); margin-bottom:.8rem;">🔄 Luồng hoạt động tổng quát</h4>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; text-align:center;">
+                <div>
+                    <div style="font-size:2rem;">①</div>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Admin</strong> tạo POI, Tour, Audio, Translation trên Web</p>
+                </div>
+                <div>
+                    <div style="font-size:2rem;">②</div>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Seller</strong> đăng ký, nhận/mở quán, cập nhật nội dung → gửi phiếu duyệt</p>
+                </div>
+                <div>
+                    <div style="font-size:2rem;">③</div>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Admin</strong> duyệt yêu cầu Seller → dữ liệu đồng bộ lên Supabase</p>
+                </div>
+                <div>
+                    <div style="font-size:2rem;">④</div>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Tourist</strong> mở App → dữ liệu load từ API → khám phá bản đồ, Tour, TTS</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SYSTEM OVERVIEW -->
+    <section id="overview">
+        <div class="section-header">
+            <div class="icon" style="background:#e8f5e9;color:var(--success);">📖</div>
+            <div>
+                <div class="section-num">Chapter 01</div>
+                <h2>Tổng Quan Hệ Thống</h2>
+            </div>
+        </div>
+
+        <div class="overview-box">
+            <h3>🎯 Mục tiêu dự án</h3>
+            <p>FoodMap Quận 4 là một hệ thống du lịch ẩm thực số hóa, cho phép du khách khám phá các quán ăn đường phố
+                tại Quận 4, TP.HCM thông qua <strong>ứng dụng di động Android</strong> với bản đồ tương tác, GPS dẫn
+                đường thời gian thực, và hướng dẫn âm thanh đa ngôn ngữ. Đồng thời cung cấp <strong>trang quản trị
+                    Web</strong> cho Admin quản lý toàn bộ hệ thống và Seller tự quản lý gian hàng của mình.</p>
+        </div>
+
+        <div class="overview-box">
+            <h3>👥 Các vai trò người dùng (Actors)</h3>
+            <ul>
+                <li><strong>👨‍💼 Admin</strong> — Quản trị viên toàn quyền: quản lý POI, Tour, Audio, Translation,
+                    Users, duyệt yêu cầu Seller, xem analytics/heatmap, quản lý dashboard tổng quan</li>
+                <li><strong>🏪 Seller</strong> — Chủ quán ăn: đăng ký tài khoản, nhận quán trống (Claim) hoặc tạo quán
+                    mới, cập nhật thông tin quán, quản lý audio và bản dịch riêng, mọi thay đổi cần Admin duyệt</li>
+                <li><strong>📱 Tourist</strong> — Du khách (người dùng mobile): sử dụng app không cần đăng nhập, xem bản
+                    đồ, chọn tour, GPS dẫn đường, nghe thuyết minh TTS đa ngôn ngữ, yêu thích quán ăn</li>
+            </ul>
+        </div>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Biểu đồ Use Case Tổng Quan Hệ Thống
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph TB
+    Admin["👨‍💼 Admin"]
+    Seller["🏪 Seller"]
+    Tourist["📱 Tourist"]
+
+    subgraph System["🗺️ Hệ Thống FoodMap Quận 4"]
+        direction TB
+        subgraph AuthModule["🔐 Module Xác thực"]
+            A1["Đăng nhập"]
+            A2["Đăng ký Seller"]
+            A3["Quản lý Users"]
+        end
+
+        subgraph POIModule["📍 Module Quản lý POI"]
+            B1["CRUD Điểm ẩm thực"]
+            B2["Upload hình ảnh"]
+            B3["Gắn danh mục"]
+        end
+
+        subgraph TourModule["🗺️ Module Tour"]
+            C1["CRUD Tour du lịch"]
+            C2["Gắn POI vào Tour"]
+            C3["Gợi ý Tour thông minh"]
+        end
+
+        subgraph AudioModule["🎧 Module Audio TTS"]
+            D1["CRUD Audio"]
+            D2["Tạo Audio bằng FPT.AI TTS"]
+        end
+
+        subgraph SellerModule["🏪 Module Seller Portal"]
+            E1["Nhận quán trống"]
+            E2["Tạo quán mới"]
+            E3["Cập nhật quán"]
+            E4["Duyệt yêu cầu Seller"]
+        end
+
+        subgraph MobileModule["📱 Module Mobile App"]
+            F1["Xem bản đồ ẩm thực"]
+            F2["Chọn Tour & GPS dẫn đường"]
+            F3["Nghe thuyết minh TTS"]
+            F4["Yêu thích quán ăn"]
+        end
+
+        subgraph AdminModule["📊 Module Dashboard"]
+            G1["Dashboard tổng quan"]
+            G2["Analytics & Heatmap"]
+            G3["Active Users realtime"]
+        end
+
+        subgraph TransModule["🌐 Module Đa ngôn ngữ"]
+            H1["CRUD bản dịch vi/en/zh"]
+        end
+    end
+
+    Admin --> A1
+    Admin --> A3
+    Admin --> B1
+    Admin --> C1
+    Admin --> D1
+    Admin --> D2
+    Admin --> E4
+    Admin --> G1
+    Admin --> G2
+    Admin --> H1
+
+    Seller --> A1
+    Seller --> A2
+    Seller --> E1
+    Seller --> E2
+    Seller --> E3
+    Seller --> D2
+
+    Tourist --> F1
+    Tourist --> F2
+    Tourist --> F3
+    Tourist --> F4
+    Tourist --> C3
+            </pre>
+        </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="arch">
+        <div class="section-header">
+            <div class="icon" style="background:#fff3e0;color:var(--primary);">🏗️</div>
+            <div>
+                <div class="section-num">Chapter 02</div>
+                <h2>Kiến Trúc Tổng Quan Hệ Thống</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Hệ thống FoodMap được chia thành 3
+            tầng chính: Web Admin (quản trị), Mobile App (người dùng cuối) và Cơ sở dữ liệu Supabase (PostgreSQL). Mọi
+            thông tin được đồng bộ qua REST API và kết nối qua Unified Node.js Proxy + Ngrok Tunnel.</p>
+
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph TB
+    subgraph Client["Tầng Client"]
+        WEB["🖥️ Web Admin<br/>React + Vite<br/>Port 6050"]
+        MOBILE["📱 Mobile App<br/>React in Android WebView<br/>APK"]
+    end
+
+    subgraph Proxy["Tầng Proxy"]
+        NGROK["🌐 Ngrok Tunnel<br/>roundup-browse-unequal.ngrok-free.dev"]
+        NODEPROXY["🔄 Node.js Proxy<br/>Port 6500<br/>Route Splitter"]
+    end
+
+    subgraph Backend["Tầng Backend"]
+        WEBAPI["⚙️ Web API<br/>ASP.NET 8<br/>Port 6050<br/>15 Controllers"]
+        MOBILEAPI["📡 Mobile API<br/>ASP.NET 8<br/>Port 6111<br/>Supabase Client"]
+    end
+
+    subgraph Data["Tầng Dữ Liệu"]
+        SUPA[("☁️ Supabase<br/>PostgreSQL<br/>14 Tables")]
+        FPT["🎧 FPT.AI TTS<br/>Text-to-Speech API"]
+    end
+
+    WEB --> WEBAPI
+    MOBILE --> NGROK --> NODEPROXY
+    NODEPROXY -->|"/api/tours, /api/places<br/>/api/Favorite, /api/users"| MOBILEAPI
+    NODEPROXY -->|"Other routes"| WEBAPI
+    WEBAPI --> SUPA
+    MOBILEAPI --> SUPA
+    WEBAPI --> FPT
+            </pre>
+        </div>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Supabase Database Tables</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Module</th>
+                        <th>Mục đích</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>narration_points</code></td>
+                        <td>POI</td>
+                        <td>Điểm ẩm thực: tên, tọa độ GPS, bán kính kích hoạt, hình ảnh web, trạng thái hoạt động, thứ
+                            tự ưu tiên</td>
+                    </tr>
+                    <tr>
+                        <td><code>stalls</code></td>
+                        <td>Seller</td>
+                        <td>Gian hàng: chủ sở hữu (OwnerId), danh mục, trạng thái
+                            (Unclaimed/Pending/Active/Closed/Rejected), IsClaimed</td>
+                    </tr>
+                    <tr>
+                        <td><code>food_places</code></td>
+                        <td>Content</td>
+                        <td>Thông tin ẩm thực chi tiết: mô tả, khoảng giá, giờ mở cửa, danh mục</td>
+                    </tr>
+                    <tr>
+                        <td><code>tours</code></td>
+                        <td>Tour</td>
+                        <td>Tuyến du lịch: tên, mô tả, thời lượng (phút), trạng thái, ngày tạo</td>
+                    </tr>
+                    <tr>
+                        <td><code>tour_pois</code></td>
+                        <td>Tour</td>
+                        <td>Bảng nối N-N giữa Tour và POI (tour_id, poi_id)</td>
+                    </tr>
+                    <tr>
+                        <td><code>audios</code></td>
+                        <td>Audio</td>
+                        <td>File audio TTS: tiêu đề, URL file, text gốc, liên kết POI, trạng thái active</td>
+                    </tr>
+                    <tr>
+                        <td><code>narration_translations</code></td>
+                        <td>i18n</td>
+                        <td>Bản dịch đa ngôn ngữ cho mỗi POI: nội dung, tên đã dịch, mã ngôn ngữ</td>
+                    </tr>
+                    <tr>
+                        <td><code>languages</code></td>
+                        <td>i18n</td>
+                        <td>Danh sách ngôn ngữ hỗ trợ (vi, en, zh)</td>
+                    </tr>
+                    <tr>
+                        <td><code>users_web</code></td>
+                        <td>Auth</td>
+                        <td>Tài khoản Admin/Seller: username (PK), hash password BCrypt, role, email, phone, status
+                            (Active/Locked)</td>
+                    </tr>
+                    <tr>
+                        <td><code>categories</code></td>
+                        <td>Content</td>
+                        <td>Danh mục ẩm thực (Quán ăn, Café, Dessert, Street Food...)</td>
+                    </tr>
+                    <tr>
+                        <td><code>histories</code></td>
+                        <td>Analytics</td>
+                        <td>Lịch sử truy cập POI: user_id, narration_point_id, timestamp — dùng cho gợi ý và heatmap
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>update_requests</code></td>
+                        <td>Approval</td>
+                        <td>Yêu cầu từ Seller chờ Admin duyệt: EntityType (Stall/Translation/FoodPlace), EntityId,
+                            NewDataJson, Status</td>
+                    </tr>
+                    <tr>
+                        <td><code>images</code></td>
+                        <td>Content</td>
+                        <td>Bảng hình ảnh POI đồng bộ cho mobile app (NarrationPointId, ImageUrl)</td>
+                    </tr>
+                    <tr>
+                        <td><code>visitor_logs</code></td>
+                        <td>Analytics</td>
+                        <td>Nhật ký truy cập hệ thống: session_id, device_type, user_agent, ip_address, page_visited,
+                            timestamp</td>
+                    </tr>
+                    <tr>
+                        <td><code>favorites</code></td>
+                        <td>Mobile</td>
+                        <td>Danh sách yêu thích của Tourist: user_id, narration_point_id (toggle thêm/xoá)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FUNCTIONAL OVERVIEW -->
+    <section id="func">
+        <div class="section-header">
+            <div class="icon" style="background:#e8f5e9;color:var(--success);">📋</div>
+            <div>
+                <div class="section-num">Chapter 03</div>
+                <h2>Tổng Quan Chức Năng Cốt Lõi</h2>
+            </div>
+        </div>
+
+        <div class="arch-grid">
+            <div class="arch-module">
+                <div class="mod-icon">🔐</div>
+                <div class="mod-name">Xác thực & Phân quyền</div>
+                <div class="mod-desc">Đăng ký/Đăng nhập JWT, BCrypt, RBAC 3 vai trò, khoá tài khoản</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">📍</div>
+                <div class="mod-name">Quản lý POI</div>
+                <div class="mod-desc">CRUD điểm ẩm thực, upload ảnh, gắn danh mục, cascade delete</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">🗺️</div>
+                <div class="mod-name">Quản lý Tour</div>
+                <div class="mod-desc">Tạo tuyến du lịch, gắn POI, gợi ý tour thông minh</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">🎧</div>
+                <div class="mod-name">Audio TTS</div>
+                <div class="mod-desc">Tạo audio từ text bằng FPT.AI, CRUD quản lý, Seller audio riêng</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">🌐</div>
+                <div class="mod-name">Đa Ngôn Ngữ</div>
+                <div class="mod-desc">Bản dịch vi/en/zh, liên kết POI, Admin/Seller CRUD</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">🏪</div>
+                <div class="mod-name">Seller Portal</div>
+                <div class="mod-desc">Nhận quán, tạo quán mới, cập nhật, gửi yêu cầu duyệt</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">✅</div>
+                <div class="mod-name">Quy trình Duyệt</div>
+                <div class="mod-desc">Admin duyệt/từ chối 4 loại yêu cầu: Claim, New Stall, Update, Translation</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">📱</div>
+                <div class="mod-name">Mobile App</div>
+                <div class="mod-desc">Bản đồ, GPS, tour, TTS đa tầng, offline cache, yêu thích</div>
+            </div>
+            <div class="arch-module">
+                <div class="mod-icon">📊</div>
+                <div class="mod-name">Analytics Dashboard</div>
+                <div class="mod-desc">Thống kê, heatmap, visitor tracking, active users realtime</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 1: AUTH -->
+    <section id="uc-auth">
+        <div class="section-header">
+            <div class="icon" style="background:#efebe9;color:#4e342e;">🔐</div>
+            <div>
+                <div class="section-num">Chapter 04</div>
+                <h2>Module 1: Xác thực & Phân quyền</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Hệ thống sử dụng JWT (JSON Web
+            Token, hạn 2 giờ) kết hợp BCrypt hash password. Phân 3 vai trò: <strong>Admin</strong>,
+            <strong>Seller</strong>, <strong>Tourist</strong>. Admin có quyền tạo user, khoá/mở khoá tài khoản, và sửa
+            thông tin user.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Xác Thực
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Admin["👨‍💼 Admin"]
+    Seller["🏪 Seller"]
+    Tourist["📱 Tourist"]
+
+    subgraph AuthSystem["Hệ thống Xác thực & Phân quyền"]
+        UC1["Đăng nhập"]
+        UC2["Đăng ký tài khoản Seller"]
+        UC3["Quản lý Users"]
+        UC4["Khoá / Mở khoá tài khoản"]
+        UC5["Xác thực JWT Token"]
+        UC6["Hash mật khẩu BCrypt"]
+        UC7["Kiểm tra tài khoản bị khoá"]
+        UC8["Phân quyền theo Role"]
+    end
+
+    Admin --> UC1
+    Admin --> UC3
+    Admin --> UC4
+    Seller --> UC1
+    Seller --> UC2
+    Tourist -.->|"Không cần đăng nhập"| AuthSystem
+
+    UC1 -.->|"«include»"| UC5
+    UC1 -.->|"«include»"| UC8
+    UC2 -.->|"«include»"| UC6
+    UC7 -.->|"«extend»"| UC1
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Đăng nhập Hệ thống</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant U as User Browser
+    participant FE as React Frontend
+    participant API as AuthController
+    participant DB as Supabase DB
+
+    U->>FE: Nhập username + password
+    FE->>API: POST /api/Auth/login
+    API->>DB: Tìm user theo username
+    DB-->>API: User record hoặc null
+
+    alt User không tồn tại
+        API-->>FE: 401 Unauthorized - Sai tài khoản
+        FE->>U: Hiện thông báo lỗi
+    else User bị khoá Status = Locked
+        API-->>FE: 401 Unauthorized - Tài khoản bị khoá
+        FE->>U: Hiện thông báo tài khoản bị khoá
+    else User tồn tại
+        API->>API: BCrypt.Verify mật khẩu với hashPass
+        alt Mật khẩu đúng
+            API->>API: Tạo JWT token Claims: Name, Role, 2h expiry
+            API-->>FE: 200 OK với token, role, username
+            FE->>FE: Lưu token vào sessionStorage
+            FE->>U: Redirect theo role Admin/Seller
+        else Mật khẩu sai
+            API-->>FE: 401 Unauthorized
+            FE->>U: Hiện thông báo lỗi
+        end
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Người dùng nhập Username & Password]) --> B[Gọi API đăng nhập]
+    B --> C{User có tồn tại?}
+    C -->|Không| D[Báo lỗi: Sai tài khoản]
+    C -->|Có| E{Trạng thái tài khoản?}
+    E -->|Locked| F[Báo lỗi: Tài khoản bị khoá]
+    E -->|Active| G[Verify Password bằng BCrypt]
+    G --> H{Mật khẩu đúng?}
+    H -->|Không| I[Báo lỗi: Sai mật khẩu]
+    H -->|Có| J[Tạo JWT Token thời hạn 2h]
+    J --> K[Trả token về cho Frontend]
+    K --> L[Lưu token vào sessionStorage]
+    L --> M{Kiểm tra Role}
+    M -->|Admin| N[Chuyển hướng trang /admin]
+    M -->|Seller| O[Chuyển hướng trang /seller]
+    N --> P([Kết thúc])
+    O --> P
+    D --> P
+    F --> P
+    I --> P
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group">
+            <h4>2. Chức năng Đăng ký Tài khoản (Seller)</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant S as Seller Browser
+    participant FE as React Frontend
+    participant API as AuthController
+    participant DB as Supabase DB
+
+    S->>FE: Nhập thông tin đăng ký username, password, email...
+    FE->>API: POST /api/Auth/register
+    API->>API: Validate định dạng dữ liệu
+    
+    API->>DB: Check tồn tại username
+    DB-->>API: Result
+    
+    API->>DB: Check tồn tại email
+    DB-->>API: Result
+
+    alt Username hoặc Email đã tồn tại
+        API-->>FE: 400 Bad Request - Trùng lặp
+        FE->>S: Hiện thông báo lỗi
+    else Thông tin hợp lệ
+        API->>API: Hash mật khẩu bằng BCrypt
+        API->>DB: INSERT UserWeb Role=Seller, Status=Active
+        DB-->>API: Success
+        API-->>FE: 200 OK - Đăng ký thành công
+        FE->>S: Thông báo thành công và redirect Login
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Bắt đầu]) --> B[Seller nhập: username, password, email, phone]
+    B --> C{Dữ liệu hợp lệ?}
+    C -->|Không| D[Trả về danh sách lỗi validation]
+    D --> B
+    C -->|Có| E{Username đã tồn tại?}
+    E -->|Có| F[Báo lỗi: Username đã tồn tại]
+    F --> B
+    E -->|Không| G{Email đã tồn tại?}
+    G -->|Có| H[Báo lỗi: Email đã tồn tại]
+    H --> B
+    G -->|Không| I[Hash mật khẩu bằng BCrypt]
+    I --> J[Tạo UserWeb với Role = Seller, Status = Active]
+    J --> K[Lưu vào Supabase bảng users_web]
+    K --> L[Trả về: Đăng ký thành công]
+    L --> M([Kết thúc])
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 2: POI -->
+    <section id="uc-poi">
+        <div class="section-header">
+            <div class="icon" style="background:#fce4ec;color:#c62828;">📍</div>
+            <div>
+                <div class="section-num">Chapter 05</div>
+                <h2>Module 2: Quản lý Điểm Ẩm Thực (POI)</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Admin quản lý toàn bộ vòng đời POI:
+            tạo mới (kèm ảnh, tọa độ GPS, danh mục), cập nhật thông tin, xóa cascade (dọn sạch mọi dữ liệu liên quan).
+            Hệ thống tự do tạo FoodPlace và Stall trống ẩn dưới nền.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Quản lý
+            POI</h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Admin["👨‍💼 Admin"]
+
+    subgraph POISystem["Quản lý Điểm Ẩm Thực - POI"]
+        UC1["Xem danh sách POI"]
+        UC2["Tạo POI mới"]
+        UC3["Cập nhật POI"]
+        UC4["Xóa POI"]
+        UC5["Upload hình ảnh"]
+        UC6["Gắn danh mục ẩm thực"]
+        UC7["Cascade Delete dữ liệu liên quan"]
+        UC8["Tự động tạo Stall mồi"]
+        UC9["Tạo FoodPlace cơ bản"]
+        UC10["Lưu Image cho Mobile"]
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    UC2 -.->|"«include»"| UC5
+    UC2 -.->|"«include»"| UC6
+    UC2 -.->|"«include»"| UC9
+    UC4 -.->|"«include»"| UC7
+    UC8 -.->|"«extend»"| UC2
+    UC10 -.->|"«extend»"| UC2
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Thêm Mới Điểm Ẩm Thực (Creating POI)</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant Admin as Admin UI
+    participant API as NarrationPointController
+    participant FS as File System
+    participant DB as Supabase DB
+
+    Admin->>API: POST /api/NarrationPoint FormData name, lat, lng, image, etc.
+    API->>API: Validate dữ liệu đầu vào
+    
+    alt Có hình ảnh tải lên
+        API->>FS: Lưu ảnh guid.ext vào wwwroot/images/
+        FS-->>API: Trả về imagePath
+    end
+
+    API->>DB: INSERT NarrationPoint
+    DB-->>API: Sinh ra point.Id
+
+    API->>DB: INSERT Image kết nối với point.Id
+    Note over DB: Ảnh gốc dành cho bản mobile app
+
+    API->>DB: INSERT Stall status=Unclaimed, ownerId=null
+    Note over DB: Tạo quán mồi để Seller có thể vào Claim nhận quán
+
+    API->>DB: INSERT FoodPlace danh mục, giá cả, mô tả
+    DB-->>API: Lưu toàn bộ thao tác
+
+    API-->>Admin: 201 Created kèm dữ liệu POI vừa tạo
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Bắt đầu tạo POI]) --> B[Nhập liệu: Tên, Tọa độ, Upload hình, Danh mục]
+    B --> C{Dữ liệu hợp lệ?}
+    C -->|Không| D[Báo lỗi Validation]
+    D --> B
+    C -->|Có| E{Có ảnh tải lên?}
+    E -->|Có| F[Lưu file ảnh vào Server File System]
+    F --> G[Lấy đường dẫn URL của ảnh]
+    E -->|Không| G
+    G --> H[Lưu NarrationPoint vào Cơ sở dữ liệu]
+    H --> I[Lưu Image record map với POI cho Mobile]
+    I --> J[Tự động tạo FoodPlace record lưu thông tin ẩm thực]
+    J --> K[Tự động tạo Stall record ở trạng thái Unclaimed]
+    K --> L[Trả về kết quả thành công]
+    L --> M([Kết thúc quá trình tạo])
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group">
+            <h4>2. Chức năng Xóa Điểm Ẩm Thực (Cascade Delete)</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant Admin as Admin UI
+    participant API as NarrationPointController
+    participant DB as Supabase DB
+
+    Admin->>API: DELETE /api/NarrationPoint/{id}
+    API->>DB: Kiểm tra POI có tồn tại không
+    DB-->>API: Trả về POI record
+
+    alt Không tìm thấy POI
+        API-->>Admin: 404 Not Found
+    else Có tồn tại
+        API->>DB: DELETE Histories lịch sử ghé thăm
+        API->>DB: DELETE TourPois tháo khỏi các tour
+        API->>DB: DELETE Stalls xoá gian hàng kết nối
+        API->>DB: DELETE FoodPlaces xoá dữ liệu ẩm thực
+        API->>DB: DELETE Translations xoá bản dịch
+        API->>DB: DELETE Images xoá hình ảnh mobile
+        API->>DB: DELETE NarrationPoint chính
+        DB-->>API: Commit Transaction tất cả dữ liệu
+        API-->>Admin: 204 No Content Thành công
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Admin chọn Xóa POI]) --> B[Gọi API DELETE truyền ID]
+    B --> C{Tìm thấy POI theo ID?}
+    C -->|Không| D[Trả lỗi 404 Not Found]
+    C -->|Có| E[Xoá toàn bộ Histories liên quan]
+    E --> F[Xoá bản ghi kết nối TourPois]
+    F --> G[Xoá các Stalls liên quan]
+    G --> H[Xoá dữ liệu FoodPlaces]
+    H --> I[Xoá bản dịch Translations vi/en/zh]
+    I --> J[Xoá danh sách Images]
+    J --> K[Xoá NarrationPoint gốc]
+    K --> L[Lưu DB SaveChanges]
+    L --> M([Trả về thành công])
+    D --> M
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 3: TOUR -->
+    <section id="uc-tour">
+        <div class="section-header">
+            <div class="icon" style="background:#e3f2fd;color:var(--info);">🗺️</div>
+            <div>
+                <div class="section-num">Chapter 06</div>
+                <h2>Module 3: Quản lý Tour Du Lịch</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Admin quản lý tuyến du lịch: tạo
+            tour mới bằng cách gộp nhiều POI lại qua Npgsql, cập nhật (xoá POI cũ + thêm mới). Hệ thống có tính năng tự
+            động gợi ý tour thông minh dựa trên Top 5 POI được ghé thăm nhiều nhất từ bảng Histories.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Quản lý
+            Tour</h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Admin["👨‍💼 Admin"]
+    Tourist["📱 Tourist"]
+
+    subgraph TourSystem["Quản lý Tour Du Lịch"]
+        UC1["Xem danh sách Tour"]
+        UC2["Tạo Tour mới"]
+        UC3["Gắn mảng POI vào Tour kết nối N-N"]
+        UC4["Cập nhật Tour"]
+        UC5["Xóa Tour"]
+        UC6["Gợi ý Tour thông minh tự động"]
+        UC7["Chọn Tour trên Mobile"]
+        UC8["GPS dẫn đường theo Tour"]
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC4
+    Admin --> UC5
+    UC2 -.->|"«include»"| UC3
+    UC4 -.->|"«include»"| UC3
+    Tourist --> UC1
+    Tourist --> UC7
+    UC7 -.->|"«include»"| UC8
+    UC6 -.->|"«extend»"| UC1
+    Tourist --> UC6
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Tạo Tour và Gắn POI</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant Admin as Admin UI
+    participant API as TourController
+    participant DB as Supabase EF Core
+    participant PG as Npgsql Direct Connection
+
+    Admin->>API: POST /api/Tour chứa tên, mô tả, danh sách poi_ids
+    API->>DB: INSERT Tour cơ bản qua EF Core
+    DB-->>API: Trả về tour.id tự sinh
+
+    Note over API: Mở kết nối Npgsql mới để map bảng trung gian N-N<br/>tránh việc EF Core bị cache state conflict
+
+    loop Lặp qua từng poi_id trong mảng
+        API->>PG: Lệnh Npgsql INSERT INTO tour_pois
+        Note over PG: Kết nối trực tiếp đưa tour_id và poi_id vào
+    end
+
+    PG-->>API: Hoàn tất liên kết tất cả POI
+    API-->>Admin: 200 OK Tạo tour thành công
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Bắt đầu thao tác tạo Tour]) --> B[Điền Tên tour, Thời lượng, Mô tả]
+    B --> C[Chọn nhiều POI từ danh sách listbox]
+    C --> D{Ít nhất 1 POI được chọn?}
+    D -->|Không| E[Báo lỗi: Tour phải có POI]
+    E --> C
+    D -->|Có| F[Gửi API lưu Tour Data]
+    F --> G[EF Core lưu bảng tours]
+    G --> H[Nhận lại TourId vừa tạo]
+    H --> I[Khởi tạo đối tượng NpgsqlConnection]
+    I --> J[Chạy vòng lặp trên mảng poi_ids]
+    J --> K[Ghi row vào bảng nối tour_pois]
+    K --> L[Lưu tất cả bằng lệnh ExecuteNonQueryAsync]
+    L --> M([Thành công])
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group">
+            <h4>2. Chức năng Gợi ý Tour Thông Minh</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant U as User / Tourist
+    participant API as TourController
+    participant DB as Supabase DB
+
+    U->>API: GET /api/Tour/suggested yêu cầu gợi ý
+    API->>DB: Fetch toàn bộ dữ liệu từ bảng Histories
+    DB-->>API: Danh sách hàng ngàn bản ghi lịch sử
+    
+    API->>API: Group by NarrationPointId và đếm Visits
+    API->>API: Sắp xếp giảm dần, Lấy Top 5 POI hot nhất
+    
+    API->>DB: Lấy tất cả Tour kèm liên kết tour_pois
+    DB-->>API: Dữ liệu cấu trúc Tour
+
+    loop So khớp từng Tour
+        API->>API: Đếm xem Tour chứa bao nhiêu POI nằm trong Top 5
+    end
+
+    API->>API: Sắp xếp Tour theo độ match giảm dần
+    API-->>U: Trả về danh sách Tour thông minh đã xếp hạng
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Hệ thống tiếp nhận yêu cầu gợi ý Tour]) --> B[Đọc bảng Histories lịch sử check-in]
+    B --> C[Gom nhóm dữ liệu THEO NarrationPointId]
+    C --> D[Đếm tổng số lượt check-in của mỗi điểm]
+    D --> E[Sắp xếp danh sách điểm theo số lượt từ cao đến thấp]
+    E --> F[Cắt lấy Top 5 POI có lượt thăm nhiều nhất]
+    F --> G[Truy xuất các Tour có chứa các POI này qua bảng tour_pois]
+    G --> H[Tính điểm số match cho từng Tour dựa trên số POI trùng]
+    H --> I[Sắp xếp mảng Tour theo điểm số giảm dần]
+    I --> J[Bổ sung thêm hình ảnh và tên POI vào data response]
+    J --> K([Trả về kết quả cho Frontend])
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 4: AUDIO TTS -->
+    <section id="uc-audio">
+        <div class="section-header">
+            <div class="icon" style="background:#f3e5f5;color:#7b1fa2;">🎧</div>
+            <div>
+                <div class="section-num">Chapter 07</div>
+                <h2>Module 4: Audio / Text-to-Speech</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Hệ thống tích hợp FPT.AI TTS API để
+            chuyển văn bản mô tả thành file audio MP3 thuyết minh. **Admin** tạo lấy URL trực tiếp. **Seller** khi tạo
+            phải tải file MP3 về server cục bộ để tự quản lý.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Audio TTS
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Admin["👨‍💼 Admin"]
+    Seller["🏪 Seller"]
+
+    subgraph AudioSystem["Hệ thống Audio TTS"]
+        UC1["Xem danh sách Audio"]
+        UC2["Tạo Audio thủ công"]
+        UC3["Admin Tạo Audio bằng TTS"]
+        UC4["Cập nhật Audio"]
+        UC5["Xóa Audio"]
+        UC6["Xem Audio thuộc quán của Seller"]
+        UC7["Gọi API FPT.AI Voice BanMai"]
+        UC8["Tải MP3 về server local lưu trữ"]
+        UC9["Seller tạo Audio TTS riêng"]
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Seller --> UC6
+    Seller --> UC9
+    UC3 -.->|"«include»"| UC7
+    UC9 -.->|"«include»"| UC7
+    UC8 -.->|"«extend»"| UC9
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Khởi tạo Thuyết minh TTS (Admin vs Seller)</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User as Admin / Seller
+    participant API as Application Controller
+    participant FPT as FPT API Service
+    participant FS as Local File System
+
+    User->>API: POST /tts-generate gửi đoạn văn bản text
+    API->>API: Validate đoạn text không rỗng
+    API->>FPT: POST call đến api.fpt.ai/hmi/tts/v5
+    Note over API,FPT: Kèm theo api-key, chọn giọng đọc banmai, tốc độ 0
+    
+    FPT-->>API: Trả về JSON chứa async mp3 URL
+    API->>API: Lọc lấy đường link URL
+
+    alt Gọi từ quyền Admin
+        API-->>User: Trả thẳng URL của máy chủ FPT
+    else Gọi từ quyền Seller
+        API->>API: Đợi 3000 milliseconds chờ FPT render xong
+        API->>FPT: Thực hiện GET URL để lấy data MP3 bytes
+        FPT-->>API: Dữ liệu stream MP3
+        API->>FS: Ghi file byte xuống ổ cứng server /audio/guid.mp3
+        FS-->>API: Success path
+        API-->>User: Trả địa chỉ local của server mình cho Seller
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Người dùng nhập text mô tả quán, bấm Tạo]) --> B{Kiểm tra độ dài text?}
+    B -->|Rỗng| C[Báo lỗi không có dữ liệu]
+    B -->|Hợp lệ| D[Khởi tạo Http Client gọi dịch vụ FPT AI]
+    D --> E{Gọi FPT API thành công?}
+    E -->|Thất bại| F[Báo lỗi do service bên thứ 3]
+    E -->|Thành công| G[Parsing kết quả JSON lấy link async]
+    G --> H{Ai là người đang thao tác?}
+    H -->|Admin| I[Nhận link FPT, lưu thẳng làm URL Audio]
+    H -->|Seller| J[Delay 3 giây nhường server FPT xử lý]
+    J --> K[Gửi GET request tải dữ liệu nhị phân MP3 từ link]
+    K --> L[Lưu file vào thư mục wwwroot/audio/]
+    L --> M[Lấy đường dẫn URL local server]
+    I --> N([Hoàn tất quá trình tạo Audio])
+    M --> N
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 5: SELLER -->
+    <section id="uc-seller">
+        <div class="section-header">
+            <div class="icon" style="background:#fff8e1;color:#f57f17;">🏪</div>
+            <div>
+                <div class="section-num">Chapter 08</div>
+                <h2>Module 5: Seller Portal & Quy trình Duyệt</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Seller có 2 luồng quan trọng:
+            <strong>Nhận quán trống (Claim Stall)</strong> từ dữ liệu Admin mồi sẵn, hoặc báo cáo <strong>Tạo quán mới
+                (New Stall)</strong>. Tất cả thay đổi thông tin đều đẩy vào bảng <code>update_requests</code> và ở trạng
+            thái Pending chờ Admin duyệt mới hiển thị.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Seller
+            Portal</h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Seller["🏪 Seller"]
+    Admin["👨‍💼 Admin"]
+
+    subgraph SellerSystem["Seller Portal"]
+        UC1["Xem gian hàng riêng"]
+        UC2["Danh sách quán vô chủ Unclaimed"]
+        UC3["Claim - Xin nhận quán"]
+        UC4["Tạo đề xuất mở quán mới"]
+        UC5["Cập nhật Profile Quán"]
+        UC6["Yêu cầu thay đổi nội dung"]
+        UC7["Quản lý audio thuyết minh riêng"]
+    end
+
+    subgraph ApprovalSystem["Quy trình Duyệt của Admin"]
+        UC9["Xem danh sách Request đang chờ"]
+        UC10["Phê duyệt Yêu cầu"]
+        UC11["Từ chối Yêu cầu"]
+        UC12["Áp dụng cập nhật dữ liệu"]
+        UC13["Xử lý ảnh Upload base64"]
+    end
+
+    Seller --> UC1
+    Seller --> UC2
+    Seller --> UC3
+    Seller --> UC4
+    Seller --> UC5
+    Seller --> UC7
+
+    UC3 -.->|"«include»"| UC6
+    UC4 -.->|"«include»"| UC6
+    UC6 -.->|"«extend»"| UC5
+
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC11
+    UC10 -.->|"«include»"| UC12
+    UC13 -.->|"«extend»"| UC10
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Nhận Quán Trống (Claim Stall)</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant S as Seller UI
+    participant SAPI as StallsController
+    participant RAPI as UpdateRequestsController
+    participant DB as Supabase DB
+
+    Note over S: Bước 1: Liệt kê quán trống
+    S->>SAPI: GET /api/stalls/unclaimed
+    SAPI->>DB: Truy vấn dữ liệu stall WHERE Status=Unclaimed AND Owner=null
+    DB-->>SAPI: List stalls
+    SAPI-->>S: Hiển thị các điểm trên bản đồ chưa có chủ
+    
+    Note over S: Bước 2: Seller xin nhận qua Update Request
+    S->>RAPI: POST /api/requests với entityType=Stall, status=PendingClaim
+    RAPI->>DB: INSERT UpdateRequest Status=Pending
+    DB-->>RAPI: Lưu thành công
+    RAPI-->>S: Thông báo chờ Admin duyệt qua màn hình quản lý
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Seller bấm nút Nhận Chủ Quán]) --> B[Tạo payload entityType=Stall, status=PendingClaim]
+    B --> C[POST /api/requests gửi UpdateRequest]
+    C --> D[Server lưu request vào bảng update_requests với Status=Pending]
+    D --> E[Frontend lưu cờ isPendingStall vào localStorage]
+    E --> F[Chuyển giao diện sang trạng thái Đang Chờ Phê Duyệt]
+    F --> G[Hệ thống tự động polling kiểm tra trạng thái mỗi 5 giây]
+    G --> H{Admin đã duyệt?}
+    H -->|Chưa| G
+    H -->|Đã duyệt| I[Stall chuyển OwnerId sang Seller, Status=Active]
+    I --> J([Tự động chuyển trang quản lý quán])
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group">
+            <h4>2. Chức năng Admin Xét Duyệt Yêu Cầu (Approve Request)</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant A as Admin UI
+    participant RAPI as UpdateRequestsController
+    participant DB as Supabase DB
+    participant FS as Local Filesystem
+
+    A->>RAPI: PUT /api/requests/id/approve
+    RAPI->>DB: Lấy Request record bằng ID
+    DB-->>RAPI: Request chứa chuỗi JSON mô tả Data mới
+    
+    RAPI->>RAPI: Parsing cú pháp JSON ra Object
+    
+    alt Trường hợp Tạo Quán Mới Tinh Hoàn Toàn (EntityId = 0)
+        RAPI->>RAPI: Tách ảnh dạng base64 ra khỏi Object
+        RAPI->>FS: Chuyển array byte thành file .png vật lý
+        RAPI->>DB: Insert mới table NarrationPoint lấy point.Id
+        RAPI->>DB: Phân mảnh tạo dòng Stall tương ứng point.Id
+        RAPI->>DB: Phân mảnh tạo mục FoodPlace
+    else Trường hợp Cập nhật Thông tin / Claim quán có sẵn
+        RAPI->>DB: Cập nhật đè dữ liệu lên POI/FoodPlace/Stall cũ
+    end
+
+    RAPI->>DB: Chuyển Request thành Status=Approved
+    DB-->>RAPI: Commit toàn bộ chuỗi Transaction
+    RAPI-->>A: Xác nhận duyệt dữ liệu hoàn tất
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Admin bấm duyệt một thẻ Request]) --> B[Lấy chuỗi NewDataJson giải mã]
+    B --> C{Hệ thống xác định Loại Request?}
+    C -->|Claim Nhận Quán| D[Đổi OwnerId cho Stall tương ứng]
+    C -->|Tạo Quán Mới| E[Đọc chuỗi byte ảnh Base64]
+    E --> F[Sinh file ảnh xuống Server]
+    F --> G[Insert Node POI mới vào bảng chính]
+    G --> H[Insert Node Seller liên kết mới]
+    C -->|Sửa Profile| I[Đè thông tin Món ăn, Giá, Mô tả]
+    C -->|Sửa Dịch Ngôn ngữ| J[Update hoặc Insert item Text Translation]
+    D --> K[Cập nhật trạng thái Request thành Approved]
+    H --> K
+    I --> K
+    J --> K
+    K --> L[Lưu DB đồng loạt 1 giao dịch đảm bảo nhất quán]
+    L --> M([Kết thúc phê duyệt thành công])
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 6: MOBILE -->
+    <section id="uc-mobile">
+        <div class="section-header">
+            <div class="icon" style="background:#e8eaf6;color:#283593;">📱</div>
+            <div>
+                <div class="section-num">Chapter 09</div>
+                <h2>Module 6: Ứng dụng Mobile Android</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Ứng dụng Android bọc webview React.
+            Tích hợp GPS tracking bằng HTML5, vẽ đường Tour qua giải thuật tối ưu khoảng cách (Nearest-Neighbor), phát
+            âm thanh TTS ngay khi Tourist đi lại gần điểm ẩm thực. App có cơ chế Fallback Offline cache.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Mobile App
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Tourist["📱 Tourist"]
+
+    subgraph MobileApp["Ứng dụng Mobile Application"]
+        UC1["Xem bản đồ địa chính ẩm thực"]
+        UC2["Chọn ngôn ngữ Vi / En / Zh"]
+        UC3["Xem danh sách Route Tour"]
+        UC4["Bấm chọn một lộ trình Tour cụ thể"]
+        UC5["Bật Tracking GPS thời gian thực"]
+        UC6["Phát âm thanh TTS lúc tới gần quán"]
+        UC7["Popup đọc thông tin hình ảnh chi tiết quán"]
+        UC8["Toggle Yêu thích Icon Trái Tim"]
+        UC9["Dùng tính năng Du lịch Ảo Virtual Tour"]
+        UC10["Nháy Heartbeat gửi trạng thái Online về server"]
+        UC11["Đọc dữ liệu Offline bằng LocalStorage"]
+    end
+
+    Tourist --> UC1
+    Tourist --> UC2
+    Tourist --> UC3
+    Tourist --> UC7
+    Tourist --> UC8
+    UC4 -.->|"«include»"| UC5
+    UC5 -.->|"«include»"| UC6
+    UC9 -.->|"«extend»"| UC5
+    UC10 -.->|"«extend»"| UC1
+    UC11 -.->|"«extend»"| UC1
+    Tourist --> UC4
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng GPS Dẫn Đường & TTS</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User as Tourist
+    participant App as Frontend (PWA)
+    participant GPS as Device Sensor Watcher
+    participant Map as Leaflet UI
+    participant TTS as Speech Engine
+
+    User->>App: Chọn Tour và ấn "Bắt đầu định hướng"
+    App->>App: Kích hoạt thuật toán vẽ Nearest-Neighbor
+    App->>Map: Vẽ vệt đường nét đứt đi qua các mốc POI
+
+    App->>GPS: Yêu cầu lấy watchPosition HighAccuracy
+
+    loop Liên tục khi di chuyển vật lý
+        GPS-->>App: Tọa độ lat, lng
+        App->>Map: Cập nhật Icon Marker điểm xanh lá vị trí User
+        
+        App->>App: Tính khoảng cách Geometry điểm đứng với các POI
+        
+        alt Nếu khoảng cách tới quán ăn bé hơn Threshold Activation
+            App->>TTS: Ra lệnh speakGPS đưa text mô tả quán vào
+            TTS-->>User: Quán A bán món B, giá C...
+            App->>Map: Refresh màu icon thành đã thăm Checked Point
+            App->>App: Chuyển target tới POI liền kề tiếp theo
+        end
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Bắt đầu đi bộ với Tour]) --> B[Kích hoạt hàm watchPosition GPS thiết bị]
+    B --> C[Nhận tín hiệu tọa độ mới nhất]
+    C --> D[Cập nhật UI kim chỉ nam trên bản đồ Map]
+    D --> E[Lấy POI mục tiêu tiếp theo trong mảng tuyến đường]
+    E --> F[Tính khoảng cách bằng công thức tính toán tọa độ cầu]
+    F --> G{Khoảng cách dưới 30 mét?}
+    G -->|Không| B
+    G -->|Có| H[Kiểm tra xem cờ TTS của quán này đã đọc chưa?]
+    H -->|Đã đọc| B
+    H -->|Chưa đọc| I[Bật thư viện SpeechSynthesis đọc giới thiệu]
+    I --> J[Tô màu POI thành màu xám báo hiệu Đã qua]
+    J --> K[Gỡ cờ POI khỏi mục tiêu, lấy POI kế tiếp vạch đường]
+    K --> L{Vòng lặp Tour còn POI nào không?}
+    L -->|Còn| B
+    L -->|Hết| M([Kết thúc Tour thông báo Chúc mừng])
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group">
+            <h4>2. Chức năng Boot & Offline Cache</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant App as Mobile App
+    participant Storage as LocalStorage
+    participant API as Mobile Backend Port 6111
+
+    App->>App: Sự kiện lúc ứng dụng mới bật splash screen
+    App->>API: Thử GET /api/tours, /api/places
+
+    alt Mạng tốt (Online)
+        API-->>App: Trả về cục data JSON 10MB
+        App->>Storage: Wipe data cũ, Ghi đè file DB JSON xuống máy tính
+        App->>App: Sử dụng dữ liệu mới bóc lớp view lên
+    else Đang bật 4G yếu hoặc 🚀 chế độ máy bay
+        API-->>App: Timeout hoặc Error Exception
+        App->>Storage: Lấy block JSON lưu ở phiên online gần nhất
+        Storage-->>App: Trả ra JSON DB local
+        App->>App: Parse data và chạy offline
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([User nhấn mở Mobile App Apk]) --> B[Đợi SplashScreen chạy]
+    B --> C{Check trạng thái kết nối mạng navigator.onLine}
+    C -->|Online| D[Fetch song song 3 API: Tours, Places, Translation]
+    D --> E{API trả data thành công?}
+    E -->|Thành công| F[Chuyển data thành chuỗi JSON.stringify]
+    F --> G[Lưu chuỗi biến mạnh này vào LocalStorage trình duyệt]
+    G --> H[Đọc data lên Redux store nội bộ Render giao diện]
+    E -->|Thất bại/Crash| I[Kích hoạt cơ chế Fallback Offline]
+    C -->|Offline| I
+    I --> J[Đọc Object JSON lưu trong LocalStorage]
+    J --> K{Có dữ liệu không?}
+    K -->|Không| L([Báo lỗi App trắng yêu cầu cắm mạng lần đầu])
+    K -->|Có đầy đủ| H
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group" id="uc-mobile-poi-conflict">
+            <h4>3. Xử lý Xung đột và Chồng chéo POI gần nhau</h4>
+            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Khi 2 hoặc nhiều quán ăn (POI) nằm san sát nhau, bán kính quét (<code>activation_radius</code>, mặc định 50m) của GPS có thể bao trùm nhiều quán cùng lúc. Hệ thống sử dụng thuật toán <strong>"Súng bắn tỉa GPS"</strong> — quét toàn bộ POI, tìm <strong>duy nhất 1 quán gần nhất</strong> bằng <code>calculateDistance</code> (Haversine), kết hợp cờ Dedup (<code>currentShopId</code>). <strong>Trường hợp đặc biệt:</strong> Nếu du khách đứng chính xác giữa 2 POI có khoảng cách bằng nhau, hệ thống ưu tiên <strong>POI có thứ tự xuất hiện trước (index nhỏ hơn)</strong> trong mảng <code>allPlacesBackup</code> từ database — do phép so sánh <code>distMet &lt; minDistance</code> (strict less-than) chỉ cập nhật khi khoảng cách <em>nhỏ hơn thật sự</em>, giữ nguyên POI đầu tiên tìm được khi bằng nhau.</p>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant GPS as GPS Sensor
+    participant App as React App State
+    participant Calc as Distance Calculator
+    participant DB as allPlacesBackup Array
+    participant Flag as Dedup Flag currentShopId
+    participant TTS as TTS Engine
+
+    GPS->>App: Tọa độ mới (lat, lng) từ watchPosition
+    App->>DB: Lấy toàn bộ mảng allPlacesBackup
+
+    Note over App,Calc: Thuật toán Súng bắn tỉa - Tìm ĐÚNG 1 quán gần nhất
+
+    App->>Calc: Khởi tạo minDistance = Infinity, closestPlace = null
+
+    loop forEach POI trong allPlacesBackup
+        Calc->>Calc: distMet = calculateDistance(userLat, userLon, poi.lat, poi.lng) x 1000
+        alt distMet nhỏ hơn STRICT minDistance hiện tại
+            Calc->>Calc: Cập nhật minDistance = distMet, closestPlace = POI này
+        else distMet BẰNG minDistance - Tie-Breaking
+            Note over Calc: Giữ nguyên closestPlace cũ vì dùng toán tử STRICT less-than
+            Note over Calc: POI có index nhỏ hơn trong database sẽ thắng
+        end
+    end
+
+    Calc-->>App: Trả về closestPlace duy nhất và minDistance
+
+    alt closestPlace = null hoặc minDistance lớn hơn activation_radius
+        App->>App: Bỏ qua, chờ GPS tick tiếp theo
+    else Có closestPlace trong bán kính kích hoạt
+        App->>Flag: So sánh closestPlace.id với currentShopId
+        alt Trùng ID đã đọc rồi
+            Flag-->>App: SKIP - không phát lại tránh lặp audio
+        else POI mới chưa đọc
+            Flag->>Flag: Cập nhật currentShopId = closestPlace.id
+            App->>TTS: speakGPS(closestPlace.name, closestPlace.description)
+            TTS-->>App: Phát âm thanh thuyết minh qua loa thiết bị
+            App->>App: Ghi lịch sử recordHistory(closestPlace.id, gps_checkin)
+        end
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([GPS báo tọa độ mới của người dùng]) --> B[Lấy mảng allPlacesBackup từ database]
+    B --> C[Khởi tạo minDistance = Infinity, closestPlace = null]
+    C --> D[Vòng lặp forEach qua TOÀN BỘ POI trong mảng]
+    D --> E{distMet STRICT nhỏ hơn minDistance?}
+    E -->|distMet nhỏ hơn| F[Cập nhật closestPlace = POI này, minDistance = distMet]
+    F --> D
+    E -->|distMet BẰNG minDistance| G["Giữ nguyên closestPlace cũ (POI có index nhỏ hơn thắng)"]
+    G --> D
+    E -->|distMet lớn hơn| D
+    D --> H{Hoàn tất quét — closestPlace có tồn tại?}
+    H -->|Không có POI nào| I([Chờ GPS tick tiếp theo])
+    H -->|Có closestPlace| J{minDistance nhỏ hơn hoặc bằng activation_radius?}
+    J -->|Ngoài bán kính| I
+    J -->|Trong bán kính| K{closestPlace.id trùng currentShopId đã lưu?}
+    K -->|Trùng — đã đọc rồi| I
+    K -->|POI mới chưa đọc| L[Gán currentShopId = closestPlace.id]
+    L --> M[Hủy audio cũ bằng speechSynthesis.cancel hoặc AndroidBridge.stop]
+    M --> N[speakGPS phát tên và mô tả quán bằng ngôn ngữ đã chọn]
+    N --> O[Ghi lịch sử recordHistory gps_checkin vào server]
+    O --> I
+                </pre>
+            </div>
+
+            <div class="highlight" style="margin-top: 1rem;">
+                <strong>⚡ Tie-Breaking khi khoảng cách bằng nhau:</strong> Vòng lặp <code>forEach</code> quét mảng <code>allPlacesBackup</code> theo thứ tự từ database. Phép so sánh <code>distMet &lt; minDistance</code> (strict less-than) chỉ ghi đè khi khoảng cách <em>nhỏ hơn thật sự</em>. Do đó khi du khách đứng chính xác giữa 2 POI cách đều nhau → <strong>POI có index nhỏ hơn trong mảng (xuất hiện trước trong database) sẽ được phát trước</strong>. Khi du khách di chuyển dần về phía POI còn lại, GPS tick tiếp theo sẽ tự động chuyển sang POI đó.
+            </div>
+        </div>
+
+        <div class="function-group" id="uc-mobile-concurrency">
+            <h4>4. Xử lý Hàng đợi Đám đông (Zero-Lag Architecture)</h4>
+            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Nếu hàng trăm, hàng ngàn du khách cùng đứng tại một điểm POI lúc này, xử lý hàng đợi (Queue) âm thanh trên Server sẽ dẫn đến sập hệ thống (bottleneck). Giải pháp của FoodMap là kiến trúc phân tán (Client-Side Computing) — để phần cứng điện thoại gánh tính toán thay vì Server.</p>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant S as Server API Port 6111
+    participant A as Thiết bị A - Khách 1
+    participant B as Thiết bị B - Khách 2
+    participant N as Thiết bị N - Khách 1000
+
+    Note over S: Giai đoạn 1 - Phân phối dữ liệu tĩnh lúc khởi động
+    S->>A: GET /api/Places trả JSON 10MB chứa tọa độ và mô tả toàn bộ POI
+    S->>B: GET /api/Places trả JSON 10MB (bản sao giống hệt)
+    S->>N: GET /api/Places trả JSON 10MB (bản sao giống hệt)
+    Note over A,N: Mỗi thiết bị lưu JSON vào RAM riêng của mình
+
+    Note over S: Giai đoạn 2 - Xử lý hoàn toàn trên Client
+    par Tất cả thiết bị xử lý song song và độc lập
+        A->>A: GPS watchPosition đọc tọa độ thiết bị A
+        A->>A: Haversine tính khoảng cách với từng POI
+        A->>A: Nếu POI trong 30m thì gọi SpeechSynthesis phát loa A
+    and
+        B->>B: GPS watchPosition đọc tọa độ thiết bị B
+        B->>B: Haversine tính khoảng cách với từng POI
+        B->>B: Nếu POI trong 30m thì gọi SpeechSynthesis phát loa B
+    and
+        N->>N: GPS watchPosition đọc tọa độ thiết bị N
+        N->>N: Haversine tính khoảng cách với từng POI
+        N->>N: Nếu POI trong 30m thì gọi SpeechSynthesis phát loa N
+    end
+
+    Note over S: Giai đoạn 3 - Heartbeat nhẹ Fire and Forget
+    A-->>S: POST /api/ping {userId, lat, lng} mỗi 15 giây
+    B-->>S: POST /api/ping {userId, lat, lng} mỗi 15 giây
+    N-->>S: POST /api/ping {userId, lat, lng} mỗi 15 giây
+    Note over S: Server chỉ ghi log file JSON, không phản hồi nặng
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Architecture Flow Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TB
+    subgraph Mobile_A["📱 Thiết bị A (Khách 1)"]
+        A1("Tự tính GPS độc lập") --> A2("Dữ liệu JSON lưu RAM")
+        A1 & A2 --> A3{"Tự match khoảng cách"}
+        A3 -->|Khớp tọa độ| A4((Phát Loa A bằng Native TTS))
+    end
+    
+    subgraph Mobile_B["📱 Thiết bị B (Khách 2)"]
+        B1("Tự tính GPS độc lập") --> B2("Dữ liệu JSON lưu RAM")
+        B1 & B2 --> B3{"Tự match khoảng cách"}
+        B3 -->|Khớp tọa độ| B4((Phát Loa B bằng Native TTS))
+    end
+    
+    subgraph Mobile_C["📱 Thiết bị C (Khách N)"]
+        C1("Tự tính GPS độc lập") --> C2("Dữ liệu JSON lưu RAM")
+        C1 & C2 --> C3{"Tự match khoảng cách"}
+        C3 -->|Khớp tọa độ| C4((Phát Loa C bằng Native TTS))
+    end
+
+    subgraph Backend_Server["☁️ Server FoodMap API (Port 6050 & 6111)"]
+        S1["Cung cấp dữ liệu tĩnh ban đầu (Chỉ nhận lúc khởi động)"]
+        S2["Nhận gói tin Ping Toạ độ nhẹ (Fire & Forget, không phản hồi)"]
+        S1 --> S2
+    end
+    
+    Backend_Server -.->|"Kéo file JSON 10MB lúc tải app"| Mobile_A
+    Backend_Server -.->|"Kéo file JSON 10MB lúc tải app"| Mobile_B
+    Backend_Server -.->|"Kéo file JSON 10MB lúc tải app"| Mobile_C
+    
+    Mobile_A -.->|"UDP/HTTP Ping 15 giây 1 lần"| Backend_Server
+    Mobile_B -.->|"UDP/HTTP Ping 15 giây 1 lần"| Backend_Server
+    Mobile_C -.->|"UDP/HTTP Ping 15 giây 1 lần"| Backend_Server
+    
+    classDef mobile fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef server fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    class Mobile_A,Mobile_B,Mobile_C mobile;
+    class Backend_Server server;
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([1000 du khách cùng đứng tại khu vực POI]) --> B{Kiến trúc nào xử lý?}
+    B -->|Truyền thống - Server Queue| C[Server nhận 1000 request GPS cùng lúc]
+    C --> D[Tính khoảng cách cho 1000 user x N POI]
+    D --> E[Tạo hàng đợi Queue phát audio cho từng user]
+    E --> F[Bottleneck nghẽn cổ chai phải chờ đợi xếp hàng]
+    F --> G([Server sập hoặc lag nghiêm trọng])
+    
+    B -->|FoodMap - Client-Side| H[Server chỉ gửi JSON tĩnh 1 lần lúc boot]
+    H --> I[Mỗi điện thoại tự tính GPS trên CPU riêng]
+    I --> J[Mỗi điện thoại tự so Haversine trên RAM riêng]
+    J --> K[Mỗi điện thoại tự phát TTS trên loa riêng]
+    K --> L{Server có bị ảnh hưởng?}
+    L -->|KHÔNG| M[Server chỉ nhận ping nhẹ 15s một lần để vẽ Heatmap]
+    M --> N([Zero-Lag cho dù 10000 du khách cùng lúc])
+                </pre>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-secondary);"><strong>Cách giải quyết Hàng đợi:</strong> Mọi thứ liên quan đến đo lường khoảng cách, quét bán kính radar, và bật loa âm thanh đều được xử lý cục bộ trên từng mạch xử lý (CPU) của riêng từng điện thoại. Do đó <strong>không hề tồn tại khái niệm hàng đợi tại Server</strong> đối với dịch vụ TTS hay Map. Server chỉ đóng vai trò phân phát dữ liệu tĩnh và vẽ Heatmap ngầm, giúp ứng dụng không bao giờ bị lag dù tại một quán có 10 hay 1000 du khách cùng nghe một lúc.</p>
+        </div>
+
+        <div class="function-group" id="uc-mobile-performance">
+            <h4>5. Tối ưu hiệu suất Performance Mobile App</h4>
+            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Ứng dụng Mobile chạy trên WebView Android với bộ nhớ hạn chế (RAM 3-4GB). Để đảm bảo mượt mà, hệ thống áp dụng nhiều kỹ thuật tối ưu: Lazy Loading, Memory Pooling, Debounce GPS, Pre-render Map Tiles, và Speech Queue Cancel.</p>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User as Tourist mở App
+    participant WV as Android WebView
+    participant React as React App.js
+    participant API as Mobile API
+    participant Cache as LocalStorage Cache
+    participant Map as Leaflet Engine
+    participant TTS as Speech Engine
+
+    Note over User,TTS: PHASE 1 - Boot tối ưu (dưới 2 giây)
+    User->>WV: Mở ứng dụng FoodMap
+    WV->>React: Load index.html từ assets cục bộ (không qua mạng)
+    React->>Cache: Kiểm tra localStorage có data cũ không
+    
+    par Fetch song song 3 API cùng lúc
+        React->>API: GET /api/Places
+        React->>API: GET /api/Tours  
+        React->>API: GET /api/Favorite
+    end
+    API-->>React: JSON response (Promise.all resolve)
+    React->>Cache: Ghi đè cache mới vào localStorage
+    React->>React: setState một lần duy nhất gộp tất cả data
+    Note over React: Tránh re-render nhiều lần bằng batch setState
+
+    Note over User,TTS: PHASE 2 - Map render tối ưu
+    React->>Map: Khởi tạo MapContainer chỉ 1 lần duy nhất
+    Map->>Map: Load CartoDB Voyager tile từ CDN Cache trình duyệt
+    React->>Map: Render Marker bằng divIcon CSS thuần thay vì ảnh PNG
+    Note over Map: divIcon CSS nhẹ hơn 10x so với image icon truyền thống
+
+    Note over User,TTS: PHASE 3 - GPS xử lý hiệu quả
+    React->>React: watchPosition với enableHighAccuracy
+    loop Mỗi tín hiệu GPS mới
+        React->>React: Debounce bỏ qua nếu di chuyển dưới 5m
+        React->>React: Chỉ tính Haversine cho POI trong Tour hiện tại
+        Note over React: Không quét toàn bộ N POI mà chỉ quét POI target
+    end
+
+    Note over User,TTS: PHASE 4 - Audio không chồng chéo
+    React->>TTS: speechSynthesis.cancel() trước khi speak mới
+    React->>TTS: speak() với ngôn ngữ đã chọn
+    Note over TTS: Cancel cũ trước Speak mới tránh queue dồn audio
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([App khởi động trên Android]) --> B[WebView load index.html từ assets cục bộ]
+    B --> C{Có kết nối mạng không?}
+    C -->|Online| D[Promise.all fetch song song 3 API cùng lúc]
+    D --> E[Gộp tất cả data vào 1 lần setState duy nhất]
+    C -->|Offline| F[Đọc data từ localStorage cache phiên trước]
+    F --> E
+    E --> G[Render Home Tab với danh sách Tour và Food Cards]
+    
+    G --> H{User chuyển sang tab Map?}
+    H -->|Có| I[Khởi tạo Leaflet MapContainer 1 lần duy nhất]
+    I --> J[Dùng divIcon CSS thay vì image icon cho Marker]
+    J --> K[Bật watchPosition GPS HighAccuracy]
+    K --> L[Nhận tọa độ mới từ sensor]
+    L --> M{Di chuyển đủ xa hơn 5m so với lần trước?}
+    M -->|Dưới 5m| N[Bỏ qua Debounce giảm tải CPU]
+    N --> L
+    M -->|Trên 5m| O[Chỉ tính Haversine cho POI target tiếp theo trong Tour]
+    O --> P{POI trong phạm vi 30m?}
+    P -->|Không| L
+    P -->|Có| Q[Cancel audio cũ đang phát nếu có]
+    Q --> R[Speak thuyết minh POI mới bằng ngôn ngữ đã chọn]
+    R --> S[Cập nhật visitedPlaces và auto-pan bản đồ]
+    S --> T{Tour còn POI tiếp theo?}
+    T -->|Còn| L
+    T -->|Hết Tour| U([Hiển thị modal Chúc mừng hoàn thành])
+                </pre>
+            </div>
+
+            <div class="highlight info" style="margin-top: 1.5rem;">
+                <strong>📊 Bảng tóm tắt kỹ thuật tối ưu Performance:</strong>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kỹ thuật</th>
+                            <th>Vấn đề giải quyết</th>
+                            <th>Cách triển khai</th>
+                            <th>Hiệu quả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Assets cục bộ</strong></td>
+                            <td>Tải app chậm qua mạng</td>
+                            <td>HTML/CSS/JS nằm trong <code>assets/</code> APK, WebView load offline</td>
+                            <td>Boot dưới 2 giây</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Promise.all</strong></td>
+                            <td>Fetch tuần tự chậm</td>
+                            <td>3 API gọi song song, resolve cùng lúc</td>
+                            <td>Giảm 66% thời gian load data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Batch setState</strong></td>
+                            <td>Re-render nhiều lần</td>
+                            <td>Gộp tất cả data vào 1 setState duy nhất</td>
+                            <td>1 render thay vì 3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>divIcon CSS</strong></td>
+                            <td>Marker ảnh PNG nặng</td>
+                            <td>Dùng CSS thuần vẽ marker thay vì load ảnh</td>
+                            <td>Nhẹ hơn 10x trên bản đồ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GPS Debounce</strong></td>
+                            <td>GPS tick quá nhiều</td>
+                            <td>Bỏ qua tín hiệu nếu di chuyển dưới 5m</td>
+                            <td>Giảm 80% CPU khi đứng yên</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Target-only Scan</strong></td>
+                            <td>Quét tất cả POI lãng phí</td>
+                            <td>Chỉ tính Haversine cho POI target tiếp theo trong Tour</td>
+                            <td>O(1) thay vì O(N)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Speech Cancel</strong></td>
+                            <td>Audio chồng chéo khi di chuyển nhanh</td>
+                            <td><code>speechSynthesis.cancel()</code> trước mỗi <code>speak()</code> mới</td>
+                            <td>Không bao giờ đè audio</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LocalStorage Cache</strong></td>
+                            <td>Mất mạng là app trắng</td>
+                            <td>Lưu toàn bộ data vào localStorage, fallback khi offline</td>
+                            <td>App chạy 100% offline sau lần đầu</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 7: ADMIN -->
+    <section id="uc-admin">
+        <div class="section-header">
+            <div class="icon" style="background:#e0f7fa;color:var(--accent);">📊</div>
+            <div>
+                <div class="section-num">Chapter 10</div>
+                <h2>Module 7: Admin Dashboard & Analytics</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Trang dashboard phục vụ Admin xem số
+            lượng tổng: Users, Tour, POI, Requests đang Pending. Hệ thống có Heatmap đồ hoạ trên bản đồ cùng Visitor
+            chart theo tuần.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Admin
+            Dashboard</h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Admin["👨‍💼 Admin"]
+
+    subgraph AdminDashboard["Admin Dashboard & Analytics"]
+        UC1["Load Dashboard Thống kê chỉ số"]
+        UC2["Màn hình Quản lý Users tuỳ chỉnh"]
+        UC3["Màn hình Thẩm định yêu cầu Seller gửi"]
+        UC4["Module vẽ Analytics Visitor Đồ thị cột"]
+        UC5["Module render Heatmap Mật độ người qua lại"]
+        UC6["Setting cơ sở bảng dịch"]
+        UC7["Quản lý thiết lập hệ thống phát âm Audio"]
+        UC8["Truy lục bảng Lịch sử Data Log Histories"]
+        UC9["Đếm thông số Active Users Online Realtime"]
+        UC10["Ghi nhật ký Log Visitor tự động lúc vô danh"]
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    UC1 -.->|"«include»"| UC9
+    UC4 -.->|"«include»"| UC5
+    UC10 -.->|"«extend»"| UC1
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Tổng quan Dashboard & Active Online</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant UI as Admin Dashboard React
+    participant API as Admin Controller Server
+    participant DB as Supabase Tables
+    participant File as Text Active User Json Memory
+
+    UI->>API: Gửi lệnh GET Overview Stats Dashboard
+    API->>DB: Thực thi loạt lệnh COUNT cho Table WebUser, Tour, Narration
+    DB-->>API: Tổng họp 1 loạt dữ liệu thô
+    API-->>UI: Build Object gọn trả UI bind vào thẻ Bài card con số
+    
+    loop Chạy mỗi chu kỳ Timer 10 giây
+        UI->>API: Kêu API trả chỉ số người dùng hiện tại
+        API->>File: FileSystem.Read file log Heartbeat Mobile gửi lên
+        API->>API: Viết hàm đếm bao nhiêu ID có timestamp nhỏ hơn 45s
+        API-->>UI: Push biến N người sang màn hình
+        UI->>UI: Thấy N đổi thì chớp màn hình thẻ Widget
+    end
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Admin click mở View trang chủ Dashboard]) --> B[Gửi request tới API phân luồng AdminController]
+    B --> C[Tính tổng Users]
+    C --> D[Tính tổng điểm POI và Tour tồn tại hệ thống database]
+    D --> E[Check Request Seller xem còn bao nhiêu Ticket Pending chưa duyệt]
+    E --> F[Truy lục Log Visitor xem dòng xe cộ ngày nay và 7 hôm]
+    F --> G[Gửi luồng phụ ra chọc vô tệp văn bản .json vật lý]
+    G --> H[Đếm record đang duy trì sống sót Heartbeat]
+    H --> I[Gộp toàn bộ số kết xuất cho file React jsx]
+    I --> J[Hiển thị UI lên các khung bảng màu sặc sỡ]
+    J --> K([Tiến trình Loop vòng lại tự động])
+                </pre>
+            </div>
+        </div>
+
+        <div class="function-group">
+            <h4>2. Chức năng Vẽ Heatmap Mật Độ</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant UI as Canvas Trang Analytics
+    participant API as History Controller Map
+    participant DB as Postgres Layer
+
+    UI->>API: Yêu cầu lấy thông tin vẽ Toạ độ Heatmap
+    API->>DB: GROUP BY Histories gộp chung ID Điểm ẩm thực
+    API->>DB: Đếm Sum Số lượt dẫm mặt checkin của Tourist
+    API->>DB: Left Join bảng điểm để bóc lat, lng
+    DB-->>API: Array Danh sách (Kinh độ, Vĩ độ, Điểm mạnh)
+    API-->>UI: Array JSON chuẩn bị nạp
+    UI->>UI: Cài thêm thư viện leaflet.heat
+    UI->>UI: Truyền mảng tọa độ vô lớp Blur vẽ bóng đổ màu đỏ cam
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Quản trị viên chọn mục Xem Phân tích Data]) --> B[Trình duyệt gửi lệnh yêu cầu Get Data Heatmap]
+    B --> C[Tại Server phân tích bảng Lịch sử từng bước chân khách]
+    C --> D[Ngắt Data theo nhóm địa điểm Food Place]
+    D --> E[Chạy vòng for lấy từng Toạ độ định vị]
+    E --> F[Tải mảng vào RAM Webview hiển thị Frontend]
+    F --> G[Khởi tạo đối tượng Bản đồ vệ tinh số Leaflet Heat]
+    G --> H[Giao hoán chuyển tập điểm thành tập Màu độ phủ Layer]
+    H --> I([Admin xem được khu vực đường phố nào thu hút nhất])
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- UC 8: TRANSLATION -->
+    <section id="uc-translation">
+        <div class="section-header">
+            <div class="icon" style="background:#e0f7fa;color:var(--accent);">🌐</div>
+            <div>
+                <div class="section-num">Chapter 11</div>
+                <h2>Module 8: Quản lý Đa Ngôn Ngữ i18n</h2>
+            </div>
+        </div>
+        <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Dữ liệu toàn hệ thống chạy 3 ngôn
+            ngữ (Việt, Anh, Trung). Admin được toàn quyền tự do CRUD ngôn ngữ, Seller nếu sửa ngôn ngữ của gian hàng
+            mình thì cần tạo phiếu chờ Admin cấp phép.</p>
+
+        <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Đa Ngôn
+            Ngữ</h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    Admin["👨‍💼 Admin"]
+    Seller["🏪 Seller"]
+
+    subgraph TransSystem["Quản lý Nội dung Đa Ngôn Ngữ Translation"]
+        UC1["Load toàn dải Bản dịch Table"]
+        UC2["Tạo Record dịch Text thủ công"]
+        UC3["Cập nhật Profile Text Bản dịch"]
+        UC4["Loại bỏ Text Ngôn ngữ"]
+        UC5["Filter bảng chỉ lấy theo đúng Quán điểm POI đó"]
+        UC6["Filter bảng chỉ tra riêng Ngôn Ngữ ZH"]
+        UC7["Seller gửi đi Phiếu đề xuất duyệt nội dung bản dịch của họ"]
+        UC8["Thao tác của Server Admin đồng thuận thay đổi của Seller"]
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Seller --> UC1
+    Seller --> UC7
+    UC5 -.->|"«extend»"| UC1
+    UC6 -.->|"«extend»"| UC1
+    UC7 -.->|"«include»"| UC8
+            </pre>
+        </div>
+
+        <div class="function-group">
+            <h4>1. Chức năng Dịch Thuật Seller Tự Đề Xuất</h4>
+
+            <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant S as Seller Editor
+    participant R as Update Request Endpoint
+    participant DB as Postgres Logic Memory
+
+    S->>S: Gõ văn bản mô tả quán tiếng Trung Quốc Zh
+    S->>R: Lệnh Push Gửi yêu cầu kèm thẻ Entity Translation
+    R->>R: Gom cấu trúc JSON bao gồm Code ngôn ngữ nội dung dịch
+    R->>DB: Nhét chuỗi JSON đó vào hộp chứa Update Requests Status=Pending
+    DB-->>R: Thông báo thành công xác nhận Server
+    R-->>S: Trả bảng trạng thái Seller Chờ Duyệt Tạm Thời Text Mới
+                </pre>
+            </div>
+
+            <h5 style="margin-top:1.5rem;">Activity Diagram</h5>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Seller vào mục Profile Quán Ngôn Ngữ]) --> B[Đọc file API xem ngôn ngữ đang có]
+    B --> C[Tại ô Textbox gõ bản Tiếng Anh]
+    C --> D[Bấm Submit Sửa Dữ liệu]
+    D --> E[Gói dữ liệu thành Payload chứa EntityId]
+    E --> F[Send HTTP Post vào API của System]
+    F --> G[System bọc thành trạng thái Yêu cầu Pending]
+    G --> H([Quay về trang Profile chờ đợi Admin quyết định số phận])
+                </pre>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- TECH STACK -->
+    <section id="tech">
+        <div class="section-header">
+            <div class="icon" style="background:#fce4ec;color:#b71c1c;">🛠️</div>
+            <div>
+                <div class="section-num">Appendix A</div>
+                <h2>Technology Stack</h2>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Backend — Web API Port 6050</h3>
+                <ul>
+                    <li><strong>ASP.NET 8</strong> — C# Web API framework</li>
+                    <li><strong>Entity Framework Core</strong> — ORM + Npgsql</li>
+                    <li><strong>Supabase PostgreSQL</strong> — Cloud database</li>
+                    <li><strong>BCrypt.Net</strong> — Password hashing</li>
+                    <li><strong>JWT System.IdentityModel</strong> — Token auth 2h expiry</li>
+                    <li><strong>FPT.AI TTS API</strong> — Text-to-Speech</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Backend — Mobile API Port 6111</h3>
+                <ul>
+                    <li><strong>ASP.NET 8</strong> — Lightweight API</li>
+                    <li><strong>Supabase Client SDK</strong> — Direct DB access</li>
+                    <li><strong>Postgrest Models</strong> — Type-safe queries</li>
+                    <li><strong>Active Users JSON</strong> — File-based heartbeat</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Web Frontend</h3>
+                <ul>
+                    <li><strong>React 18</strong> — UI framework</li>
+                    <li><strong>Vite</strong> — Build tool</li>
+                    <li><strong>React Router</strong> — SPA routing</li>
+                    <li><strong>Leaflet.js</strong> — Interactive maps</li>
+                    <li><strong>leaflet.heat</strong> — Heatmap visualization</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Mobile App</h3>
+                <ul>
+                    <li><strong>Android Kotlin</strong> — Native shell</li>
+                    <li><strong>WebView</strong> — Renders React app</li>
+                    <li><strong>React Build (static)</strong> — Mobile frontend</li>
+                    <li><strong>Leaflet.js</strong> — Map rendering</li>
+                    <li><strong>AndroidBridge</strong> — Native TTS bridge</li>
+                    <li><strong>localStorage</strong> — Offline cache</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- QR DOWNLOAD SECTION -->
+    <section class="qr-section" id="download">
+        <h2>📥 Tải Ứng Dụng FoodMap (Android APK)</h2>
+        <p style="margin-bottom: 1rem; opacity: 0.9;">Quét mã QR dưới đây bằng điện thoại để tải và cài đặt trực tiếp ứng dụng FoodMap.</p>
+        <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Froundup-browse-unequal.ngrok-free.dev%2Fdownload%2Fapp.html" alt="FoodMap APK QR Code">
+        </div>
+        <p style="margin-top: 0.8rem; opacity: 0.7; font-size: 0.85rem;">Quét bằng Zalo, Camera, hoặc bất kỳ ứng dụng nào</p>
+        <br>
+        <a href="https://roundup-browse-unequal.ngrok-free.dev/download/app.html" class="download-btn">📲 Tải APK</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p><strong>FoodMap Quận 4 — Project Initiation Document</strong></p>
+        <p>ASP.NET 8 + React + Supabase + Android WebView + Leaflet + FPT.AI TTS</p>
+        <p style="margin-top:.5rem;">Generated from codebase analysis • All data verified against source code • 2026</p>
+    </footer>
+
+    <!-- Mermaid -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            themeVariables: {
+                fontSize: '15px',
+                fontFamily: 'Segoe UI'
+            },
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' },
+            sequence: { useMaxWidth: false, showSequenceNumbers: false }
+        });
+    </script>
+</body>
+
+</html>

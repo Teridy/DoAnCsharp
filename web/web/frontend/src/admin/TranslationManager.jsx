@@ -1,3 +1,4 @@
+import { API_BASE, API } from "../config";
 import { useEffect, useState } from "react";
 // Import dưới dạng object styles
 import styles from "../css/TranslationManager.module.css";
@@ -25,7 +26,7 @@ function TranslationManager() {
   const token = sessionStorage.getItem("token");
 
   const loadTranslations = () => {
-    fetch("http://localhost:6050/api/Translation", {
+    fetch(`${API_BASE}/api/Translation`, {
       headers: { Authorization: "Bearer " + token }
     })
       .then(res => res.json())
@@ -37,7 +38,7 @@ function TranslationManager() {
   };
 
   const loadLanguages = () => {
-    fetch("http://localhost:6050/api/Language", {
+    fetch(`${API_BASE}/api/Language`, {
       headers: { Authorization: "Bearer " + token }
     })
       .then(res => res.json())
@@ -74,7 +75,7 @@ function TranslationManager() {
       TranslatedName: newTranslation.translatedName 
     };
 
-    const response = await fetch("http://localhost:6050/api/Translation", {
+    const response = await fetch(`${API_BASE}/api/Translation`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +107,7 @@ function TranslationManager() {
     };
 
     const response = await fetch(
-      `http://localhost:6050/api/Translation/${selectedTranslation.id}`,
+      `${API_BASE}/api/Translation/${selectedTranslation.id}`,
       {
         method: "PUT",
         headers: {
@@ -133,7 +134,7 @@ function TranslationManager() {
   const deleteTranslation = async (id) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa bản dịch này không?")) return;
     try {
-      const response = await fetch(`http://localhost:6050/api/Translation/${id}`, {
+      const response = await fetch(`${API_BASE}/api/Translation/${id}`, {
         method: "DELETE",
         headers: { Authorization: "Bearer " + token }
       });

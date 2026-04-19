@@ -384,3 +384,9 @@ C:\doan\web\web\backend\obj\Debug\net10.0\swae.build.ex.cache
 C:\doan\web\web\backend\obj\Debug\net10.0\web.csproj.Up2Date
 C:\doan\web\web\backend\obj\Debug\net10.0\web.genruntimeconfig.cache
 C:\doan\web\web\backend\obj\Debug\net10.0\ref\web.dll
+C:\doan\web\web\backend\obj\Debug\net10.0\compressed\8w73xvzxug-{0}-36d48skiks-36d48skiks.gz
+C:\doan\web\web\backend\obj\Debug\net10.0\compressed\v1dfu7lsxp-{0}-nxf8zri2mo-nxf8zri2mo.gz
+C:\doan\web\web\backend\obj\Debug\net10.0\compressed\j648gz15x9-{0}-69kjnsiwqx-69kjnsiwqx.gz
+C:\doan\web\web\backend\obj\Debug\net10.0\compressed\qlusbn0k6y-{0}-7otcn74bfx-7otcn74bfx.gz
+C:\doan\web\web\backend\obj\Debug\net10.0\compressed\2c9lc0btrj-{0}-q0g6oxau8o-q0g6oxau8o.gz
+C:\doan\web\web\backend\obj\Debug\net10.0\compressed\4ckdri4n2k-{0}-3eqfjtzeng-3eqfjtzeng.gz

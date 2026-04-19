@@ -23,6 +23,7 @@ public class AppDbContext : DbContext
     public DbSet<UpdateRequest> UpdateRequests { get; set; }
     public DbSet<FoodPlace> FoodPlaces { get; set; }
     public DbSet<Image> Images { get; set; }    
+    public DbSet<VisitorLog> VisitorLogs { get; set; }
 
     // ✅ FIX: Dùng static method thay vì switch expression (không dùng được trong expression tree)
     private static string StallStatusToString(StallStatus status)

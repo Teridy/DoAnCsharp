@@ -1,3 +1,4 @@
+import { API_BASE, API } from "./config";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./css/Register.css";
@@ -14,7 +15,7 @@ function Register() {
     e.preventDefault();
     setLoading(true);
 
-    const response = await fetch("http://localhost:6050/api/auth/register", {
+    const response = await fetch(`${API_BASE}/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userName, password, email, phone }),

@@ -1,11 +1,18 @@
+import { API_BASE, API } from "../config";
 import { useEffect, useState } from "react";
 import styles from "../css/AudioManager.module.css";
 
-const API = "http://localhost:6050";
 
-// ── TTS ──
-const speakText = (text) => {
-  if (!text) return alert("Không có nội dung để đọc!");
+
+
+// ── TTS (toggle play/stop) ──
+const speakText = (text, btnEl) => {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (btnEl) btnEl.textContent = '🔊';
+    return;
+  }
+  if (!text) return;
   const doSpeak = () => {
     const voices = window.speechSynthesis.getVoices();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -14,6 +21,8 @@ const speakText = (text) => {
     else if (/[\u4e00-\u9fff]/.test(text)) lang = "zh-CN";
     const voice = voices.find(v => v.lang === lang) || voices.find(v => v.lang.startsWith(lang.split("-")[0]));
     if (voice) { utterance.voice = voice; utterance.lang = voice.lang; }
+    utterance.onstart = () => { if (btnEl) btnEl.textContent = '⏹'; };
+    utterance.onend = () => { if (btnEl) btnEl.textContent = '🔊'; };
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   };
@@ -107,7 +116,7 @@ function VietnameseTab({ token }) {
                   <button
                     className={`${styles["action-btn"]} ${styles["play-btn"]}`}
                     title="Nghe thử TTS"
-                    onClick={() => speakText(food.description)}
+                    onClick={(e) => speakText(food.description, e.currentTarget)}
                   >🔊</button>
                   <button
                     className={`${styles["action-btn"]} ${styles["edit-btn"]}`}
@@ -287,7 +296,7 @@ function TranslationTab({ token }) {
                   <button
                     className={`${styles["action-btn"]} ${styles["play-btn"]}`}
                     title="Nghe thử TTS"
-                    onClick={() => speakText(t.content)}
+                    onClick={(e) => speakText(t.content, e.currentTarget)}
                   >🔊</button>
                   <button
                     className={`${styles["action-btn"]} ${styles["edit-btn"]}`}

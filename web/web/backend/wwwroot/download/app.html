@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tải App FoodMap Q4</title>
+    <meta name="description" content="Tải ứng dụng FoodMap Quận 4 - Khám phá ẩm thực đường phố">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+        }
+        .card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 1rem;
+            box-shadow: 0 8px 24px rgba(249,115,22,0.4);
+        }
+        h1 {
+            color: #0f172a;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        .version {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .description {
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+        /* === ZALO WARNING BANNER === */
+        .zalo-warning {
+            display: none;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+        .zalo-warning.show { display: block; }
+        .zalo-warning .warn-title {
+            font-weight: 800;
+            color: #92400e;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .zalo-warning .warn-steps {
+            color: #78350f;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .zalo-warning .warn-steps b {
+            color: #dc2626;
+        }
+        .zalo-warning .step-num {
+            display: inline-flex;
+            width: 22px;
+            height: 22px;
+            background: #f97316;
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 0.3rem;
+        }
+        /* === BUTTONS === */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-download {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            box-shadow: 0 6px 20px rgba(249,115,22,0.4);
+        }
+        .btn-download:hover {
+            box-shadow: 0 8px 28px rgba(249,115,22,0.5);
+            transform: translateY(-1px);
+        }
+        .btn-chrome {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 6px 20px rgba(59,130,246,0.4);
+        }
+        .btn-chrome:hover {
+            box-shadow: 0 8px 28px rgba(59,130,246,0.5);
+            transform: translateY(-1px);
+        }
+        .btn-copy {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            box-shadow: 0 6px 20px rgba(139,92,246,0.4);
+        }
+        .btn-copy:hover {
+            box-shadow: 0 8px 28px rgba(139,92,246,0.5);
+        }
+        .btn-sm {
+            font-size: 0.85rem;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        /* === FEATURES === */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin: 1.2rem 0;
+        }
+        .feature {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 0.7rem;
+            text-align: center;
+        }
+        .feature .emoji { font-size: 1.3rem; }
+        .feature .text {
+            font-size: 0.75rem;
+            color: #475569;
+            margin-top: 0.2rem;
+            font-weight: 600;
+        }
+        /* === STATUS === */
+        .status {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        .status.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .status.info {
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        .footer-note {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+        /* === PULSE ANIMATION === */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 6px 20px rgba(249,115,22,0.4); }
+            50% { box-shadow: 0 6px 30px rgba(249,115,22,0.7); }
+        }
+        .btn-download { animation: pulse 2s infinite; }
+
+        /* === COPY SUCCESS === */
+        .copy-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #059669;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 30px rgba(5,150,105,0.4);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="app-icon">🍜</div>
+            <h1>FoodMap Quận 4</h1>
+            <p class="version">Phiên bản Android • 15 MB</p>
+            <p class="description">Khám phá ẩm thực đường phố Quận 4 với bản đồ tương tác, GPS dẫn đường và thuyết minh đa ngôn ngữ.</p>
+
+            <!-- ZALO WARNING - hidden by default, shown via JS -->
+            <div id="zaloWarning" class="zalo-warning">
+                <div class="warn-title">⚠️ Bạn đang mở trong Zalo</div>
+                <div class="warn-steps">
+                    Zalo không hỗ trợ tải APK trực tiếp. Làm theo các bước:<br><br>
+                    <span class="step-num">1</span> Bấm nút <b>"📋 SAO CHÉP LINK"</b> bên dưới<br>
+                    <span class="step-num">2</span> Mở ứng dụng <b>Chrome</b> hoặc <b>Safari</b><br>
+                    <span class="step-num">3</span> <b>Dán link</b> vào thanh địa chỉ và truy cập<br>
+                    <span class="step-num">4</span> Bấm <b>"Tải xuống APK"</b> để tải app
+                </div>
+            </div>
+
+            <!-- DOWNLOAD BUTTON - shown for normal browsers -->
+            <a id="btnDownload" href="/download/FoodMapApp.apk" class="btn btn-download">
+                ⬇️ TẢI XUỐNG APK
+            </a>
+
+            <!-- OPEN IN CHROME - shown for Zalo/in-app browsers -->
+            <button id="btnOpenChrome" class="btn btn-chrome" style="display:none;" onclick="openInChrome()">
+                🌐 MỞ BẰNG CHROME
+            </button>
+
+            <!-- COPY LINK - always shown -->
+            <button class="btn btn-copy btn-sm" onclick="copyLink()">
+                📋 SAO CHÉP LINK TẢI VỀ
+            </button>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="emoji">🗺️</div>
+                    <div class="text">Bản đồ tương tác</div>
+                </div>
+                <div class="feature">
+                    <div class="emoji">📍</div>
+                    <div class="text">GPS dẫn đường</div>
+                </div>
+                <div class="feature">
+                    <div class="emoji">🎧</div>
+                    <div class="text">Thuyết minh TTS</div>
+                </div>
+                <div class="feature">
+                    <div class="emoji">🌐</div>
+                    <div class="text">Đa ngôn ngữ</div>
+                </div>
+            </div>
+
+            <div id="statusBox" class="status info">
+                💡 Sau khi tải xong, mở file APK và cài đặt. Nếu được hỏi, chọn <b>"Cho phép cài từ nguồn không xác định"</b>.
+            </div>
+
+            <p class="footer-note">
+                FoodMap Q4 — Hệ thống du lịch ẩm thực Quận 4, TP.HCM<br>
+                ASP.NET 8 + React + Supabase + Android WebView
+            </p>
+        </div>
+    </div>
+
+    <!-- COPY TOAST -->
+    <div id="copyToast" class="copy-toast">✅ Đã sao chép link!</div>
+
+    <script>
+        // === DETECT IN-APP BROWSERS ===
+        var ua = navigator.userAgent || '';
+        var isZalo = /zalo/i.test(ua);
+        var isFacebook = /FBAN|FBAV|FB_IAB/i.test(ua);
+        var isMessenger = /Messenger/i.test(ua);
+        var isInApp = isZalo || isFacebook || isMessenger || /Instagram|Line|Viber|Twitter|Snapchat/i.test(ua);
+
+        var currentPageUrl = window.location.href;
+        // Build download URL (same origin)
+        var downloadUrl = window.location.origin + '/download/app.html';
+
+        if (isInApp) {
+            // Show Zalo warning
+            document.getElementById('zaloWarning').classList.add('show');
+            // Show "Open in Chrome" button
+            document.getElementById('btnOpenChrome').style.display = 'block';
+            // Change download button text
+            var dlBtn = document.getElementById('btnDownload');
+            dlBtn.textContent = '⬇️ THỬ TẢI TRỰC TIẾP';
+            dlBtn.style.animation = 'none';
+            dlBtn.style.opacity = '0.7';
+            // Update status
+            document.getElementById('statusBox').innerHTML = '⚠️ Trình duyệt trong app có thể chặn tải APK. Nếu không tải được, hãy bấm <b>"Sao chép link"</b> rồi mở bằng Chrome.';
+            document.getElementById('statusBox').className = 'status info';
+        }
+
+        function openInChrome() {
+            // Try to open in Chrome via intent:// (Android)
+            var chromeIntent = 'intent://' + window.location.host + '/download/app.html#Intent;scheme=https;package=com.android.chrome;end';
+            
+            // Try intent first
+            window.location.href = chromeIntent;
+            
+            // Fallback: if intent doesn't work after 1 second, copy link
+            setTimeout(function() {
+                copyLink();
+            }, 1500);
+        }
+
+        function copyLink() {
+            var textToCopy = currentPageUrl;
+            
+            // Modern API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    showToast();
+                }).catch(function() {
+                    fallbackCopy(textToCopy);
+                });
+            } else {
+                fallbackCopy(textToCopy);
+            }
+        }
+
+        function fallbackCopy(text) {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (e) {
+                alert('Link tải: ' + text + '\n\nHãy copy link này và mở trong Chrome!');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showToast() {
+            var toast = document.getElementById('copyToast');
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

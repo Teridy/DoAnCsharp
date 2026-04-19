@@ -1,3 +1,4 @@
+import { API_BASE, API } from "../config";
 import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, useMap, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -42,7 +43,7 @@ function HistoryManager() {
 
     const loadHistory = async () => {
         try {
-            const res = await fetch("http://localhost:6050/api/History", {
+            const res = await fetch(`${API_BASE}/api/History`, {
                 headers: { Authorization: "Bearer " + token }
             });
             if (!res.ok) throw new Error();
@@ -65,7 +66,7 @@ const handleLoadMore = () => {
 };
     const loadStats = async () => {
         try {
-            const res = await fetch("http://localhost:6050/api/History/stats", {
+            const res = await fetch(`${API_BASE}/api/History/stats`, {
                 headers: { Authorization: "Bearer " + token }
             });
             if (!res.ok) {
@@ -85,7 +86,7 @@ const handleLoadMore = () => {
 
     const loadHeatmap = async () => {
         try {
-            const res = await fetch("http://localhost:6050/api/History/heatmap", {
+            const res = await fetch(`${API_BASE}/api/History/heatmap`, {
                 headers: { Authorization: "Bearer " + token }
             });
             if (!res.ok) return;
@@ -142,7 +143,7 @@ const handleLoadMore = () => {
         return (
           <div key={p.poi} className="top-poi-item">
             <div className={`poi-rank ${rankClass}`}>{i + 1}</div>
-            <span className="poi-name">POI {p.poi}</span>
+            <span className="poi-name">{p.name || `POI ${p.poi}`}</span>
             <div className="poi-bar-wrap">
               <div className="poi-bar" style={{ width: `${(p.count / maxCount) * 100}%` }} />
             </div>
@@ -215,10 +216,7 @@ const handleLoadMore = () => {
             {h.event_type || 'unknown'}
           </span>
           <div className="timeline-info">
-            <span>👤 <b>User {h.users_id}</b></span>
-            <span>📍 <b>POI {h.narrationPointId}</b></span>
-            <span>📱 <b>{h.device_os || 'N/A'}</b></span>
-            <span>🖥 <b>{h.device_model || 'N/A'}</b></span>
+            <span>📍 <b>{h.poiName || `POI ${h.narrationPointId}`}</b></span>
           </div>
           <span className="timeline-time">
             {new Date(h.created_at).toLocaleString('vi-VN')}

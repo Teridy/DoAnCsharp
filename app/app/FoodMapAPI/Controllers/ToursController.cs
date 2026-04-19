@@ -64,6 +64,63 @@ namespace FoodMapAPI.Controllers
                 return StatusCode(500, $"Lỗi lấy danh sách điểm trong Tour: {ex.Message}");
             }
         }
+
+        private static readonly object _fileLock = new object();
+
+        [HttpPost("ping")]
+        public async Task<IActionResult> Ping([FromQuery] string deviceId, [FromQuery] double? lat, [FromQuery] double? lon)
+        {
+            if (string.IsNullOrEmpty(deviceId)) return BadRequest("Missing deviceId");
+            try
+            {
+                string path = @"c:\doan\active_users.json";
+                Dictionary<string, UserPing> activeUsers = new Dictionary<string, UserPing>();
+                
+                lock (_fileLock)
+                {
+                    // Read existing
+                    if (System.IO.File.Exists(path))
+                    {
+                        try {
+                            var content = System.IO.File.ReadAllText(path);
+                            if (!string.IsNullOrWhiteSpace(content))
+                            {
+                                activeUsers = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, UserPing>>(content) ?? new Dictionary<string, UserPing>();
+                            }
+                        } catch { /* ignore read conflicts */ }
+                    }
+                    
+                    // Update — lưu cả tọa độ GPS để hiển thị Heatmap real-time
+                    activeUsers[deviceId] = new UserPing {
+                        lastSeen = DateTime.UtcNow,
+                        latitude = lat,
+                        longitude = lon
+                    };
+
+                    // Clean old entries (hơn 2 phút không ping → xóa)
+                    var cutoff = DateTime.UtcNow.AddMinutes(-2);
+                    var tokeep = activeUsers.Where(kvp => kvp.Value.lastSeen > cutoff).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+                    // Write
+                    try {
+                        System.IO.File.WriteAllText(path, System.Text.Json.JsonSerializer.Serialize(tokeep));
+                    } catch { /* ignore write conflicts */ }
+                }
+
+                return Ok("ok");
+            }
+            catch
+            {
+                return Ok("error");
+            }
+        }
+    }
+
+    // DTO lưu vị trí real-time của từng thiết bị
+    public class UserPing {
+        public DateTime lastSeen { get; set; }
+        public double? latitude { get; set; }
+        public double? longitude { get; set; }
     }
 
     // --- CÁC MODEL MAPPING SUPABASE CHO TOUR ---

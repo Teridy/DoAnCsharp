@@ -1,3 +1,4 @@
+import { API_BASE, API } from "../config";
 import { useState, useEffect } from "react";
 import {
   Store, Headphones, Languages,
@@ -66,7 +67,7 @@ const handleClaim = async (stall) => {
   if (!window.confirm(`Bạn muốn nhận quản lý quán "${stall.stallName}"?`)) return;
 
   try {
-    const res = await fetch("http://localhost:6050/api/requests", {
+    const res = await fetch(`${API_BASE}/api/requests`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,10 +95,10 @@ const handleClaim = async (stall) => {
     localStorage.setItem("currentSellerTab", tabName);
   };
 
-  const API_URL = "http://localhost:6050/api/Stalls";
+  const API_URL = `${API_BASE}/api/Stalls`;
 const fetchUnclaimedStalls = async () => {
     try {
-        const res = await fetch("http://localhost:6050/api/Stalls/unclaimed"); // Kiểm tra lại URL này có đúng với Swagger/Backend không
+        const res = await fetch(`${API_BASE}/api/Stalls/unclaimed`); // Kiểm tra lại URL này có đúng với Swagger/Backend không
         if (res.ok) {
             const data = await res.json();
             setUnclaimedStalls(Array.isArray(data) ? data : []);
@@ -171,7 +172,7 @@ const fetchUnclaimedStalls = async () => {
   };
  const fetchCategories = async () => {
     try {
-      const res = await fetch("http://localhost:6050/api/Categories");
+      const res = await fetch(`${API_BASE}/api/Categories`);
       if (res.ok) {
         const data = await res.json();
         setCategories(Array.isArray(data) ? data : []);
@@ -212,7 +213,7 @@ useEffect(() => {
       description: editingStall.description || "",
       
       image: null,
-      imagePreview: editingStall.imageUrl ? `http://localhost:6050${editingStall.imageUrl}` : ""
+      imagePreview: editingStall.imageUrl ? `${API_BASE}${editingStall.imageUrl}` : ""
     });
   }
 }, [editingStall]);
@@ -254,7 +255,7 @@ useEffect(() => {
       };
 
       try {
-        const res = await fetch("http://localhost:6050/api/requests", { 
+        const res = await fetch(`${API_BASE}/api/requests`, { 
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -302,7 +303,7 @@ const handleUpdate = async () => {
   };
 
     try {
-      const res = await fetch("http://localhost:6050/api/requests", { 
+      const res = await fetch(`${API_BASE}/api/requests`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -356,7 +357,7 @@ const handleUpdate = async () => {
                                   unclaimedStalls.map((s) => (
                                       <div key={s.id} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", borderBottom: "1px solid #f1f5f9", borderRadius: "8px", marginBottom: "10px", backgroundColor: "#f8fafc", transition: "transform 0.2s" }}>
                                          <img 
-                                            src={s.imageUrl ? `http://localhost:6050${s.imageUrl}` : "https://via.placeholder.com/55"} 
+                                            src={s.imageUrl ? `${API_BASE}${s.imageUrl}` : "https://via.placeholder.com/55"} 
                                             style={{ width: "55px", height: "55px", borderRadius: "8px", objectFit: "cover" }} 
                                             alt="" 
                                             onError={(e) => { e.target.src = "https://via.placeholder.com/55"; }}
@@ -541,7 +542,7 @@ const handleUpdate = async () => {
    src={
   stall.image_url?.startsWith("data:")
     ? stall.image_url
-    : `http://localhost:6050${stall.image_url || stall.imageUrl}`
+    : `${API_BASE}${stall.image_url || stall.imageUrl}`
 }
     
     /* 3. Đổi stall.stallName thành stall.name cho đúng mapping */
@@ -666,7 +667,7 @@ const handleUpdate = async () => {
         src={
           formData.imagePreview 
             ? formData.imagePreview // ảnh mới chọn (base64)
-            : `http://localhost:6050${editingStall.imageUrl}` // ảnh từ server
+            : `${API_BASE}${editingStall.imageUrl}` // ảnh từ server
         }
         alt="Preview"
         style={{ 

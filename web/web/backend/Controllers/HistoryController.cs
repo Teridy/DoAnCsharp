@@ -1,4 +1,4 @@
-// ================= BACKEND: HistoryController (Improved) =================
+// ================= BACKEND: HistoryController =================
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +19,17 @@ public class HistoryController : ControllerBase
         var histories = await _context.Histories
             .OrderByDescending(h => h.created_at)
             .Take(100)
+            .Join(_context.NarrationPoints,
+                h => h.NarrationPointId,
+                n => n.Id,
+                (h, n) => new {
+                    h.id,
+                    h.event_type,
+                    h.users_id,
+                    narrationPointId = h.NarrationPointId,
+                    poiName = n.Name,
+                    h.created_at
+                })
             .ToListAsync();
 
         return Ok(histories);
@@ -67,6 +78,14 @@ public class HistoryController : ControllerBase
             })
             .OrderByDescending(x => x.count)
             .Take(5)
+            .Join(_context.NarrationPoints,
+                h => h.poi,
+                n => n.Id,
+                (h, n) => new {
+                    poi = h.poi,
+                    name = n.Name,
+                    count = h.count
+                })
             .ToListAsync();
 
         return Ok(new {
@@ -75,30 +94,27 @@ public class HistoryController : ControllerBase
             topPois
         });
     }
+
     [HttpGet("heatmap")]
-public async Task<IActionResult> GetHeatmapData()
-{
-    var data = await _context.Histories
-        .GroupBy(h => h.NarrationPointId)
-        .Select(g => new {
-            narrationPointId = g.Key,
-            count = g.Count()
-        })
-        .Join(_context.NarrationPoints,
-            h => h.narrationPointId,
-            n => n.Id,
-            (h, n) => new {
-                lat = n.Latitude,
-                lng = n.Longitude,
-                weight = h.count,
-                name = n.Name
+    public async Task<IActionResult> GetHeatmapData()
+    {
+        var data = await _context.Histories
+            .GroupBy(h => h.NarrationPointId)
+            .Select(g => new {
+                narrationPointId = g.Key,
+                count = g.Count()
             })
-        .ToListAsync();
+            .Join(_context.NarrationPoints,
+                h => h.narrationPointId,
+                n => n.Id,
+                (h, n) => new {
+                    lat = n.Latitude,
+                    lng = n.Longitude,
+                    weight = h.count,
+                    name = n.Name
+                })
+            .ToListAsync();
 
-    return Ok(data);
+        return Ok(data);
+    }
 }
-}
-
-
-
-
