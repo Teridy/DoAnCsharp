@@ -152,6 +152,36 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener { // THÊM
         // Kiểm tra nếu chưa có quyền thì xin, nếu có rồi thì thôi
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, 1)
+        } else {
+            checkGPSEnabled() // Đã có quyền → kiểm tra GPS bật chưa
+        }
+    }
+
+    // Xử lý kết quả khi người dùng bấm Cho phép / Từ chối
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                android.util.Log.d("GPS", "✅ Quyền GPS đã được cấp!")
+                checkGPSEnabled()
+            } else {
+                android.util.Log.e("GPS", "❌ Người dùng TỪ CHỐI quyền GPS!")
+                // Xin lại quyền lần nữa
+                android.widget.Toast.makeText(this, "⚠️ Ứng dụng cần quyền GPS để hoạt động!", android.widget.Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    // Kiểm tra GPS điện thoại đã bật chưa
+    private fun checkGPSEnabled() {
+        val locationManager = getSystemService(LOCATION_SERVICE) as android.location.LocationManager
+        if (!locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+            android.util.Log.e("GPS", "❌ GPS chưa bật trên điện thoại!")
+            android.widget.Toast.makeText(this, "📍 Vui lòng bật GPS trong Cài đặt!", android.widget.Toast.LENGTH_LONG).show()
+            // Mở Settings GPS cho người dùng
+            startActivity(android.content.Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        } else {
+            android.util.Log.d("GPS", "✅ GPS đang bật, sẵn sàng!")
         }
     }
 }   

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FoodMapAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff838d197f433ad155f98602fa5da6323d2c1544")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+770883a89b408145e8027cd50c87f7bcf595447f")]
 [assembly: System.Reflection.AssemblyProductAttribute("FoodMapAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FoodMapAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
