@@ -490,6 +490,7 @@
             <li><a href="#uc-mobile">Mobile</a></li>
             <li><a href="#uc-admin">Admin</a></li>
             <li><a href="#uc-translation">Đa ngôn ngữ</a></li>
+            <li><a href="#uc-monitoring">Monitoring</a></li>
         </ul>
     </nav>
 
@@ -514,7 +515,7 @@
     <section>
         <div class="stats-row">
             <div class="stat-card">
-                <div class="value">15</div>
+                <div class="value">19</div>
                 <div class="label">Controllers</div>
             </div>
             <div class="stat-card">
@@ -522,11 +523,11 @@
                 <div class="label">User Roles</div>
             </div>
             <div class="stat-card">
-                <div class="value">43</div>
+                <div class="value">68</div>
                 <div class="label">API Endpoints</div>
             </div>
             <div class="stat-card">
-                <div class="value">15</div>
+                <div class="value">18</div>
                 <div class="label">React Pages</div>
             </div>
             <div class="stat-card">
@@ -558,16 +559,20 @@
             </div>
         </div>
         <p style="font-size:1.15rem; line-height:1.8; color:var(--text-secondary); margin-bottom:2rem;">
-            FoodMap Quận 4 là hệ thống <strong>du lịch ẩm thực số hóa</strong> tại Quận 4, TP.HCM. Hệ thống gồm 3 thành phần chính:
+            FoodMap Quận 4 là hệ thống <strong>du lịch ẩm thực số hóa</strong> tại Quận 4, TP.HCM. Hệ thống gồm 3 thành
+            phần chính:
             <strong>Ứng dụng Mobile Android</strong> cho du khách khám phá ẩm thực trên bản đồ tương tác,
             <strong>Web Admin</strong> cho quản trị viên và chủ quán quản lý nội dung, và
-            <strong>Backend API</strong> xử lý toàn bộ logic nghiệp vụ. Dưới đây là tổng quan các thành phần và chức năng cốt lõi.
+            <strong>Backend API</strong> xử lý toàn bộ logic nghiệp vụ. Dưới đây là tổng quan các thành phần và chức
+            năng cốt lõi.
         </p>
 
         <!-- 3 SYSTEM COMPONENTS -->
         <h3 style="font-size:1.4rem; color:var(--primary-dark); margin-bottom:1rem;">📦 Ba thành phần hệ thống</h3>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-bottom:2.5rem;">
-            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #1565c0;">
+        <div
+            style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-bottom:2.5rem;">
+            <div
+                style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #1565c0;">
                 <div style="font-size:1.6rem; margin-bottom:.4rem;">📱</div>
                 <h4 style="color:#1565c0; margin-bottom:.5rem;">Mobile App (Android APK)</h4>
                 <p style="color:var(--text-secondary); font-size:.92rem; line-height:1.6;">
@@ -577,57 +582,71 @@
                     Có cơ chế <strong>offline cache</strong> bằng LocalStorage.
                 </p>
             </div>
-            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #e65100;">
+            <div
+                style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #e65100;">
                 <div style="font-size:1.6rem; margin-bottom:.4rem;">🖥️</div>
                 <h4 style="color:#e65100; margin-bottom:.5rem;">Web Admin (React + Vite)</h4>
                 <p style="color:var(--text-secondary); font-size:.92rem; line-height:1.6;">
                     Trang quản trị dành cho <strong>Admin</strong> và <strong>Seller</strong>.
                     Admin quản lý toàn bộ: POI, Tour, Audio, Translation, Users, Duyệt yêu cầu, Dashboard Analytics.
                     Seller đăng ký → nhận quán trống hoặc mở quán mới → cập nhật nội dung → chờ Admin duyệt.
-                    Gồm <strong>15 trang React</strong> với phân quyền JWT.
+                    Gồm <strong>18 trang React</strong> với phân quyền JWT.
                 </p>
             </div>
-            <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #2e7d32;">
+            <div
+                style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06); border-left:4px solid #2e7d32;">
                 <div style="font-size:1.6rem; margin-bottom:.4rem;">⚙️</div>
                 <h4 style="color:#2e7d32; margin-bottom:.5rem;">Backend & Database</h4>
                 <p style="color:var(--text-secondary); font-size:.92rem; line-height:1.6;">
-                    2 server ASP.NET 8: <strong>Web API (port 6050)</strong> với 15 Controllers và 43 endpoints phục vụ Admin/Seller,
-                    <strong>Mobile API (port 6111)</strong> phục vụ Tourist. Database <strong>Supabase PostgreSQL</strong>
-                    với 14 bảng. Tích hợp <strong>FPT.AI TTS API</strong> (text-to-speech), Unified Proxy + Ngrok Tunnel.
+                    2 server ASP.NET 8: <strong>Web API (port 6050)</strong> với 15 Controllers và 61 endpoints phục vụ
+                    Admin/Seller,
+                    <strong>Mobile API (port 6111)</strong> phục vụ Tourist. Database <strong>Supabase
+                        PostgreSQL</strong>
+                    với 14 bảng. Tích hợp <strong>FPT.AI TTS API</strong> (text-to-speech), Unified Proxy + Ngrok
+                    Tunnel.
                 </p>
             </div>
         </div>
 
         <!-- CORE FEATURES BY ROLE -->
-        <h3 style="font-size:1.4rem; color:var(--primary-dark); margin-bottom:1rem;">🎯 Chức năng cốt lõi theo vai trò</h3>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.2rem; margin-bottom:2rem;">
+        <h3 style="font-size:1.4rem; color:var(--primary-dark); margin-bottom:1rem;">🎯 Chức năng cốt lõi theo vai trò
+        </h3>
+        <div
+            style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.2rem; margin-bottom:2rem;">
 
             <!-- ADMIN -->
             <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
                 <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;">
-                    <span style="background:#e8eaf6; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">👨‍💼</span>
+                    <span
+                        style="background:#e8eaf6; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">👨‍💼</span>
                     <h4 style="color:#283593;">Admin — Quản trị viên</h4>
                 </div>
                 <ul style="color:var(--text-secondary); font-size:.9rem; line-height:1.8; padding-left:1.2rem;">
-                    <li><strong>CRUD Điểm ẩm thực (POI)</strong> — tạo/sửa/xóa kèm ảnh, tọa độ GPS, danh mục, cascade delete</li>
-                    <li><strong>Quản lý Tour</strong> — tạo tuyến du lịch gắn nhiều POI bằng Npgsql, gợi ý Tour thông minh</li>
+                    <li><strong>CRUD Điểm ẩm thực (POI)</strong> — tạo/sửa/xóa kèm ảnh, tọa độ GPS, danh mục, cascade
+                        delete</li>
+                    <li><strong>Quản lý Tour</strong> — tạo tuyến du lịch gắn nhiều POI bằng Npgsql, gợi ý Tour thông
+                        minh</li>
                     <li><strong>Audio TTS</strong> — tạo thuyết minh bằng FPT.AI, CRUD quản lý file audio</li>
                     <li><strong>Đa ngôn ngữ</strong> — CRUD bản dịch vi/en/zh cho mỗi POI</li>
-                    <li><strong>Duyệt yêu cầu</strong> — Approve/Reject 4 loại: Claim quán, Mở quán mới, Sửa thông tin (Stall/FoodPlace), Dịch thuật</li>
+                    <li><strong>Duyệt yêu cầu</strong> — Approve/Reject 4 loại: Claim quán, Mở quán mới, Sửa thông tin
+                        (Stall/FoodPlace), Dịch thuật</li>
                     <li><strong>Quản lý Users</strong> — tạo tài khoản, khóa/mở khóa, phân quyền</li>
-                    <li><strong>Dashboard Analytics</strong> — thống kê tổng quan, heatmap mật độ, visitor chart, active users realtime</li>
+                    <li><strong>Dashboard Analytics</strong> — thống kê tổng quan, heatmap mật độ, visitor chart, active
+                        users realtime</li>
                 </ul>
             </div>
 
             <!-- SELLER -->
             <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
                 <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;">
-                    <span style="background:#fff8e1; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🏪</span>
+                    <span
+                        style="background:#fff8e1; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🏪</span>
                     <h4 style="color:#f57f17;">Seller — Chủ quán ăn</h4>
                 </div>
                 <ul style="color:var(--text-secondary); font-size:.9rem; line-height:1.8; padding-left:1.2rem;">
                     <li><strong>Đăng ký tài khoản</strong> — tự tạo tài khoản Seller với BCrypt hash password</li>
-                    <li><strong>Nhận quán trống (Claim)</strong> — xem bản đồ quán vô chủ, bấm nhận → chờ Admin duyệt</li>
+                    <li><strong>Nhận quán trống (Claim)</strong> — xem bản đồ quán vô chủ, bấm nhận → chờ Admin duyệt
+                    </li>
                     <li><strong>Tạo quán mới</strong> — đề xuất mở quán kèm ảnh, vị trí, thông tin → chờ duyệt</li>
                     <li><strong>Cập nhật Profile quán</strong> — sửa giá, mô tả, giờ mở cửa → tạo update request</li>
                     <li><strong>Audio TTS riêng</strong> — tạo thuyết minh cho quán mình, file lưu server local</li>
@@ -638,13 +657,17 @@
             <!-- TOURIST -->
             <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
                 <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;">
-                    <span style="background:#e8f5e9; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">📱</span>
+                    <span
+                        style="background:#e8f5e9; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">📱</span>
                     <h4 style="color:#2e7d32;">Tourist — Du khách (Mobile App)</h4>
                 </div>
                 <ul style="color:var(--text-secondary); font-size:.9rem; line-height:1.8; padding-left:1.2rem;">
-                    <li><strong>Bản đồ ẩm thực</strong> — xem toàn bộ quán ăn trên Leaflet Map, popup chi tiết kèm ảnh</li>
-                    <li><strong>Chọn Tour & GPS</strong> — chọn tuyến tham quan, bật GPS dẫn đường theo Nearest-Neighbor</li>
-                    <li><strong>Thuyết minh TTS</strong> — khi đến gần quán (≤30m), tự phát audio giới thiệu đa ngôn ngữ</li>
+                    <li><strong>Bản đồ ẩm thực</strong> — xem toàn bộ quán ăn trên Leaflet Map, popup chi tiết kèm ảnh
+                    </li>
+                    <li><strong>Chọn Tour & GPS</strong> — chọn tuyến tham quan, bật GPS dẫn đường theo Nearest-Neighbor
+                    </li>
+                    <li><strong>Thuyết minh TTS</strong> — khi đến gần quán (≤30m), tự phát audio giới thiệu đa ngôn ngữ
+                    </li>
                     <li><strong>Chọn ngôn ngữ</strong> — chuyển đổi Việt / Anh / Trung cho toàn bộ nội dung</li>
                     <li><strong>Yêu thích</strong> — toggle icon trái tim để đánh dấu quán ăn yêu thích</li>
                     <li><strong>Du lịch ảo</strong> — trải nghiệm Tour không cần di chuyển thực tế</li>
@@ -656,22 +679,27 @@
         <!-- SYSTEM FLOW -->
         <div style="background:white; border-radius:14px; padding:1.5rem; box-shadow:0 4px 16px rgba(0,0,0,.06);">
             <h4 style="color:var(--primary-dark); margin-bottom:.8rem;">🔄 Luồng hoạt động tổng quát</h4>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; text-align:center;">
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; text-align:center;">
                 <div>
                     <div style="font-size:2rem;">①</div>
-                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Admin</strong> tạo POI, Tour, Audio, Translation trên Web</p>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Admin</strong>
+                        tạo POI, Tour, Audio, Translation trên Web</p>
                 </div>
                 <div>
                     <div style="font-size:2rem;">②</div>
-                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Seller</strong> đăng ký, nhận/mở quán, cập nhật nội dung → gửi phiếu duyệt</p>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Seller</strong>
+                        đăng ký, nhận/mở quán, cập nhật nội dung → gửi phiếu duyệt</p>
                 </div>
                 <div>
                     <div style="font-size:2rem;">③</div>
-                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Admin</strong> duyệt yêu cầu Seller → dữ liệu đồng bộ lên Supabase</p>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Admin</strong>
+                        duyệt yêu cầu Seller → dữ liệu đồng bộ lên Supabase</p>
                 </div>
                 <div>
                     <div style="font-size:2rem;">④</div>
-                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Tourist</strong> mở App → dữ liệu load từ API → khám phá bản đồ, Tour, TTS</p>
+                    <p style="font-size:.85rem; color:var(--text-secondary); line-height:1.5;"><strong>Tourist</strong>
+                        mở App → dữ liệu load từ API → khám phá bản đồ, Tour, TTS</p>
                 </div>
             </div>
         </div>
@@ -820,8 +848,8 @@ graph TB
     end
 
     subgraph Backend["Tầng Backend"]
-        WEBAPI["⚙️ Web API<br/>ASP.NET 8<br/>Port 6050<br/>15 Controllers"]
-        MOBILEAPI["📡 Mobile API<br/>ASP.NET 8<br/>Port 6111<br/>Supabase Client"]
+        WEBAPI["⚙️ Web API<br/>ASP.NET 8<br/>Port 6050<br/>15 Controllers, 61 Endpoints"]
+        MOBILEAPI["📡 Mobile API<br/>ASP.NET 8<br/>Port 6111<br/>4 Controllers, 7 Endpoints"]
     end
 
     subgraph Data["Tầng Dữ Liệu"]
@@ -1007,7 +1035,8 @@ graph TB
         <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Hệ thống sử dụng JWT (JSON Web
             Token, hạn 2 giờ) kết hợp BCrypt hash password. Phân 3 vai trò: <strong>Admin</strong>,
             <strong>Seller</strong>, <strong>Tourist</strong>. Admin có quyền tạo user, khoá/mở khoá tài khoản, và sửa
-            thông tin user.</p>
+            thông tin user.
+        </p>
 
         <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Xác Thực
         </h3>
@@ -1582,7 +1611,8 @@ flowchart TD
         <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Seller có 2 luồng quan trọng:
             <strong>Nhận quán trống (Claim Stall)</strong> từ dữ liệu Admin mồi sẵn, hoặc báo cáo <strong>Tạo quán mới
                 (New Stall)</strong>. Tất cả thay đổi thông tin đều đẩy vào bảng <code>update_requests</code> và ở trạng
-            thái Pending chờ Admin duyệt mới hiển thị.</p>
+            thái Pending chờ Admin duyệt mới hiển thị.
+        </p>
 
         <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Seller
             Portal</h3>
@@ -1741,7 +1771,9 @@ flowchart TD
             </div>
         </div>
         <p style="margin-bottom:1rem;font-size:1.1rem;color:var(--text-secondary);">Ứng dụng Android bọc webview React.
-            Tích hợp GPS tracking bằng HTML5, vẽ đường Tour qua giải thuật tối ưu khoảng cách (Nearest-Neighbor), phát
+            Tích hợp GPS tracking 3 tầng: <strong>Android FusedLocation (Native)</strong> → <strong>HTML5 Geolocation
+                (Wi-Fi)</strong> → <strong>IP Geolocation (fallback)</strong>. Vẽ đường Tour qua giải thuật tối ưu
+            khoảng cách (Nearest-Neighbor), phát
             âm thanh TTS ngay khi Tourist đi lại gần điểm ẩm thực. App có cơ chế Fallback Offline cache.</p>
 
         <h3 style="margin:2rem 0 1rem; font-size:1.6rem; color:var(--primary-dark)">Use Case Diagram — Module Mobile App
@@ -1796,7 +1828,7 @@ sequenceDiagram
     App->>App: Kích hoạt thuật toán vẽ Nearest-Neighbor
     App->>Map: Vẽ vệt đường nét đứt đi qua các mốc POI
 
-    App->>GPS: Yêu cầu lấy watchPosition HighAccuracy
+    App->>GPS: Yêu cầu lấy watchPosition enableHighAccuracy=false cho Wi-Fi
 
     loop Liên tục khi di chuyển vật lý
         GPS-->>App: Tọa độ lat, lng
@@ -1819,11 +1851,11 @@ sequenceDiagram
                 <pre class="mermaid">
 flowchart TD
     A([Bắt đầu đi bộ với Tour]) --> B[Kích hoạt hàm watchPosition GPS thiết bị]
-    B --> C[Nhận tín hiệu tọa độ mới nhất]
+    B --> C[Nhận tín hiệu tọa độ mới từ FusedLocation hoặc Wi-Fi]
     C --> D[Cập nhật UI kim chỉ nam trên bản đồ Map]
     D --> E[Lấy POI mục tiêu tiếp theo trong mảng tuyến đường]
     E --> F[Tính khoảng cách bằng công thức tính toán tọa độ cầu]
-    F --> G{Khoảng cách dưới 30 mét?}
+    F --> G{Khoảng cách dưới 50 mét?}
     G -->|Không| B
     G -->|Có| H[Kiểm tra xem cờ TTS của quán này đã đọc chưa?]
     H -->|Đã đọc| B
@@ -1874,7 +1906,7 @@ flowchart TD
     D --> E{API trả data thành công?}
     E -->|Thành công| F[Chuyển data thành chuỗi JSON.stringify]
     F --> G[Lưu chuỗi biến mạnh này vào LocalStorage trình duyệt]
-    G --> H[Đọc data lên Redux store nội bộ Render giao diện]
+    G --> H[Đọc data lên React useState nội bộ Render giao diện]
     E -->|Thất bại/Crash| I[Kích hoạt cơ chế Fallback Offline]
     C -->|Offline| I
     I --> J[Đọc Object JSON lưu trong LocalStorage]
@@ -1886,51 +1918,74 @@ flowchart TD
         </div>
 
         <div class="function-group" id="uc-mobile-poi-conflict">
-            <h4>3. Xử lý Xung đột và Chồng chéo POI gần nhau</h4>
-            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Khi 2 hoặc nhiều quán ăn (POI) nằm san sát nhau, bán kính quét (<code>activation_radius</code>, mặc định 50m) của GPS có thể bao trùm nhiều quán cùng lúc. Hệ thống sử dụng thuật toán <strong>"Súng bắn tỉa GPS"</strong> — quét toàn bộ POI, tìm <strong>duy nhất 1 quán gần nhất</strong> bằng <code>calculateDistance</code> (Haversine), kết hợp cờ Dedup (<code>currentShopId</code>). <strong>Trường hợp đặc biệt:</strong> Nếu du khách đứng chính xác giữa 2 POI có khoảng cách bằng nhau, hệ thống ưu tiên <strong>POI có thứ tự xuất hiện trước (index nhỏ hơn)</strong> trong mảng <code>allPlacesBackup</code> từ database — do phép so sánh <code>distMet &lt; minDistance</code> (strict less-than) chỉ cập nhật khi khoảng cách <em>nhỏ hơn thật sự</em>, giữ nguyên POI đầu tiên tìm được khi bằng nhau.</p>
+            <h4>3. Xử lý Xung đột và Chồng chéo POI gần nhau (Smart POI Queue)</h4>
+            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Khi 2 hoặc nhiều quán
+                ăn (POI) nằm san sát nhau, bán kính quét (<code>activation_radius</code>, mặc định 50m) của GPS có thể
+                bao trùm nhiều quán cùng lúc. Hệ thống sử dụng thuật toán <strong>Smart POI Queue</strong> — thu thập
+                <strong>tất cả POI trong bán kính</strong>, tính <strong>hướng di chuyển (heading)</strong> từ vị trí
+                GPS trước đó, rồi sắp xếp theo <strong>4 tiêu chí ưu tiên</strong>:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>1️⃣ Chưa ghé thăm</h3>
+                    <p>POI chưa visit được ưu tiên hơn POI đã visit. Sử dụng <code>visitedPlaces</code> (Set) để kiểm tra.</p>
+                </div>
+                <div class="card">
+                    <h3>2️⃣ Hướng trước mặt</h3>
+                    <p>Tính bearing từ vị trí trước → hiện tại để xác định heading. POI nằm <strong>trước mặt</strong>
+                        (góc &lt; 90°) được ưu tiên hơn POI <strong>sau lưng</strong> (góc &gt; 90°). Chỉ tính khi di chuyển &gt; 2m (tránh GPS jitter).</p>
+                </div>
+                <div class="card">
+                    <h3>3️⃣ Khoảng cách gần</h3>
+                    <p>POI gần hơn (mét) được ưu tiên. Sử dụng công thức Haversine (<code>calculateDistance</code>) để tính.</p>
+                </div>
+                <div class="card">
+                    <h3>4️⃣ ID Database</h3>
+                    <p>Tie-breaker cuối cùng: POI có <code>id</code> nhỏ hơn (tạo trước trong database) sẽ được chọn. Đảm bảo kết quả <strong>luôn xác định</strong> (deterministic).</p>
+                </div>
+            </div>
 
             <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
             <div class="mermaid-container">
                 <pre class="mermaid">
 sequenceDiagram
     participant GPS as GPS Sensor
-    participant App as React App State
-    participant Calc as Distance Calculator
-    participant DB as allPlacesBackup Array
-    participant Flag as Dedup Flag currentShopId
+    participant App as React App
+    participant Prev as prevLocationRef
+    participant Calc as Smart POI Queue
+    participant Flag as currentShopId
     participant TTS as TTS Engine
 
-    GPS->>App: Tọa độ mới (lat, lng) từ watchPosition
-    App->>DB: Lấy toàn bộ mảng allPlacesBackup
+    GPS->>App: Tọa độ mới (lat, lng)
 
-    Note over App,Calc: Thuật toán Súng bắn tỉa - Tìm ĐÚNG 1 quán gần nhất
+    App->>Prev: Lấy vị trí trước đó
+    alt Di chuyển > 2m
+        App->>App: Tính userHeading = bearing(prev → current)
+    else Đứng yên hoặc GPS jitter
+        App->>App: userHeading = null (bỏ qua heading)
+    end
+    App->>Prev: Lưu vị trí hiện tại
 
-    App->>Calc: Khởi tạo minDistance = Infinity, closestPlace = null
+    Note over Calc: Thu thập TẤT CẢ POI trong activation_radius
 
-    loop forEach POI trong allPlacesBackup
-        Calc->>Calc: distMet = calculateDistance(userLat, userLon, poi.lat, poi.lng) x 1000
-        alt distMet nhỏ hơn STRICT minDistance hiện tại
-            Calc->>Calc: Cập nhật minDistance = distMet, closestPlace = POI này
-        else distMet BẰNG minDistance - Tie-Breaking
-            Note over Calc: Giữ nguyên closestPlace cũ vì dùng toán tử STRICT less-than
-            Note over Calc: POI có index nhỏ hơn trong database sẽ thắng
-        end
+    App->>Calc: map() + filter(distMet <= radius)
+    loop Mỗi POI trong bán kính
+        Calc->>Calc: Tính distMet = Haversine × 1000
+        Calc->>Calc: Tính angleDiff = |userHeading - bearingToPOI|
     end
 
-    Calc-->>App: Trả về closestPlace duy nhất và minDistance
+    Note over Calc: Sắp xếp 4 tiêu chí
 
-    alt closestPlace = null hoặc minDistance lớn hơn activation_radius
-        App->>App: Bỏ qua, chờ GPS tick tiếp theo
-    else Có closestPlace trong bán kính kích hoạt
-        App->>Flag: So sánh closestPlace.id với currentShopId
-        alt Trùng ID đã đọc rồi
-            Flag-->>App: SKIP - không phát lại tránh lặp audio
-        else POI mới chưa đọc
-            Flag->>Flag: Cập nhật currentShopId = closestPlace.id
-            App->>TTS: speakGPS(closestPlace.name, closestPlace.description)
-            TTS-->>App: Phát âm thanh thuyết minh qua loa thiết bị
-            App->>App: Ghi lịch sử recordHistory(closestPlace.id, gps_checkin)
-        end
+    Calc->>Calc: Sort: Chưa ghé > Trước mặt > Gần hơn > ID nhỏ
+    Calc-->>App: bestPOI = nearbyPOIs[0]
+
+    App->>Flag: bestPOI.id !== currentShopId?
+    alt POI mới
+        Flag->>Flag: currentShopId = bestPOI.id
+        App->>TTS: speakGPS(bestPOI.name, description)
+        App->>App: recordHistory(gps_checkin)
+    else Đã đọc rồi
+        App->>App: SKIP
     end
                 </pre>
             </div>
@@ -1939,37 +1994,43 @@ sequenceDiagram
             <div class="mermaid-container">
                 <pre class="mermaid">
 flowchart TD
-    A([GPS báo tọa độ mới của người dùng]) --> B[Lấy mảng allPlacesBackup từ database]
-    B --> C[Khởi tạo minDistance = Infinity, closestPlace = null]
-    C --> D[Vòng lặp forEach qua TOÀN BỘ POI trong mảng]
-    D --> E{distMet STRICT nhỏ hơn minDistance?}
-    E -->|distMet nhỏ hơn| F[Cập nhật closestPlace = POI này, minDistance = distMet]
-    F --> D
-    E -->|distMet BẰNG minDistance| G["Giữ nguyên closestPlace cũ (POI có index nhỏ hơn thắng)"]
-    G --> D
-    E -->|distMet lớn hơn| D
-    D --> H{Hoàn tất quét — closestPlace có tồn tại?}
-    H -->|Không có POI nào| I([Chờ GPS tick tiếp theo])
-    H -->|Có closestPlace| J{minDistance nhỏ hơn hoặc bằng activation_radius?}
-    J -->|Ngoài bán kính| I
-    J -->|Trong bán kính| K{closestPlace.id trùng currentShopId đã lưu?}
-    K -->|Trùng — đã đọc rồi| I
-    K -->|POI mới chưa đọc| L[Gán currentShopId = closestPlace.id]
-    L --> M[Hủy audio cũ bằng speechSynthesis.cancel hoặc AndroidBridge.stop]
-    M --> N[speakGPS phát tên và mô tả quán bằng ngôn ngữ đã chọn]
-    N --> O[Ghi lịch sử recordHistory gps_checkin vào server]
-    O --> I
+    A([GPS báo tọa độ mới]) --> B{Di chuyển > 2m so với lần trước?}
+    B -->|Có| C[Tính userHeading = bearing từ prev → current]
+    B -->|Không| D[userHeading = null - bỏ qua hướng]
+    C --> E[Lưu vị trí hiện tại vào prevLocationRef]
+    D --> E
+
+    E --> F[Thu thập TẤT CẢ POI trong activation_radius]
+    F --> G{Có POI nào trong bán kính?}
+    G -->|Không| H([Chờ GPS tick tiếp theo])
+
+    G -->|Có| I[Tính angleDiff cho mỗi POI]
+    I --> J["Sắp xếp theo 4 tiêu chí:<br/>1. Chưa ghé thăm<br/>2. Trước mặt (< 90°)<br/>3. Khoảng cách gần<br/>4. ID database nhỏ"]
+    J --> K[Chọn bestPOI = nearbyPOIs đầu tiên]
+
+    K --> L{bestPOI.id === currentShopId?}
+    L -->|Trùng - đã đọc| H
+    L -->|POI mới| M[Cập nhật currentShopId]
+    M --> N[speakGPS phát thuyết minh]
+    N --> O[Ghi lịch sử gps_checkin]
+    O --> H
                 </pre>
             </div>
 
             <div class="highlight" style="margin-top: 1rem;">
-                <strong>⚡ Tie-Breaking khi khoảng cách bằng nhau:</strong> Vòng lặp <code>forEach</code> quét mảng <code>allPlacesBackup</code> theo thứ tự từ database. Phép so sánh <code>distMet &lt; minDistance</code> (strict less-than) chỉ ghi đè khi khoảng cách <em>nhỏ hơn thật sự</em>. Do đó khi du khách đứng chính xác giữa 2 POI cách đều nhau → <strong>POI có index nhỏ hơn trong mảng (xuất hiện trước trong database) sẽ được phát trước</strong>. Khi du khách di chuyển dần về phía POI còn lại, GPS tick tiếp theo sẽ tự động chuyển sang POI đó.
+                <strong>⚡ Ví dụ thực tế:</strong> Du khách đi bộ hướng Đông, đứng giữa Quán A (trước mặt, 30m) và
+                Quán B (sau lưng, 30m). Cả hai cùng khoảng cách nhưng Quán A nằm phía trước mặt (angleDiff = 20°) →
+                <strong>Quán A được đọc trước</strong>. Khi du khách quay lại hướng Quán B → GPS tick tiếp theo phát hiện
+                Quán B nằm trước mặt + chưa ghé → đọc Quán B.
             </div>
         </div>
 
         <div class="function-group" id="uc-mobile-concurrency">
             <h4>4. Xử lý Hàng đợi Đám đông (Zero-Lag Architecture)</h4>
-            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Nếu hàng trăm, hàng ngàn du khách cùng đứng tại một điểm POI lúc này, xử lý hàng đợi (Queue) âm thanh trên Server sẽ dẫn đến sập hệ thống (bottleneck). Giải pháp của FoodMap là kiến trúc phân tán (Client-Side Computing) — để phần cứng điện thoại gánh tính toán thay vì Server.</p>
+            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Nếu hàng trăm, hàng
+                ngàn du khách cùng đứng tại một điểm POI lúc này, xử lý hàng đợi (Queue) âm thanh trên Server sẽ dẫn đến
+                sập hệ thống (bottleneck). Giải pháp của FoodMap là kiến trúc phân tán (Client-Side Computing) — để phần
+                cứng điện thoại gánh tính toán thay vì Server.</p>
 
             <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
             <div class="mermaid-container">
@@ -1990,21 +2051,21 @@ sequenceDiagram
     par Tất cả thiết bị xử lý song song và độc lập
         A->>A: GPS watchPosition đọc tọa độ thiết bị A
         A->>A: Haversine tính khoảng cách với từng POI
-        A->>A: Nếu POI trong 30m thì gọi SpeechSynthesis phát loa A
+        A->>A: Nếu POI trong 50m thì gọi SpeechSynthesis phát loa A
     and
         B->>B: GPS watchPosition đọc tọa độ thiết bị B
         B->>B: Haversine tính khoảng cách với từng POI
-        B->>B: Nếu POI trong 30m thì gọi SpeechSynthesis phát loa B
+        B->>B: Nếu POI trong 50m thì gọi SpeechSynthesis phát loa B
     and
         N->>N: GPS watchPosition đọc tọa độ thiết bị N
         N->>N: Haversine tính khoảng cách với từng POI
-        N->>N: Nếu POI trong 30m thì gọi SpeechSynthesis phát loa N
+        N->>N: Nếu POI trong 50m thì gọi SpeechSynthesis phát loa N
     end
 
     Note over S: Giai đoạn 3 - Heartbeat nhẹ Fire and Forget
-    A-->>S: POST /api/ping {userId, lat, lng} mỗi 15 giây
-    B-->>S: POST /api/ping {userId, lat, lng} mỗi 15 giây
-    N-->>S: POST /api/ping {userId, lat, lng} mỗi 15 giây
+    A-->>S: POST /api/ping {userId, lat, lng} mỗi 5 giây
+    B-->>S: POST /api/ping {userId, lat, lng} mỗi 5 giây
+    N-->>S: POST /api/ping {userId, lat, lng} mỗi 5 giây
     Note over S: Server chỉ ghi log file JSON, không phản hồi nặng
                 </pre>
             </div>
@@ -2041,9 +2102,9 @@ graph TB
     Backend_Server -.->|"Kéo file JSON 10MB lúc tải app"| Mobile_B
     Backend_Server -.->|"Kéo file JSON 10MB lúc tải app"| Mobile_C
     
-    Mobile_A -.->|"UDP/HTTP Ping 15 giây 1 lần"| Backend_Server
-    Mobile_B -.->|"UDP/HTTP Ping 15 giây 1 lần"| Backend_Server
-    Mobile_C -.->|"UDP/HTTP Ping 15 giây 1 lần"| Backend_Server
+    Mobile_A -.->|"HTTP Ping 5 giây 1 lần"| Backend_Server
+    Mobile_B -.->|"HTTP Ping 5 giây 1 lần"| Backend_Server
+    Mobile_C -.->|"HTTP Ping 5 giây 1 lần"| Backend_Server
     
     classDef mobile fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
     classDef server fill:#fff3e0,stroke:#e65100,stroke-width:2px;
@@ -2068,16 +2129,23 @@ flowchart TD
     I --> J[Mỗi điện thoại tự so Haversine trên RAM riêng]
     J --> K[Mỗi điện thoại tự phát TTS trên loa riêng]
     K --> L{Server có bị ảnh hưởng?}
-    L -->|KHÔNG| M[Server chỉ nhận ping nhẹ 15s một lần để vẽ Heatmap]
+    L -->|KHÔNG| M[Server chỉ nhận ping nhẹ 5s một lần để vẽ Heatmap]
     M --> N([Zero-Lag cho dù 10000 du khách cùng lúc])
                 </pre>
             </div>
-            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-secondary);"><strong>Cách giải quyết Hàng đợi:</strong> Mọi thứ liên quan đến đo lường khoảng cách, quét bán kính radar, và bật loa âm thanh đều được xử lý cục bộ trên từng mạch xử lý (CPU) của riêng từng điện thoại. Do đó <strong>không hề tồn tại khái niệm hàng đợi tại Server</strong> đối với dịch vụ TTS hay Map. Server chỉ đóng vai trò phân phát dữ liệu tĩnh và vẽ Heatmap ngầm, giúp ứng dụng không bao giờ bị lag dù tại một quán có 10 hay 1000 du khách cùng nghe một lúc.</p>
+            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-secondary);"><strong>Cách giải quyết
+                    Hàng đợi:</strong> Mọi thứ liên quan đến đo lường khoảng cách, quét bán kính radar, và bật loa âm
+                thanh đều được xử lý cục bộ trên từng mạch xử lý (CPU) của riêng từng điện thoại. Do đó <strong>không hề
+                    tồn tại khái niệm hàng đợi tại Server</strong> đối với dịch vụ TTS hay Map. Server chỉ đóng vai trò
+                phân phát dữ liệu tĩnh và vẽ Heatmap ngầm, giúp ứng dụng không bao giờ bị lag dù tại một quán có 10 hay
+                1000 du khách cùng nghe một lúc.</p>
         </div>
 
         <div class="function-group" id="uc-mobile-performance">
             <h4>5. Tối ưu hiệu suất Performance Mobile App</h4>
-            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Ứng dụng Mobile chạy trên WebView Android với bộ nhớ hạn chế (RAM 3-4GB). Để đảm bảo mượt mà, hệ thống áp dụng nhiều kỹ thuật tối ưu: Lazy Loading, Memory Pooling, Debounce GPS, Pre-render Map Tiles, và Speech Queue Cancel.</p>
+            <p style="margin: 0.5rem 0 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">Ứng dụng Mobile chạy
+                trên WebView Android với bộ nhớ hạn chế (RAM 3-4GB). Để đảm bảo mượt mà, hệ thống áp dụng nhiều kỹ thuật
+                tối ưu: Lazy Loading, Memory Pooling, Debounce GPS, Pre-render Map Tiles, và Speech Queue Cancel.</p>
 
             <h5 style="margin-top:1.5rem;">Sequence Diagram</h5>
             <div class="mermaid-container">
@@ -2113,11 +2181,11 @@ sequenceDiagram
     Note over Map: divIcon CSS nhẹ hơn 10x so với image icon truyền thống
 
     Note over User,TTS: PHASE 3 - GPS xử lý hiệu quả
-    React->>React: watchPosition với enableHighAccuracy
+    React->>React: FusedLocation Native poll mỗi 3s + watchPosition enableHighAccuracy=false
     loop Mỗi tín hiệu GPS mới
-        React->>React: Debounce bỏ qua nếu di chuyển dưới 5m
-        React->>React: Chỉ tính Haversine cho POI trong Tour hiện tại
-        Note over React: Không quét toàn bộ N POI mà chỉ quét POI target
+        React->>React: Quét toàn bộ allPlacesBackup bằng forEach O(N)
+        React->>React: Tìm POI gần nhất bằng Haversine, so sánh với activation_radius
+        Note over React: Dedup bằng currentShopId — không phát lại POI đã đọc
     end
 
     Note over User,TTS: PHASE 4 - Audio không chồng chéo
@@ -2142,15 +2210,14 @@ flowchart TD
     G --> H{User chuyển sang tab Map?}
     H -->|Có| I[Khởi tạo Leaflet MapContainer 1 lần duy nhất]
     I --> J[Dùng divIcon CSS thay vì image icon cho Marker]
-    J --> K[Bật watchPosition GPS HighAccuracy]
+    J --> K[Bật FusedLocation Native 3s + watchPosition Wi-Fi]
     K --> L[Nhận tọa độ mới từ sensor]
-    L --> M{Di chuyển đủ xa hơn 5m so với lần trước?}
-    M -->|Dưới 5m| N[Bỏ qua Debounce giảm tải CPU]
-    N --> L
-    M -->|Trên 5m| O[Chỉ tính Haversine cho POI target tiếp theo trong Tour]
-    O --> P{POI trong phạm vi 30m?}
+    L --> O[Quét toàn bộ allPlacesBackup forEach tìm POI gần nhất]
+    O --> P{POI trong phạm vi activation_radius 50m?}
     P -->|Không| L
-    P -->|Có| Q[Cancel audio cũ đang phát nếu có]
+    P -->|Có| PA{currentShopId trùng POI này?}
+    PA -->|Trùng — đã đọc| L
+    PA -->|POI mới| Q[Cancel audio cũ đang phát nếu có]
     Q --> R[Speak thuyết minh POI mới bằng ngôn ngữ đã chọn]
     R --> S[Cập nhật visitedPlaces và auto-pan bản đồ]
     S --> T{Tour còn POI tiếp theo?}
@@ -2198,16 +2265,16 @@ flowchart TD
                             <td>Nhẹ hơn 10x trên bản đồ</td>
                         </tr>
                         <tr>
-                            <td><strong>GPS Debounce</strong></td>
-                            <td>GPS tick quá nhiều</td>
-                            <td>Bỏ qua tín hiệu nếu di chuyển dưới 5m</td>
-                            <td>Giảm 80% CPU khi đứng yên</td>
+                            <td><strong>Dedup currentShopId</strong></td>
+                            <td>Phát TTS lặp lại cùng quán</td>
+                            <td>Cờ <code>currentShopId</code> ngăn phát lại POI đã đọc</td>
+                            <td>Không bao giờ lặp audio</td>
                         </tr>
                         <tr>
-                            <td><strong>Target-only Scan</strong></td>
-                            <td>Quét tất cả POI lãng phí</td>
-                            <td>Chỉ tính Haversine cho POI target tiếp theo trong Tour</td>
-                            <td>O(1) thay vì O(N)</td>
+                            <td><strong>Full Scan + Nearest</strong></td>
+                            <td>Cần tìm quán gần nhất chính xác</td>
+                            <td>Quét toàn bộ <code>allPlacesBackup.forEach</code> bằng Haversine O(N)</td>
+                            <td>Luôn khớp đúng quán gần nhất</td>
                         </tr>
                         <tr>
                             <td><strong>Speech Cancel</strong></td>
@@ -2293,7 +2360,7 @@ sequenceDiagram
     loop Chạy mỗi chu kỳ Timer 10 giây
         UI->>API: Kêu API trả chỉ số người dùng hiện tại
         API->>File: FileSystem.Read file log Heartbeat Mobile gửi lên
-        API->>API: Viết hàm đếm bao nhiêu ID có timestamp nhỏ hơn 45s
+        API->>API: Viết hàm đếm bao nhiêu ID có timestamp nhỏ hơn 30s
         API-->>UI: Push biến N người sang màn hình
         UI->>UI: Thấy N đổi thì chớp màn hình thẻ Widget
     end
@@ -2492,14 +2559,343 @@ flowchart TD
             </div>
         </div>
     </section>
+
+    <!-- MONITORING SECTION -->
+    <section id="uc-monitoring">
+        <div class="section-header">
+            <div class="icon" style="background:#e8eaf6;color:#283593;">📊</div>
+            <div>
+                <div class="section-num">Monitoring & Analytics</div>
+                <h2>Module Giám Sát & Thống Kê</h2>
+            </div>
+        </div>
+
+        <p style="font-size:1.1rem; color:var(--text-secondary); margin-bottom:2rem;">
+            Module Monitoring cho phép Admin theo dõi hoạt động hệ thống theo thời gian thực. Gồm 4 API endpoint chính:
+            <code>GET /api/admin/overview</code> (tổng quan), <code>GET /api/admin/analytics</code> (biểu đồ lượt truy cập),
+            <code>GET /api/admin/active-users</code> (GPS realtime), và <code>GET /api/History/heatmap</code> (bản đồ nhiệt).
+        </p>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>📈 Dashboard Overview</h3>
+                <p>Thống kê tổng quan: tổng user, POI, audio, tour, translations, lịch sử, yêu cầu chờ duyệt, lượt truy cập hôm nay / 7 ngày / tổng cộng.</p>
+                <ul>
+                    <li><code>GET /api/admin/overview</code></li>
+                    <li>Auth: <strong>Admin only</strong> (JWT + Role)</li>
+                    <li>Đếm từ 7 bảng: users_web, narration_points, food_places, tours, narration_translations, histories, update_requests, visitor_logs</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>📊 Visitor Analytics</h3>
+                <p>Biểu đồ lượt truy cập 7 ngày, phân loại thiết bị (Mobile/Desktop), 10 lượt truy cập gần nhất.</p>
+                <ul>
+                    <li><code>GET /api/admin/analytics</code></li>
+                    <li>GroupBy ngày → fill missing days</li>
+                    <li>GroupBy DeviceType → pie chart</li>
+                    <li>Top 10 recent visits (IP, page, device, time)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🟢 Active Users Realtime</h3>
+                <p>Theo dõi du khách đang online trên app mobile, hiển thị vị trí GPS realtime trên bản đồ admin.</p>
+                <ul>
+                    <li><code>GET /api/admin/active-users</code></li>
+                    <li>Đọc file <code>active_users.json</code></li>
+                    <li>Lọc user có lastSeen ≤ 12 giây</li>
+                    <li>Trả về activeCount + positions (lat/lng)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🗺️ History Heatmap</h3>
+                <p>Bản đồ nhiệt hiển thị mật độ tương tác tại các POI, giúp phân tích địa điểm phổ biến nhất.</p>
+                <ul>
+                    <li><code>GET /api/History/heatmap</code></li>
+                    <li>GroupBy NarrationPointId → count</li>
+                    <li>Join narration_points → lấy lat/lng</li>
+                    <li>Render bằng leaflet.heat trên frontend</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SEQUENCE: Dashboard Overview -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            🔄 Sequence Diagram — Admin xem Dashboard Overview
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    actor Admin as Admin
+    participant FE as AdminDashboard.jsx
+    participant API as AdminController<br/>GET /api/admin/overview
+    participant DB as PostgreSQL (Supabase)
+
+    Admin->>FE: Mở trang /admin
+    FE->>FE: useEffect → fetchOverview()
+
+    FE->>API: GET /api/admin/overview<br/>Headers: Authorization: Bearer {JWT}
+
+    API->>API: [Authorize(Roles = "Admin")]<br/>Kiểm tra JWT token + role
+
+    par Đếm song song từ 7 bảng
+        API->>DB: SELECT COUNT(*) FROM users_web
+        API->>DB: SELECT COUNT(*) FROM narration_points
+        API->>DB: SELECT COUNT(*) FROM food_places<br/>WHERE description IS NOT NULL
+        API->>DB: SELECT COUNT(*) FROM tours
+        API->>DB: SELECT COUNT(*) FROM narration_translations
+        API->>DB: SELECT COUNT(*) FROM histories
+        API->>DB: SELECT COUNT(*) FROM update_requests<br/>WHERE status = 'Pending'
+    end
+
+    par Đếm visitor_logs
+        API->>DB: SELECT COUNT(*) FROM visitor_logs<br/>WHERE created_at >= TODAY
+        API->>DB: SELECT COUNT(*) FROM visitor_logs<br/>WHERE created_at >= TODAY-7
+        API->>DB: SELECT COUNT(*) FROM visitor_logs
+    end
+
+    DB-->>API: Tất cả kết quả count
+
+    API-->>FE: 200 OK<br/>{totalUsers, totalPoi, totalAudio,<br/>totalTours, totalTranslations,<br/>totalHistory, pendingRequests,<br/>visitorsToday, visitors7Days,<br/>visitorsTotal}
+
+    FE->>FE: setState(overview)
+    FE->>Admin: Render 10 stat cards
+            </pre>
+        </div>
+
+        <!-- SEQUENCE: Analytics -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            🔄 Sequence Diagram — Admin xem Visitor Analytics
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    actor Admin as Admin
+    participant FE as AdminDashboard.jsx
+    participant API as AdminController<br/>GET /api/admin/analytics
+    participant DB as PostgreSQL
+
+    Admin->>FE: Cuộn tới phần Analytics
+    FE->>API: GET /api/admin/analytics<br/>Authorization: Bearer {JWT}
+
+    API->>DB: SELECT DATE(created_at), COUNT(*)<br/>FROM visitor_logs<br/>WHERE created_at >= TODAY-6<br/>GROUP BY DATE(created_at)
+    DB-->>API: daily[] (có thể thiếu ngày)
+
+    API->>API: Fill missing days (loop 7 ngày)<br/>Ngày nào thiếu → count = 0
+
+    API->>DB: SELECT device_type, COUNT(*)<br/>FROM visitor_logs<br/>GROUP BY device_type
+    DB-->>API: devices[] (Mobile/Desktop/...)
+
+    API->>DB: SELECT TOP 10 FROM visitor_logs<br/>ORDER BY created_at DESC
+    DB-->>API: recentVisits[]
+
+    API-->>FE: 200 OK {dailyChart, devices, recentVisits}
+
+    FE->>FE: Render biểu đồ cột (7 ngày)
+    FE->>FE: Render pie chart (thiết bị)
+    FE->>FE: Render bảng 10 lượt gần nhất
+    FE->>Admin: Hiển thị dashboard analytics
+            </pre>
+        </div>
+
+        <!-- SEQUENCE: Active Users -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            🔄 Sequence Diagram — Active Users Realtime (GPS)
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    actor Tourist as Tourist (Mobile)
+    participant MobileAPI as Mobile API<br/>Port 6111
+    participant File as active_users.json
+    participant WebAPI as AdminController<br/>GET /api/admin/active-users
+    participant FE as AdminDashboard.jsx
+    actor Admin as Admin
+
+    Note over Tourist,MobileAPI: Mobile app gửi GPS mỗi 5 giây
+
+    loop Mỗi 5 giây
+        Tourist->>MobileAPI: POST /api/users/ping<br/>{sessionId, latitude, longitude}
+        MobileAPI->>File: Ghi/cập nhật active_users.json<br/>{sessionId: {lastSeen, lat, lng}}
+    end
+
+    Note over Admin,FE: Admin Dashboard polling mỗi 5 giây
+
+    loop setInterval(5000ms)
+        FE->>WebAPI: GET /api/admin/active-users
+        WebAPI->>File: Đọc active_users.json<br/>(FileShare.ReadWrite)
+        File-->>WebAPI: JSON dictionary
+
+        WebAPI->>WebAPI: Lọc user có<br/>lastSeen >= Now - 12 giây
+
+        WebAPI-->>FE: 200 OK<br/>{activeCount: 3,<br/>positions: [{lat, lng}, ...]}
+
+        FE->>FE: Cập nhật marker trên bản đồ
+        FE->>Admin: Hiển thị số online + vị trí GPS
+    end
+            </pre>
+        </div>
+
+        <!-- SEQUENCE: Heatmap -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            🔄 Sequence Diagram — History Heatmap
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    actor Admin as Admin
+    participant FE as HistoryManager.jsx
+    participant API as HistoryController<br/>GET /api/History/heatmap
+    participant DB as PostgreSQL
+
+    Admin->>FE: Mở trang Heatmap
+    FE->>API: GET /api/History/heatmap<br/>Authorization: Bearer {JWT}
+
+    API->>DB: SELECT narration_point_id, COUNT(*)<br/>FROM histories<br/>GROUP BY narration_point_id
+
+    API->>DB: JOIN narration_points<br/>ON id = narration_point_id<br/>SELECT lat, lng, count AS weight, name
+
+    DB-->>API: [{lat, lng, weight, name}, ...]
+
+    API-->>FE: 200 OK<br/>[{lat:10.75, lng:106.70, weight:42, name:"Hủ tiếu"},<br/>{lat:10.76, lng:106.71, weight:18, name:"Bánh mì"}]
+
+    FE->>FE: L.heatLayer(data).addTo(map)
+    FE->>Admin: Bản đồ nhiệt với<br/>các vùng nóng/lạnh
+            </pre>
+        </div>
+
+        <!-- SEQUENCE: Visitor Log -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            🔄 Sequence Diagram — Visitor Log (Ghi nhận truy cập)
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    actor User as User (Web/Mobile)
+    participant FE as React Frontend
+    participant API as AdminController<br/>POST /api/visitor/log
+    participant DB as PostgreSQL
+
+    User->>FE: Truy cập trang web
+    FE->>FE: useEffect → gọi logVisitor()
+
+    FE->>API: POST /api/visitor/log [AllowAnonymous]<br/>{sessionId, deviceType, pageVisited}
+
+    API->>API: Tạo VisitorLog object<br/>SessionId = req ?? GUID mới<br/>DeviceType = req ?? "unknown"<br/>UserAgent = Request.Headers<br/>IpAddress = RemoteIpAddress<br/>CreatedAt = DateTime.UtcNow
+
+    API->>DB: INSERT INTO visitor_logs<br/>(session_id, device_type, user_agent,<br/>ip_address, page_visited, created_at)
+    DB-->>API: OK
+
+    API-->>FE: 200 {status: "logged"}
+            </pre>
+        </div>
+
+        <!-- ACTIVITY DIAGRAM -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            📋 Activity Diagram — Luồng hoạt động Monitoring tổng quát
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+flowchart TD
+    A([Admin đăng nhập]) --> B[Mở trang /admin]
+    B --> C{Trang nào?}
+
+    C -->|Dashboard| D[GET /api/admin/overview]
+    D --> D1[Đếm 7 bảng + visitor_logs]
+    D1 --> D2[Render 10 stat cards]
+
+    C -->|Analytics| E[GET /api/admin/analytics]
+    E --> E1[Query visitor_logs 7 ngày]
+    E1 --> E2[Fill missing days]
+    E2 --> E3[GroupBy device_type]
+    E3 --> E4[Top 10 recent visits]
+    E4 --> E5[Render biểu đồ cột + pie + bảng]
+
+    C -->|Active Users| F[GET /api/admin/active-users]
+    F --> F1[Đọc active_users.json]
+    F1 --> F2{File tồn tại?}
+    F2 -->|Không| F3[Return activeCount = 0]
+    F2 -->|Có| F4[Parse JSON dictionary]
+    F4 --> F5[Lọc lastSeen >= Now - 12s]
+    F5 --> F6[Lọc có lat/lng hợp lệ]
+    F6 --> F7[Render marker GPS trên bản đồ]
+
+    C -->|Heatmap| G[GET /api/History/heatmap]
+    G --> G1[GroupBy narration_point_id]
+    G1 --> G2[JOIN narration_points lấy lat/lng]
+    G2 --> G3[Render L.heatLayer trên Leaflet]
+
+    C -->|History Log| H[GET /api/History]
+    H --> H1[SELECT TOP 100 histories<br/>JOIN narration_points]
+    H1 --> H2[Render bảng lịch sử]
+
+    C -->|History Stats| I[GET /api/History/stats]
+    I --> I1[Đếm total + today]
+    I1 --> I2[Top 5 POI được tương tác nhiều nhất]
+    I2 --> I3[Render thống kê]
+
+    D2 --> J([Hiển thị cho Admin])
+    E5 --> J
+    F3 --> J
+    F7 --> J
+    G3 --> J
+    H2 --> J
+    I3 --> J
+            </pre>
+        </div>
+
+        <!-- HISTORY STATS SEQUENCE -->
+        <h3 style="margin:2.5rem 0 1rem; font-size:1.4rem; color:var(--primary-dark)">
+            🔄 Sequence Diagram — History Stats (Top POI)
+        </h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    actor Admin as Admin
+    participant FE as HistoryManager.jsx
+    participant API as HistoryController<br/>GET /api/History/stats
+    participant DB as PostgreSQL
+
+    Admin->>FE: Mở trang History
+    FE->>API: GET /api/History/stats
+
+    API->>DB: SELECT COUNT(*) FROM histories
+    DB-->>API: total = 256
+
+    API->>DB: SELECT COUNT(*) FROM histories<br/>WHERE created_at >= TODAY
+    DB-->>API: today = 12
+
+    API->>DB: SELECT narration_point_id, COUNT(*)<br/>FROM histories<br/>GROUP BY narration_point_id<br/>ORDER BY count DESC LIMIT 5
+    API->>DB: JOIN narration_points → lấy tên POI
+    DB-->>API: topPois = [{name:"Hủ tiếu", count:42}, ...]
+
+    API-->>FE: 200 {total:256, today:12, topPois:[...]}
+    FE->>Admin: Hiển thị thống kê + top 5 POI
+            </pre>
+        </div>
+
+        <div class="highlight info">
+            <strong>📌 Tóm tắt API Monitoring:</strong><br>
+            <code>GET /api/admin/overview</code> — 10 chỉ số tổng quan (auth Admin)<br>
+            <code>GET /api/admin/analytics</code> — Biểu đồ 7 ngày + thiết bị (auth Admin)<br>
+            <code>GET /api/admin/active-users</code> — GPS realtime từ file JSON (auth Admin)<br>
+            <code>POST /api/visitor/log</code> — Ghi nhận truy cập (công khai, không auth)<br>
+            <code>GET /api/History</code> — 100 lịch sử gần nhất (JOIN POI name)<br>
+            <code>GET /api/History/stats</code> — Thống kê + Top 5 POI<br>
+            <code>GET /api/History/heatmap</code> — Dữ liệu bản đồ nhiệt (lat/lng/weight)
+        </div>
+    </section>
+
     <!-- QR DOWNLOAD SECTION -->
     <section class="qr-section" id="download">
         <h2>📥 Tải Ứng Dụng FoodMap (Android APK)</h2>
-        <p style="margin-bottom: 1rem; opacity: 0.9;">Quét mã QR dưới đây bằng điện thoại để tải và cài đặt trực tiếp ứng dụng FoodMap.</p>
+        <p style="margin-bottom: 1rem; opacity: 0.9;">Quét mã QR dưới đây bằng điện thoại để tải và cài đặt trực tiếp
+            ứng dụng FoodMap.</p>
         <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Froundup-browse-unequal.ngrok-free.dev%2Fdownload%2Fapp.html" alt="FoodMap APK QR Code">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Froundup-browse-unequal.ngrok-free.dev%2Fdownload%2Fapp.html"
+                alt="FoodMap APK QR Code">
         </div>
-        <p style="margin-top: 0.8rem; opacity: 0.7; font-size: 0.85rem;">Quét bằng Zalo, Camera, hoặc bất kỳ ứng dụng nào</p>
+        <p style="margin-top: 0.8rem; opacity: 0.7; font-size: 0.85rem;">Quét bằng Zalo, Camera, hoặc bất kỳ ứng dụng
+            nào</p>
         <br>
         <a href="https://roundup-browse-unequal.ngrok-free.dev/download/app.html" class="download-btn">📲 Tải APK</a>
     </section>

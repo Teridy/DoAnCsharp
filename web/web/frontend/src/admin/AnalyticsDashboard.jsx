@@ -261,6 +261,12 @@ export default function AnalyticsDashboard() {
       {/* Charts Row */}
       <div className={styles.chartsRow}>
 
+        {/* Bar Chart — Lượt truy cập 7 ngày */}
+        <div className={styles.chartPanel}>
+          <h2 className={styles.panelTitle}>📊 Lượt truy cập 7 ngày qua</h2>
+          <BarChart data={analytics?.dailyChart} />
+        </div>
+
         {/* Donut Chart */}
         <div className={styles.chartPanel}>
           <h2 className={styles.panelTitle}>📱 Phân loại thiết bị</h2>

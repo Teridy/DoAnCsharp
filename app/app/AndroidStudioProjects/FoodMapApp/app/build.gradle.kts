@@ -50,6 +50,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
+    
+    // 🔥 LOGIC CHUẨN: Fused Location từ Google Play Services
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

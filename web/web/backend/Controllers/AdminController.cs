@@ -131,17 +131,20 @@ public class AdminController : ControllerBase
             var activeUsers = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, ActiveUserPing>>(content);
             if (activeUsers == null) return Ok(new { activeCount = 0, positions = new List<object>() });
 
-            // Lọc user online trong 45 giây gần nhất
+            // Lọc user online trong 10 giây gần nhất (Rất nhạy)
             var onlineUsers = activeUsers.Values
-                .Where(u => u.lastSeen >= DateTime.UtcNow.AddSeconds(-45))
+                .Where(u => u.lastSeen >= DateTime.UtcNow.AddSeconds(-12))
                 .ToList();
 
             int count = onlineUsers.Count;
 
-            // Trả về danh sách tọa độ GPS cho Heatmap real-time
+            // Trả về danh sách tọa độ GPS thực tế. Lọc bỏ các thiết bị bị lỗi không có GPS
             var positions = onlineUsers
                 .Where(u => u.latitude.HasValue && u.longitude.HasValue)
-                .Select(u => new { lat = u.latitude, lng = u.longitude })
+                .Select(u => new { 
+                    lat = u.latitude.Value,
+                    lng = u.longitude.Value
+                })
                 .ToList();
 
             return Ok(new { activeCount = count, positions });

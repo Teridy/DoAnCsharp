@@ -97,8 +97,8 @@ namespace FoodMapAPI.Controllers
                         longitude = lon
                     };
 
-                    // Clean old entries (hơn 2 phút không ping → xóa)
-                    var cutoff = DateTime.UtcNow.AddMinutes(-2);
+                    // Clean old entries (hơn 30 giây không ping → xóa rác)
+                    var cutoff = DateTime.UtcNow.AddSeconds(-30);
                     var tokeep = activeUsers.Where(kvp => kvp.Value.lastSeen > cutoff).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
                     // Write

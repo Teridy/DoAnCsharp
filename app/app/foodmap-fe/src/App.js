@@ -115,8 +115,8 @@ L.Icon.Default.mergeOptions({
 // ✅ COMPONENT TỰ ĐỘNG DI CHUYỂN CAMERA
 function AutoPan({ position }) {
   const map = useMap();
-  useEffect(() => { 
-    if (position && map) map.flyTo(position, 18, { animate: true, duration: 1.5 }); 
+  useEffect(() => {
+    if (position && map) map.flyTo(position, 18, { animate: true, duration: 1.5 });
   }, [map, position]);
   return null;
 }
@@ -201,30 +201,30 @@ const translations = {
 };
 
 function App() {
-  const [places, setPlaces] = useState([]); 
-  const [orderedPlaces, setOrderedPlaces] = useState([]); 
+  const [places, setPlaces] = useState([]);
+  const [orderedPlaces, setOrderedPlaces] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
-  const [currentTourIndex, setCurrentTourIndex] = useState(-1); 
+  const [currentTourIndex, setCurrentTourIndex] = useState(-1);
   const [userId] = useState(localStorage.getItem("user_id"));
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [lang, setLang] = useState(localStorage.getItem("app_lang") || "vi");
   const [dataLang, setDataLang] = useState(lang);
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [userLocation, setUserLocation] = useState(null); 
+  const [userLocation, setUserLocation] = useState(null);
   const [visitedPlaces, setVisitedPlaces] = useState(new Set());
-  const [tours, setTours] = useState([]); 
-  const [selectedTourId, setSelectedTourId] = useState(null); 
+  const [tours, setTours] = useState([]);
+  const [selectedTourId, setSelectedTourId] = useState(null);
   const [allPlacesBackup, setAllPlacesBackup] = useState([]);
 
   const speakingIndexRef = useRef(-1);
   const speakTimeoutRef = useRef(null);
 
   // CÁC BIẾN QUẢN LÝ CHẾ ĐỘ MAP
-  const [isVirtualTour, setIsVirtualTour] = useState(false); 
+  const [isVirtualTour, setIsVirtualTour] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   // REF
   const mapRef = useRef(null);
-  const [currentShopId, setCurrentShopId] = useState(null); 
+  const [currentShopId, setCurrentShopId] = useState(null);
   const [showEntryModeModal, setShowEntryModeModal] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [showGPSChoiceModal, setShowGPSChoiceModal] = useState(false);
@@ -233,7 +233,7 @@ function App() {
   const isDesktopBrowser = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const isRealPhone = window.location.protocol === 'file:' && !navigator.userAgent.includes('sdk_gphone');
   const LOCALTUNNEL_URL = "https://roundup-browse-unequal.ngrok-free.dev";
-  const API_BASE = isDesktopBrowser ? "http://localhost:6111/api" : (isRealPhone ? LOCALTUNNEL_URL + "/api" : "http://10.0.2.2:6111/api"); 
+  const API_BASE = isDesktopBrowser ? "http://localhost:6111/api" : (isRealPhone ? LOCALTUNNEL_URL + "/api" : "http://10.0.2.2:6111/api");
   // URL cho Web API (History endpoint nằm ở Web API port 6050, proxy sẽ route đúng)
   const WEB_API_BASE = isDesktopBrowser ? "http://localhost:6050" : (isRealPhone ? LOCALTUNNEL_URL : "http://10.0.2.2:6050");
   const t = translations[lang] || translations["vi"];
@@ -250,7 +250,7 @@ function App() {
     if (!rawPlaces || rawPlaces.length === 0) return [];
     let unvisited = [...rawPlaces];
     let route = [];
-    let currentPos = { lat: 10.7619, lon: 106.7020 }; 
+    let currentPos = { lat: 10.7619, lon: 106.7020 };
     while (unvisited.length > 0) {
       let nearestIndex = 0;
       let minDistance = calculateDistance(currentPos.lat, currentPos.lon, unvisited[0].latitude, unvisited[0].longitude);
@@ -296,7 +296,7 @@ function App() {
         const sessionId = localStorage.getItem('foodmap_device_id') || 'anonymous_mobile';
         const ua = navigator.userAgent;
         const deviceType = /Android/i.test(ua) ? 'Mobile' : (/iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop');
-        
+
         await fetch(`${WEB_API_BASE}/api/visitor/log`, {
           method: 'POST',
           headers: {
@@ -328,7 +328,7 @@ function App() {
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(textToSpeak)}&tl=${lang}&client=tw-ob`;
         window.tourAudio = new Audio(url);
         window.tourAudio.onended = onEnd;
-        window.tourAudio.play().catch(() => { if(onEnd) speakTimeoutRef.current = setTimeout(onEnd, 1000); });
+        window.tourAudio.play().catch(() => { if (onEnd) speakTimeoutRef.current = setTimeout(onEnd, 1000); });
       } else { if (onEnd) onEnd(); }
     };
 
@@ -337,18 +337,18 @@ function App() {
       window.AndroidBridge.speak(textToSpeak, lang);
       if (onEnd) {
         const estimatedTime = textToSpeak.length * 90;
-        speakTimeoutRef.current = setTimeout(onEnd, Math.max(estimatedTime, 2000)); 
+        speakTimeoutRef.current = setTimeout(onEnd, Math.max(estimatedTime, 2000));
       }
     } else {
       if (synth) {
         const msg = new SpeechSynthesisUtterance(textToSpeak);
-        window.currentUtterance = msg; 
+        window.currentUtterance = msg;
         msg.lang = lang === "en" ? "en-US" : (lang === "zh" ? "zh-CN" : "vi-VN");
         msg.rate = 1.0;
         if (onEnd) {
-            msg.onend = onEnd;
-            const estimatedTime = textToSpeak.length * 90;
-            speakTimeoutRef.current = setTimeout(() => { synth.cancel(); onEnd(); }, Math.max(estimatedTime, 2000) + 2000);
+          msg.onend = onEnd;
+          const estimatedTime = textToSpeak.length * 90;
+          speakTimeoutRef.current = setTimeout(() => { synth.cancel(); onEnd(); }, Math.max(estimatedTime, 2000) + 2000);
         }
         msg.onerror = () => playGoogleOnline();
         setTimeout(() => { synth.speak(msg); }, 50);
@@ -357,14 +357,14 @@ function App() {
   }, [lang]);
 
   // HÀM ĐỌC DÀNH RIÊNG CHO GPS
-  const speakGPS = (shopName, description) => {
+  const speakGPS = useCallback((shopName, description) => {
     console.log("📍 KÍCH HOẠT ĐỌC GPS CHO:", shopName);
     const prefix = lang === "vi" ? "Hệ thống GPS xác nhận bạn đã đến gần " : (lang === "zh" ? "GPS系统确认您已接近 " : "GPS system confirms you are near ");
     const fullText = `${prefix} ${shopName}. ${description}`;
     speak(fullText, () => {
-      showChoiceModal(); 
+      setShowGPSChoiceModal(true);
     });
-  };
+  }, [lang, speak]);
 
   const showChoiceModal = () => {
     // Hiển thị modal chọn chế độ thay vì window.confirm (gây lỗi pop-up trên WebView)
@@ -375,7 +375,7 @@ function App() {
     setShowGPSChoiceModal(false);
     if (goVirtual) {
       setIsVirtualTour(true);
-      setCurrentTourIndex(prev => (prev === -1 ? 0 : prev)); 
+      setCurrentTourIndex(prev => (prev === -1 ? 0 : prev));
     } else {
       setIsVirtualTour(false);
     }
@@ -396,43 +396,43 @@ function App() {
       });
     };
 
-        const cleanImageUrl = (url) => {
+    const cleanImageUrl = (url) => {
       if (!url) return "";
-      
+
       // Giữ nguyên nếu là link web ngoài (Supabase)
-      if (url.includes("supabase.co") || url.startsWith("https://")) return url; 
+      if (url.includes("supabase.co") || url.startsWith("https://")) return url;
 
       // Thuật toán mới: Bỏ qua toàn bộ IP phía trước, chỉ bắt đầu lấy từ chữ "/images/..."
       let path = url;
       if (path.includes("images/")) {
-         path = "/images/" + path.split("images/")[1];
+        path = "/images/" + path.split("images/")[1];
       } else if (!path.startsWith("/")) {
-         path = "/" + path;
+        path = "/" + path;
       }
 
       // Nối với IP API hiện tại
-      const serverBaseUrl = API_BASE.replace("/api", ""); 
-      return serverBaseUrl + path; 
+      const serverBaseUrl = API_BASE.replace("/api", "");
+      return serverBaseUrl + path;
     };
 
     // Tạo chìa khóa vạn năng + bypass tunnel warning
-      const headers = {
-        "Authorization": "Basic " + btoa("11303626:60-dayfreetrial"),
-        "ngrok-skip-browser-warning": "true",
-        "Bypass-Tunnel-Reminder": "true"
-      };
+    const headers = {
+      "Authorization": "Basic " + btoa("11303626:60-dayfreetrial"),
+      "ngrok-skip-browser-warning": "true",
+      "Bypass-Tunnel-Reminder": "true"
+    };
 
     const loadData = async () => {
       try {
         const [toursRes, tpRes, placesRes] = await Promise.all([
           fetch(`${API_BASE}/tours?lang=${lang}`, { headers }), // Thêm { headers } vào đây
-      fetch(`${API_BASE}/tours/pois`, { headers }),          // Thêm { headers } vào đây
-      fetch(`${API_BASE}/places?lang=${lang}`, { headers })
+          fetch(`${API_BASE}/tours/pois`, { headers }),          // Thêm { headers } vào đây
+          fetch(`${API_BASE}/places?lang=${lang}`, { headers })
         ]);
         const toursData = await toursRes.json();
         const tourPoisData = await tpRes.json();
         const placesRaw = await placesRes.json();
-        
+
         localStorage.setItem("cache_tours", JSON.stringify(toursData));
         localStorage.setItem("cache_tour_pois", JSON.stringify(tourPoisData));
         localStorage.setItem(`cache_places_${lang}`, JSON.stringify(placesRaw));
@@ -443,14 +443,14 @@ function App() {
         setDataLang(lang);
 
         if (selectedTourId) {
-           const poiIdsForThisTour = tourPoisData.filter(tp => tp.tour_id === selectedTourId).map(tp => tp.poi_id);
-           const tourPlaces = allProcessed.filter(p => poiIdsForThisTour.includes(p.id));
-           setPlaces(tourPlaces);
-           setOrderedPlaces(sortPlacesByRoute(tourPlaces));
+          const poiIdsForThisTour = tourPoisData.filter(tp => tp.tour_id === selectedTourId).map(tp => tp.poi_id);
+          const tourPlaces = allProcessed.filter(p => poiIdsForThisTour.includes(p.id));
+          setPlaces(tourPlaces);
+          setOrderedPlaces(sortPlacesByRoute(tourPlaces));
         } else {
-           const homePlaces = allProcessed.filter(p => !p.name.toLowerCase().includes("cổng"));
-           setPlaces(homePlaces);
-           setOrderedPlaces(sortPlacesByRoute(homePlaces));
+          const homePlaces = allProcessed.filter(p => !p.name.toLowerCase().includes("cổng"));
+          setPlaces(homePlaces);
+          setOrderedPlaces(sortPlacesByRoute(homePlaces));
         }
       } catch (err) {
         console.log("Mất mạng! Đang tìm dữ liệu trong Storage...");
@@ -469,14 +469,14 @@ function App() {
           setDataLang(lang);
 
           if (selectedTourId) {
-             const poiIdsForThisTour = tourPoisData.filter(tp => tp.tour_id === selectedTourId).map(tp => tp.poi_id);
-             const tourPlaces = allProcessed.filter(p => poiIdsForThisTour.includes(p.id));
-             setPlaces(tourPlaces);
-             setOrderedPlaces(sortPlacesByRoute(tourPlaces));
+            const poiIdsForThisTour = tourPoisData.filter(tp => tp.tour_id === selectedTourId).map(tp => tp.poi_id);
+            const tourPlaces = allProcessed.filter(p => poiIdsForThisTour.includes(p.id));
+            setPlaces(tourPlaces);
+            setOrderedPlaces(sortPlacesByRoute(tourPlaces));
           } else {
-             const homePlaces = allProcessed.filter(p => !p.name.toLowerCase().includes("cổng"));
-             setPlaces(homePlaces);
-             setOrderedPlaces(sortPlacesByRoute(homePlaces));
+            const homePlaces = allProcessed.filter(p => !p.name.toLowerCase().includes("cổng"));
+            setPlaces(homePlaces);
+            setOrderedPlaces(sortPlacesByRoute(homePlaces));
           }
         } else {
           console.log("Storage trống, kích hoạt SQLite dự phòng...");
@@ -485,7 +485,7 @@ function App() {
             const SQL = await initSqlJs({ wasmBinary: wasmBinary });
             const dbBytes = await loadFileXHR("food_narration_poc.db");
             const db = new SQL.Database(dbBytes);
-            
+
             let offlineTours = [];
             try {
               const toursRes = db.exec("SELECT * FROM tours");
@@ -493,11 +493,11 @@ function App() {
                 const cols = toursRes[0].columns;
                 offlineTours = toursRes[0].values.map(row => {
                   let obj = {}; cols.forEach((col, idx) => { obj[col] = row[idx]; });
-                  if(!obj.color) obj.color = "#EE4D2D"; return obj;
+                  if (!obj.color) obj.color = "#EE4D2D"; return obj;
                 });
                 setTours(offlineTours);
               }
-            } catch (e) {}
+            } catch (e) { }
 
             let offlineTourPois = [];
             try {
@@ -508,7 +508,7 @@ function App() {
                   let obj = {}; cols.forEach((col, idx) => { obj[col] = row[idx]; }); return obj;
                 });
               }
-            } catch (e) {}
+            } catch (e) { }
 
             const query = `SELECT f.id, COALESCE(t.translated_name, n.name) AS name, COALESCE(t.content, f.description) AS description, n.latitude, n.longitude, i.image_url, f.price_range FROM food_places f JOIN narration_points n ON f.narration_point_id = n.id LEFT JOIN images i ON n.id = i.narration_point_id LEFT JOIN narration_translations t ON n.id = t.narration_point_id AND t.language_code = '${lang}'`;
             const res = db.exec(query);
@@ -518,19 +518,19 @@ function App() {
               const allOfflineProcessed = values.map(row => {
                 let obj = {}; columns.forEach((col, index) => { obj[col] = col === "image_url" ? cleanImageUrl(row[index]) : row[index]; }); return obj;
               });
-              
+
               setAllPlacesBackup(allOfflineProcessed);
               setDataLang(lang);
-              
+
               if (selectedTourId) {
-                 const poiIdsForThisTour = offlineTourPois.filter(tp => tp.tour_id === selectedTourId).map(tp => tp.poi_id);
-                 const tourPlaces = allOfflineProcessed.filter(p => poiIdsForThisTour.includes(p.id));
-                 setPlaces(tourPlaces);
-                 setOrderedPlaces(sortPlacesByRoute(tourPlaces));
+                const poiIdsForThisTour = offlineTourPois.filter(tp => tp.tour_id === selectedTourId).map(tp => tp.poi_id);
+                const tourPlaces = allOfflineProcessed.filter(p => poiIdsForThisTour.includes(p.id));
+                setPlaces(tourPlaces);
+                setOrderedPlaces(sortPlacesByRoute(tourPlaces));
               } else {
-                 const homePlaces = allOfflineProcessed.filter(p => !p.name.toLowerCase().includes("cổng"));
-                 setPlaces(homePlaces);
-                 setOrderedPlaces(sortPlacesByRoute(homePlaces));
+                const homePlaces = allOfflineProcessed.filter(p => !p.name.toLowerCase().includes("cổng"));
+                setPlaces(homePlaces);
+                setOrderedPlaces(sortPlacesByRoute(homePlaces));
               }
             }
           } catch (dbErr) {
@@ -544,17 +544,17 @@ function App() {
 
   const startTour = (tourId) => {
     setSelectedTourId(tourId);
-    setActiveTab("map"); 
-    setIsVirtualTour(false); 
-    setCurrentTourIndex(-1); 
-    speakingIndexRef.current = -1; 
+    setActiveTab("map");
+    setIsVirtualTour(false);
+    setCurrentTourIndex(-1);
+    speakingIndexRef.current = -1;
     setSelectedPlace(null);
     // Modal đã xóa - chế độ được chọn trực tiếp trên map
   };
 
   const exitTour = () => {
     setSelectedTourId(null);
-    setCurrentTourIndex(-1); 
+    setCurrentTourIndex(-1);
     speakingIndexRef.current = -1;
     setSelectedPlace(null);
     setShowCompletionModal(false);
@@ -572,7 +572,7 @@ function App() {
     setLang(newLang);
     localStorage.setItem("app_lang", newLang);
     if (activeTab === "map" && selectedTourId !== null) {
-      speakingIndexRef.current = -1; 
+      speakingIndexRef.current = -1;
       if (currentTourIndex >= orderedPlaces.length) {
         setCurrentTourIndex(0);
       }
@@ -581,30 +581,30 @@ function App() {
 
   // 1. CHỐNG XUNG ĐỘT TOUR ẢO (DIỆT BÓNG MA)
   useEffect(() => {
-    let isCancelled = false; 
+    let isCancelled = false;
 
     if (activeTab === "map" && isVirtualTour && currentTourIndex >= 0 && currentTourIndex < orderedPlaces.length && lang === dataLang) {
-      if (speakingIndexRef.current === currentTourIndex) return; 
-      
+      if (speakingIndexRef.current === currentTourIndex) return;
+
       speakingIndexRef.current = currentTourIndex;
       const p = orderedPlaces[currentTourIndex];
-      
-      setSelectedPlace(p); 
+
+      setSelectedPlace(p);
       markAsVisited(p);
 
       const prefix = lang === "vi" ? "Chúng ta đang đến " : (lang === "zh" ? "我们正在前往 " : "We are arriving at ");
-      
+
       speak(`${prefix} ${p.name}. ${p.description}`, () => {
-        if (isCancelled) return; 
-        speakTimeoutRef.current = setTimeout(() => { 
-          if (isCancelled) return; 
-          if(activeTab === "map" && isVirtualTour) {
-            setCurrentTourIndex(prev => prev + 1); 
+        if (isCancelled) return;
+        speakTimeoutRef.current = setTimeout(() => {
+          if (isCancelled) return;
+          if (activeTab === "map" && isVirtualTour) {
+            setCurrentTourIndex(prev => prev + 1);
           }
         }, 800);
       });
     } else if (activeTab !== "map") {
-      speakingIndexRef.current = -1; 
+      speakingIndexRef.current = -1;
     }
 
     return () => { isCancelled = true; };
@@ -623,11 +623,32 @@ function App() {
   useEffect(() => { userLocationRef.current = userLocation; }, [userLocation]);
 
   useEffect(() => {
-    // --- GPS trước, để có vị trí cho ping ---
+    // --- GPS: Ưu tiên Android Native, fallback navigator.geolocation ---
+    const getNativeGPS = () => {
+      if (window.AndroidBridge && window.AndroidBridge.hasGPS && window.AndroidBridge.hasGPS()) {
+        const lat = window.AndroidBridge.getLatitude();
+        const lon = window.AndroidBridge.getLongitude();
+        if (lat && lon && lat !== 0 && lon !== 0) {
+          return [lat, lon];
+        }
+      }
+      return null;
+    };
+
+    // Poll GPS Native mỗi 3 giây (nhanh hơn và ổn định hơn watchPosition trong WebView)
+    const gpsInterval = setInterval(() => {
+      const native = getNativeGPS();
+      if (native) {
+        setUserLocation(native);
+      }
+    }, 3000);
+
+    // Fallback BẤT CHẤP (cả Mobile webview và Desktop): dùng navigator.geolocation
+    // Quan trọng: enableHighAccuracy = false để ÉP dùng Wi-Fi định vị (bắt cực nhanh và chuẩn trong nhà)
     const locId = navigator.geolocation.watchPosition(
       (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
-      () => {},
-      { enableHighAccuracy: true }
+      (err) => console.log("HTML5 GPS Error:", err),
+      { enableHighAccuracy: false, maximumAge: 0, timeout: 10000 }
     );
 
     // --- Heartbeat (Real-time Online Tracking) ---
@@ -636,67 +657,146 @@ function App() {
       deviceId = "device_" + Math.random().toString(36).substring(2, 15);
       localStorage.setItem("foodmap_device_id", deviceId);
     }
-    const sendPing = () => {
-      const loc = userLocationRef.current;
-      const params = loc ? `&lat=${loc[0]}&lon=${loc[1]}` : '';
+
+    const sendPing = async () => {
+      // Ưu tiên 1: Native GPS (nhanh, đáng tin cậy)
+      let lat = null, lon = null;
+      const native = getNativeGPS();
+      if (native) {
+        lat = native[0]; lon = native[1];
+        setUserLocation(native); // cập nhật state luôn
+      } else {
+        // Ưu tiên 2: từ ref (watchPosition)
+        const loc = userLocationRef.current;
+        if (loc && loc[0] && loc[1]) {
+          lat = loc[0]; lon = loc[1];
+        }
+      }
+
+      // Ưu tiên 3: IP Geolocation (Đỉnh cao dự phòng khi máy khoá GPS phần cứng)
+      if (!lat || !lon) {
+        try {
+          const res = await fetch('https://ipwhois.app/json/');
+          const data = await res.json();
+          if (data && data.latitude && data.longitude) {
+            lat = data.latitude;
+            lon = data.longitude;
+            setUserLocation([lat, lon]);
+            console.log("📍 IP Geo Fallback: ", lat, lon);
+          }
+        } catch (e) {
+          console.log("IP Geo Error", e);
+        }
+      }
+
+      // GPS: Nếu không có tọa độ thực → không gửi ping (tránh hiển thị sai trên admin heatmap)
+      if (!lat || !lon) {
+          console.log("📍 Không có dữ liệu GPS — bỏ qua ping lần này");
+          return;
+      }
+      const params = (lat && lon) ? `&lat=${lat}&lon=${lon}` : '';
       fetch(`${API_BASE}/tours/ping?deviceId=${deviceId}${params}`, {
         method: "POST",
         headers: { "ngrok-skip-browser-warning": "true", "Bypass-Tunnel-Reminder": "true" }
-      }).catch(() => {});
+      }).catch(() => { });
+      console.log(`📡 Ping sent: lat=${lat}, lon=${lon}`);
     };
-    sendPing();
-    const pingInterval = setInterval(sendPing, 15000);
+
+    // Đợi 3 giây cho GPS lock trước khi ping lần đầu
+    setTimeout(sendPing, 3000);
+    const pingInterval = setInterval(sendPing, 5000);
 
     try {
-      if (window.Android) setIsMobileDevice(true);
+      if (window.AndroidBridge) setIsMobileDevice(true);
       else setIsMobileDevice(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     } catch { setIsMobileDevice(false); }
 
     return () => {
-      navigator.geolocation.clearWatch(locId);
+      clearInterval(gpsInterval);
+      if (locId !== null) navigator.geolocation.clearWatch(locId);
       clearInterval(pingInterval);
     };
-  }, [API_BASE]);
+  }, []); // ← EMPTY DEPS: chạy 1 lần duy nhất
 
-  // 2. CHẾ ĐỘ SÚNG BẮN TỈA GPS (TÌM ĐÚNG 1 QUÁN GẦN NHẤT)
+  // 📐 HEADING: Lưu vị trí trước đó để tính hướng di chuyển
+  const prevLocationRef = useRef(null);
+
   useEffect(() => {
-    if (activeTab !== "map" || allPlacesBackup.length === 0) return;
+    if (!userLocation || activeTab !== "map" || allPlacesBackup.length === 0 || isVirtualTour) return;
 
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const userLat = position.coords.latitude;
-        const userLon = position.coords.longitude;
-        setUserLocation([userLat, userLon]);
+    const userLat = userLocation[0];
+    const userLon = userLocation[1];
 
-        if (!isVirtualTour) {
-          let closestPlace = null;
-          let minDistance = Infinity;
+    // 📐 Tính hướng di chuyển (bearing) từ vị trí trước → vị trí hiện tại
+    let userHeading = null;
+    if (prevLocationRef.current) {
+      const prevLat = prevLocationRef.current[0];
+      const prevLon = prevLocationRef.current[1];
+      const movedDist = calculateDistance(prevLat, prevLon, userLat, userLon) * 1000;
+      if (movedDist > 2) { // Chỉ tính heading khi di chuyển > 2m (tránh GPS jitter)
+        const dLon = (userLon - prevLon) * Math.PI / 180;
+        const lat1 = prevLat * Math.PI / 180;
+        const lat2 = userLat * Math.PI / 180;
+        const y = Math.sin(dLon) * Math.cos(lat2);
+        const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+        userHeading = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; // 0-360 độ
+      }
+    }
+    prevLocationRef.current = userLocation;
 
-          allPlacesBackup.forEach((p) => {
-            const distMet = calculateDistance(userLat, userLon, p.latitude, p.longitude) * 1000;
-            if (distMet < minDistance) {
-              minDistance = distMet;
-              closestPlace = p;
-            }
-          });
+    // ✅ SMART POI QUEUE: Thu thập TẤT CẢ POI trong bán kính kích hoạt
+    const nearbyPOIs = allPlacesBackup
+      .map((p) => {
+        const distMet = calculateDistance(userLat, userLon, p.latitude, p.longitude) * 1000;
 
-          if (closestPlace) {
-            const radius = closestPlace.activation_radius || 50; 
-            if (minDistance <= radius && currentShopId !== closestPlace.id) {
-              console.log(`🎯 ĐÃ KHÓA MỤC TIÊU: ${closestPlace.name}`);
-              setCurrentShopId(closestPlace.id); 
-              setSelectedPlace(closestPlace);    
-              speakGPS(closestPlace.name, closestPlace.description);
-              recordHistory(closestPlace.id, 'gps_checkin');  // ✅ Ghi lịch sử GPS check-in
-            }
-          }
+        // 📐 Tính góc từ user → POI
+        let angleDiff = 180; // Mặc định: đằng sau (nếu không có heading)
+        if (userHeading !== null) {
+          const dLon = (p.longitude - userLon) * Math.PI / 180;
+          const lat1 = userLat * Math.PI / 180;
+          const lat2 = p.latitude * Math.PI / 180;
+          const y = Math.sin(dLon) * Math.cos(lat2);
+          const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+          const bearingToPOI = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+          angleDiff = Math.abs(userHeading - bearingToPOI);
+          if (angleDiff > 180) angleDiff = 360 - angleDiff; // 0° = trước mặt, 180° = sau lưng
         }
-      },
-      (error) => console.log("GPS Error", error),
-      { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
-    );
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, [activeTab, allPlacesBackup, isVirtualTour, currentShopId, markAsVisited]);
+
+        return { ...p, distMet, angleDiff };
+      })
+      .filter((p) => p.distMet <= (p.activation_radius || 50));
+
+    if (nearbyPOIs.length === 0) return;
+
+    // ✅ SẮP XẾP ƯU TIÊN: Chưa ghé → Hướng trước mặt → Khoảng cách
+    nearbyPOIs.sort((a, b) => {
+      // 1. Ưu tiên POI chưa ghé thăm
+      const aVisited = visitedPlaces.has(a.id) ? 1 : 0;
+      const bVisited = visitedPlaces.has(b.id) ? 1 : 0;
+      if (aVisited !== bVisited) return aVisited - bVisited;
+
+      // 2. Ưu tiên POI nằm trước mặt (góc < 90° = phía trước)
+      const aFront = a.angleDiff <= 90 ? 0 : 1;
+      const bFront = b.angleDiff <= 90 ? 0 : 1;
+      if (aFront !== bFront) return aFront - bFront;
+
+      // 3. Khoảng cách gần hơn
+      if (a.distMet !== b.distMet) return a.distMet - b.distMet;
+
+      // 4. ID nhỏ hơn trong database (tie-breaker cuối cùng)
+      return a.id - b.id;
+    });
+
+    const bestPOI = nearbyPOIs[0];
+
+    if (bestPOI && currentShopId !== bestPOI.id) {
+      console.log(`🎯 ĐÃ KHÓA MỤC TIÊU: ${bestPOI.name} (${Math.round(bestPOI.distMet)}m, heading:${Math.round(bestPOI.angleDiff)}°, priority:${bestPOI.priority || 0}, nearby:${nearbyPOIs.length})`);
+      setCurrentShopId(bestPOI.id);
+      setSelectedPlace(bestPOI);
+      speakGPS(bestPOI.name, bestPOI.description);
+      recordHistory(bestPOI.id, 'gps_checkin');
+    }
+  }, [userLocation, activeTab, allPlacesBackup, isVirtualTour, currentShopId, speakGPS, recordHistory, visitedPlaces]);
 
   useEffect(() => {
     if (activeTab === "map" && orderedPlaces.length > 0 && currentTourIndex >= orderedPlaces.length) {
@@ -709,12 +809,12 @@ function App() {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: parseInt(userId), narration_point_id: placeId })
     }).then(() => setFavoriteIds(prev => prev.includes(placeId) ? prev.filter(id => id !== placeId) : [...prev, placeId]))
-      .catch(() => alert("Cần có mạng để lưu yêu thích!")); 
+      .catch(() => alert("Cần có mạng để lưu yêu thích!"));
   };
 
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "#F4F7FB", position: "relative", overflow: "hidden", fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
-      
+
       <div style={{ height: "calc(100vh - 75px)", overflowY: "auto", overflowX: "hidden" }}>
 
         {/* --- TAB HOME --- */}
@@ -722,10 +822,10 @@ function App() {
           <div style={{ padding: "30px 20px", minHeight: "100%", background: "linear-gradient(180deg, #FFFFFF 0%, #F4F7FB 100%)" }}>
             <h2 style={{ fontSize: "32px", color: "#1A1A1A", fontWeight: "900", letterSpacing: "-0.5px", margin: "0 0 5px 0" }}>Vĩnh Khánh</h2>
             <h2 style={{ fontSize: "32px", color: "#EE4D2D", fontWeight: "900", letterSpacing: "-0.5px", margin: "0 0 25px 0" }}>Street Food</h2>
-            
+
             <div style={{ display: "flex", gap: "10px", marginBottom: "35px" }}>
               {["vi", "en", "zh"].map(l => (
-                <button key={l} 
+                <button key={l}
                   onClick={() => handleChangeLanguage(l)}
                   style={{ border: "none", padding: "10px 24px", borderRadius: "12px", backgroundColor: lang === l ? "#EE4D2D" : "#FFFFFF", color: lang === l ? "white" : "#6B7280", fontWeight: "700", fontSize: "14px", textTransform: "uppercase", boxShadow: lang === l ? "0 8px 16px rgba(238, 77, 45, 0.3)" : "0 2px 8px rgba(0,0,0,0.05)", transition: "all 0.3s ease", cursor: "pointer" }}>
                   {l}
@@ -748,20 +848,20 @@ function App() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", marginTop: "10px" }}>
               <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#2D3436", margin: 0 }}>{t.mustTry}</h3>
             </div>
-            
+
             {/* --- DANH SÁCH MÓN ĂN QUẸT NGANG --- */}
             <div style={{ display: "flex", gap: "20px", overflowX: "auto", paddingBottom: "25px", scrollbarWidth: "none", marginLeft: "-20px", paddingLeft: "20px", marginRight: "-20px", paddingRight: "20px" }}>
               {allPlacesBackup.filter(p => !p.name.toLowerCase().includes("cổng")).map(p => (
                 <div key={p.id} onClick={() => { setSelectedPlace(p); markAsVisited(p); speak(`${p.name}. ${p.description}`); }} style={{ minWidth: "280px", height: "360px", borderRadius: "12px", boxShadow: "0 15px 35px rgba(0,0,0,0.1)", overflow: "hidden", position: "relative", flexShrink: 0, cursor: "pointer", backgroundColor: "#fff" }}>
                   <img src={p.image_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
                   <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "70%", background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%)" }}></div>
-                  
+
                   {/* 🟢🔴 MÁC TRẠNG THÁI (MỞ/ĐÓNG) NẰM Ở GÓC TRÊN BÊN TRÁI */}
                   <div style={{ position: "absolute", top: "20px", left: "20px", zIndex: 10 }}>
-                    <span style={{ 
-                      backgroundColor: p.is_active ? "rgba(46, 213, 115, 0.9)" : "rgba(238, 77, 45, 0.9)", 
-                      color: "white", padding: "6px 12px", borderRadius: "12px", fontSize: "12px", fontWeight: "900", 
-                      backdropFilter: "blur(5px)", boxShadow: "0 4px 10px rgba(0,0,0,0.2)" 
+                    <span style={{
+                      backgroundColor: p.is_active ? "rgba(46, 213, 115, 0.9)" : "rgba(238, 77, 45, 0.9)",
+                      color: "white", padding: "6px 12px", borderRadius: "12px", fontSize: "12px", fontWeight: "900",
+                      backdropFilter: "blur(5px)", boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
                     }}>
                       {p.is_active ? t.isOpen : t.isClosed}
                     </span>
@@ -771,7 +871,7 @@ function App() {
                   <div onClick={(e) => { e.stopPropagation(); handleToggleFavorite(p.id); }} style={{ position: "absolute", top: "20px", right: "20px", zIndex: 10, fontSize: "18px", backgroundColor: "rgba(255,255,255,0.3)", borderRadius: "50%", width: "45px", height: "45px", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.4)" }}>
                     {favoriteIds.includes(p.id) ? "❤️" : "🤍"}
                   </div>
-                  
+
                   {/* TÊN, GIÁ TIỀN VÀ RATING Ở DƯỚI CÙNG */}
                   <div style={{ position: "absolute", bottom: "25px", left: "25px", right: "25px", zIndex: 10 }}>
                     <p style={{ margin: 0, fontWeight: "900", color: "#FFFFFF", fontSize: "24px", textShadow: "0 2px 8px rgba(0,0,0,0.5)", lineHeight: "1.2" }}>{p.name}</p>
@@ -792,15 +892,15 @@ function App() {
             <MapContainer center={[10.7619, 106.7020]} zoom={17} style={{ height: "100%", width: "100%", zIndex: 1 }} zoomControl={false}>
               <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
               {orderedPlaces.map((p) => (
-                <Marker key={p.id} position={[p.latitude, p.longitude]} 
+                <Marker key={p.id} position={[p.latitude, p.longitude]}
                   icon={L.divIcon({
-                    className: 'transparent-leaflet-icon', 
-                    html: selectedPlace?.id === p.id 
+                    className: 'transparent-leaflet-icon',
+                    html: selectedPlace?.id === p.id
                       ? `<div class="modern-active-marker"><div class="modern-active-marker-core"></div></div>`
                       : `<div class="normal-marker"></div>`,
                     iconSize: [30, 30], iconAnchor: [15, 15]
                   })}
-                  eventHandlers={{ click: () => { setSelectedPlace(p); markAsVisited(p); speak(`${p.name}. ${p.description}`); } }} 
+                  eventHandlers={{ click: () => { setSelectedPlace(p); markAsVisited(p); speak(`${p.name}. ${p.description}`); } }}
                 />
               ))}
               {userLocation && (
@@ -822,21 +922,23 @@ function App() {
               </div>
               {/* Hàng 2: Nút chọn chế độ Tour ảo / GPS thực tế */}
               <div style={{ display: "flex", gap: "8px", pointerEvents: "auto" }}>
-                <button 
+                <button
                   onClick={() => { setIsVirtualTour(true); setCurrentTourIndex(prev => prev === -1 ? 0 : prev); }}
-                  style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", padding: "10px 0", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "12px", cursor: "pointer", transition: "all 0.2s",
+                  style={{
+                    flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", padding: "10px 0", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "12px", cursor: "pointer", transition: "all 0.2s",
                     backgroundColor: isVirtualTour ? "#4285F4" : "rgba(255,255,255,0.92)",
                     color: isVirtualTour ? "white" : "#636E72",
                     boxShadow: isVirtualTour ? "0 4px 15px rgba(66,133,244,0.4)" : "0 2px 10px rgba(0,0,0,0.08)"
                   }}>
                   🔄 {t.btnVirtualTour || "Tour ảo"}
                 </button>
-                <button 
-                  onClick={() => { 
+                <button
+                  onClick={() => {
                     setIsVirtualTour(false); setCurrentTourIndex(-1); speakingIndexRef.current = -1; setSelectedPlace(null); setCurrentShopId(null);
                     if (window.speechSynthesis) window.speechSynthesis.cancel();
                   }}
-                  style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", padding: "10px 0", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "12px", cursor: "pointer", transition: "all 0.2s",
+                  style={{
+                    flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", padding: "10px 0", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "12px", cursor: "pointer", transition: "all 0.2s",
                     backgroundColor: !isVirtualTour ? "#00E5FF" : "rgba(255,255,255,0.92)",
                     color: !isVirtualTour ? "#1A1A1A" : "#636E72",
                     boxShadow: !isVirtualTour ? "0 4px 15px rgba(0,229,255,0.4)" : "0 2px 10px rgba(0,0,0,0.08)"
@@ -853,7 +955,7 @@ function App() {
                   <img src={selectedPlace.image_url} alt={selectedPlace.name} style={{ width: "100%", height: "160px", objectFit: "cover", borderRadius: "12px", marginBottom: "15px" }} />
                   <h3 style={{ margin: 0, fontSize: "22px", color: "#1A1A1A", fontWeight: "900" }}>{selectedPlace.name}</h3>
                   <p style={{ margin: "8px 0 12px 0", color: "#EE4D2D", fontWeight: "800" }}>{selectedPlace.price_range}</p>
-                  <p style={{ margin: "0", color: "#636E72", fontSize: "14px", lineHeight: "1.5" }}>{selectedPlace.description}</p> 
+                  <p style={{ margin: "0", color: "#636E72", fontSize: "14px", lineHeight: "1.5" }}>{selectedPlace.description}</p>
                 </div>
               </div>
             )}
@@ -899,7 +1001,7 @@ function App() {
             </div>
             <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#1A1A1A", marginBottom: "15px" }}>{t.proListTitle}</h3>
             {visitedPlaces.size === 0 ? (
-              <div style={{ backgroundColor: "white", padding: "30px 20px", borderRadius: "12px", textAlign: "center", boxShadow: "0 4px 15px rgba(0,0,0,0.03)", marginBottom: "30px" }}><p style={{ fontSize: "40px", margin: "0 0 10px 0" }}>👟</p><p style={{ color: "#636E72", fontWeight: "600", margin: 0, fontSize: "14px", lineHeight: "1.5" }}>{t.proEmpty1}<br/>{t.proEmpty2}</p></div>
+              <div style={{ backgroundColor: "white", padding: "30px 20px", borderRadius: "12px", textAlign: "center", boxShadow: "0 4px 15px rgba(0,0,0,0.03)", marginBottom: "30px" }}><p style={{ fontSize: "40px", margin: "0 0 10px 0" }}>👟</p><p style={{ color: "#636E72", fontWeight: "600", margin: 0, fontSize: "14px", lineHeight: "1.5" }}>{t.proEmpty1}<br />{t.proEmpty2}</p></div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "30px" }}>
                 {allPlacesBackup.filter(p => visitedPlaces.has(p.id)).map(p => (
@@ -915,25 +1017,25 @@ function App() {
       </div>
 
       {/* --- BẢNG THÔNG BÁO HOÀN THÀNH TOUR --- */}
-        {showCompletionModal && (
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 10001, display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(5px)" }}>
-            <div style={{ backgroundColor: "white", padding: "35px 25px", borderRadius: "12px", width: "80%", maxWidth: "340px", textAlign: "center", boxShadow: "0 20px 50px rgba(0,0,0,0.25)", animation: "slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
-              
-              <div style={{ fontSize: "65px", marginBottom: "15px", filter: "drop-shadow(0 10px 10px rgba(0,0,0,0.1))" }}>🏆</div>
-              <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#1A1A1A", margin: "0 0 10px 0", letterSpacing: "-0.5px" }}>{t.tourEnded}</h3>
-              <p style={{ fontSize: "15px", color: "#636E72", marginBottom: "30px", lineHeight: "1.5", fontWeight: "500" }}>{t.tourCompleteDesc}</p>
-              
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <button onClick={() => { setShowCompletionModal(false); setCurrentTourIndex(0); speakingIndexRef.current = -1; }} style={{ backgroundColor: "#4285F4", color: "white", border: "none", padding: "16px", borderRadius: "12px", fontWeight: "800", fontSize: "16px", cursor: "pointer", boxShadow: "0 8px 20px rgba(66, 133, 244, 0.3)", transition: "0.2s" }}>
-                  {t.btnReplay}
-                </button>
-                <button onClick={() => { setShowCompletionModal(false); exitTour(); setActiveTab("home"); }} style={{ backgroundColor: "#F4F7FB", color: "#2D3436", border: "none", padding: "16px", borderRadius: "12px", fontWeight: "800", fontSize: "16px", cursor: "pointer", transition: "0.2s" }}>
-                  {t.btnGoHome}
-                </button>
-              </div>
+      {showCompletionModal && (
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 10001, display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(5px)" }}>
+          <div style={{ backgroundColor: "white", padding: "35px 25px", borderRadius: "12px", width: "80%", maxWidth: "340px", textAlign: "center", boxShadow: "0 20px 50px rgba(0,0,0,0.25)", animation: "slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
+
+            <div style={{ fontSize: "65px", marginBottom: "15px", filter: "drop-shadow(0 10px 10px rgba(0,0,0,0.1))" }}>🏆</div>
+            <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#1A1A1A", margin: "0 0 10px 0", letterSpacing: "-0.5px" }}>{t.tourEnded}</h3>
+            <p style={{ fontSize: "15px", color: "#636E72", marginBottom: "30px", lineHeight: "1.5", fontWeight: "500" }}>{t.tourCompleteDesc}</p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <button onClick={() => { setShowCompletionModal(false); setCurrentTourIndex(0); speakingIndexRef.current = -1; }} style={{ backgroundColor: "#4285F4", color: "white", border: "none", padding: "16px", borderRadius: "12px", fontWeight: "800", fontSize: "16px", cursor: "pointer", boxShadow: "0 8px 20px rgba(66, 133, 244, 0.3)", transition: "0.2s" }}>
+                {t.btnReplay}
+              </button>
+              <button onClick={() => { setShowCompletionModal(false); exitTour(); setActiveTab("home"); }} style={{ backgroundColor: "#F4F7FB", color: "#2D3436", border: "none", padding: "16px", borderRadius: "12px", fontWeight: "800", fontSize: "16px", cursor: "pointer", transition: "0.2s" }}>
+                {t.btnGoHome}
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
       {/* Modal chọn chế độ đã được chuyển thành nút inline trên map */}
 
@@ -942,22 +1044,22 @@ function App() {
       <div style={{ position: "absolute", bottom: 0, width: "100%", height: "75px", backgroundColor: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(15px)", borderTop: "1px solid rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-around", alignItems: "center", zIndex: 1000, paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div onClick={() => setActiveTab("home")} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", color: activeTab === "home" ? "#EE4D2D" : "#B2BEC3", cursor: "pointer", transition: "0.2s" }}><span style={{ fontSize: "22px" }}>🏠</span><span style={{ fontSize: "11px", fontWeight: "800" }}>{t.navHome}</span></div>
         <div onClick={() => setActiveTab("favorites")} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", color: activeTab === "favorites" ? "#EE4D2D" : "#B2BEC3", cursor: "pointer", transition: "0.2s" }}><span style={{ fontSize: "22px" }}>❤️</span><span style={{ fontSize: "11px", fontWeight: "800" }}>{t.navFav}</span></div>
-        
+
         {/* 3. NÚT MAP: TẨY TRẮNG MỌI DỮ LIỆU CŨ */}
-        <div 
-          onClick={() => { 
-            setActiveTab("map"); 
+        <div
+          onClick={() => {
+            setActiveTab("map");
             if (window.speechSynthesis) window.speechSynthesis.cancel();
             if (window.AndroidBridge) window.AndroidBridge.stop();
             if (window.tourAudio) { window.tourAudio.pause(); window.tourAudio.src = ""; }
             if (speakTimeoutRef.current) { clearTimeout(speakTimeoutRef.current); speakTimeoutRef.current = null; }
-            setIsVirtualTour(false); 
-            setCurrentTourIndex(-1); 
-            speakingIndexRef.current = -1; 
-            setSelectedPlace(null);  
-            setCurrentShopId(null);  
+            setIsVirtualTour(false);
+            setCurrentTourIndex(-1);
+            speakingIndexRef.current = -1;
+            setSelectedPlace(null);
+            setCurrentShopId(null);
             // Vào map trực tiếp, không cần modal
-          }} 
+          }}
           style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", color: activeTab === "map" ? "#4285F4" : "#B2BEC3", cursor: "pointer", transition: "0.2s" }}
         >
           <div style={{ backgroundColor: activeTab === "map" ? "#E8F0FE" : "transparent", padding: "4px 15px", borderRadius: "12px", display: "flex", flexDirection: "column", alignItems: "center" }}>
