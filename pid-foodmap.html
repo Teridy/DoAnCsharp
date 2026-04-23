@@ -1819,29 +1819,58 @@ graph LR
                 <pre class="mermaid">
 sequenceDiagram
     participant User as Tourist
-    participant App as Frontend (PWA)
-    participant GPS as Device Sensor Watcher
-    participant Map as Leaflet UI
-    participant TTS as Speech Engine
+    participant WV as Android WebView
+    participant Bridge as AndroidBridge (Native)
+    participant HTML5 as navigator.geolocation
+    participant App as React App.js
+    participant Map as Leaflet Map
+    participant TTS as TTS Engine
 
-    User->>App: Chọn Tour và ấn "Bắt đầu định hướng"
-    App->>App: Kích hoạt thuật toán vẽ Nearest-Neighbor
-    App->>Map: Vẽ vệt đường nét đứt đi qua các mốc POI
+    User->>WV: Mở App, chọn Tour, nhấn GPS thực tế
+    WV->>Bridge: Kiểm tra AndroidBridge.hasGPS()
 
-    App->>GPS: Yêu cầu lấy watchPosition enableHighAccuracy=false cho Wi-Fi
+    Note over App: GPS FALLBACK 3 TẦNG (dòng 625-703)
 
-    loop Liên tục khi di chuyển vật lý
-        GPS-->>App: Tọa độ lat, lng
-        App->>Map: Cập nhật Icon Marker điểm xanh lá vị trí User
-        
-        App->>App: Tính khoảng cách Geometry điểm đứng với các POI
-        
-        alt Nếu khoảng cách tới quán ăn bé hơn Threshold Activation
-            App->>TTS: Ra lệnh speakGPS đưa text mô tả quán vào
-            TTS-->>User: Quán A bán món B, giá C...
-            App->>Map: Refresh màu icon thành đã thăm Checked Point
-            App->>App: Chuyển target tới POI liền kề tiếp theo
+    par Tầng 1: Android Native GPS (poll 3 giây)
+        loop Mỗi 3 giây (setInterval)
+            Bridge->>Bridge: FusedLocationProvider.getLatitude/Longitude
+            Bridge-->>App: [lat, lng] từ chip GPS
+            App->>App: setUserLocation([lat, lng])
         end
+    and Tầng 2: HTML5 Geolocation (fallback)
+        HTML5->>HTML5: watchPosition(enableHighAccuracy=false)
+        HTML5-->>App: [lat, lng] từ Wi-Fi/Cell tower
+    end
+
+    App->>Map: Cập nhật marker vị trí du khách (chấm xanh)
+
+    Note over App: SMART POI QUEUE (dòng 724-813)
+
+    App->>App: Thu thập TẤT CẢ POI trong 50m
+    App->>App: Tính heading từ prevLocation → currentLocation
+    App->>App: Tính angleDiff cho mỗi POI
+    App->>App: Sort 4 tiêu chí: Chưa ghé → Trước mặt → Gần → ID
+
+    alt bestPOI mới (currentShopId thay đổi)
+        App->>App: setCurrentShopId(bestPOI.id)
+        App->>Map: Highlight POI đang phát
+
+        Note over TTS: TTS FALLBACK 3 TẦNG (dòng 319-369)
+
+        alt Tầng 1: Android Native TTS (offline)
+            App->>Bridge: AndroidBridge.speak(text, lang)
+            Bridge-->>User: Phát loa thiết bị (offline)
+        else Tầng 2: Web Speech API (browser)
+            App->>TTS: SpeechSynthesisUtterance(text)
+            TTS-->>User: Browser TTS engine đọc
+        else Tầng 3: Google Translate TTS (online)
+            App->>TTS: new Audio(google_tts_url)
+            TTS-->>User: Stream audio từ Google
+        end
+
+        App->>App: recordHistory(gps_checkin) fire-and-forget
+    else bestPOI trùng currentShopId
+        App->>App: SKIP — không đọc lại
     end
                 </pre>
             </div>
@@ -1850,21 +1879,40 @@ sequenceDiagram
             <div class="mermaid-container">
                 <pre class="mermaid">
 flowchart TD
-    A([Bắt đầu đi bộ với Tour]) --> B[Kích hoạt hàm watchPosition GPS thiết bị]
-    B --> C[Nhận tín hiệu tọa độ mới từ FusedLocation hoặc Wi-Fi]
-    C --> D[Cập nhật UI kim chỉ nam trên bản đồ Map]
-    D --> E[Lấy POI mục tiêu tiếp theo trong mảng tuyến đường]
-    E --> F[Tính khoảng cách bằng công thức tính toán tọa độ cầu]
-    F --> G{Khoảng cách dưới 50 mét?}
-    G -->|Không| B
-    G -->|Có| H[Kiểm tra xem cờ TTS của quán này đã đọc chưa?]
-    H -->|Đã đọc| B
-    H -->|Chưa đọc| I[Bật thư viện SpeechSynthesis đọc giới thiệu]
-    I --> J[Tô màu POI thành màu xám báo hiệu Đã qua]
-    J --> K[Gỡ cờ POI khỏi mục tiêu, lấy POI kế tiếp vạch đường]
-    K --> L{Vòng lặp Tour còn POI nào không?}
-    L -->|Còn| B
-    L -->|Hết| M([Kết thúc Tour thông báo Chúc mừng])
+    A([Du khách bật GPS và đi bộ]) --> B[Tầng 1: AndroidBridge.getLatitude]
+    B --> C{Có tọa độ Native?}
+    C -->|Có| E[setUserLocation từ Native GPS]
+    C -->|Không| D[Tầng 2: watchPosition HTML5]
+    D --> D1{Có tọa độ HTML5?}
+    D1 -->|Có| E
+    D1 -->|Không| D2[Tầng 3: IP Geolocation ipwhois.app]
+    D2 --> E
+
+    E --> F{Di chuyển > 2m so với lần trước?}
+    F -->|Có| G[Tính userHeading = bearing từ prev → current]
+    F -->|Không| H[userHeading = null]
+    G --> I[Lưu prevLocationRef = vị trí hiện tại]
+    H --> I
+
+    I --> J["Thu thập TẤT CẢ POI trong activation_radius (50m)"]
+    J --> K{Có POI nào gần?}
+    K -->|Không| A
+
+    K -->|Có| L["Sắp xếp 4 tiêu chí:<br/>1. Chưa ghé thăm<br/>2. Trước mặt (< 90°)<br/>3. Khoảng cách gần<br/>4. ID database nhỏ"]
+    L --> M[bestPOI = nearbyPOIs đầu tiên]
+    M --> N{bestPOI.id === currentShopId?}
+    N -->|Trùng - đã đọc| A
+
+    N -->|POI mới| O[setCurrentShopId = bestPOI.id]
+    O --> P{AndroidBridge khả dụng?}
+    P -->|Có| Q[Tầng 1: AndroidBridge.speak - OFFLINE]
+    P -->|Không| R{speechSynthesis khả dụng?}
+    R -->|Có| S[Tầng 2: Web Speech API - OFFLINE]
+    R -->|Không| T[Tầng 3: Google Translate TTS - ONLINE]
+    Q --> U[recordHistory gps_checkin]
+    S --> U
+    T --> U
+    U --> A
                 </pre>
             </div>
         </div>
@@ -1876,22 +1924,57 @@ flowchart TD
             <div class="mermaid-container">
                 <pre class="mermaid">
 sequenceDiagram
-    participant App as Mobile App
-    participant Storage as LocalStorage
-    participant API as Mobile Backend Port 6111
+    participant App as React App.js
+    participant API as Mobile API Port 6111
+    participant LS as localStorage
+    participant SQL as SQLite (sql.js WASM)
 
-    App->>App: Sự kiện lúc ứng dụng mới bật splash screen
-    App->>API: Thử GET /api/tours, /api/places
+    App->>App: useEffect khi app mount (dòng 384-543)
 
-    alt Mạng tốt (Online)
-        API-->>App: Trả về cục data JSON 10MB
-        App->>Storage: Wipe data cũ, Ghi đè file DB JSON xuống máy tính
-        App->>App: Sử dụng dữ liệu mới bóc lớp view lên
-    else Đang bật 4G yếu hoặc 🚀 chế độ máy bay
-        API-->>App: Timeout hoặc Error Exception
-        App->>Storage: Lấy block JSON lưu ở phiên online gần nhất
-        Storage-->>App: Trả ra JSON DB local
-        App->>App: Parse data và chạy offline
+    Note over App,API: TẦNG 1: Online — Fetch 3 API song song
+
+    par Promise.all (dòng 427-431)
+        App->>API: GET /api/tours?lang=vi
+        App->>API: GET /api/tours/pois
+        App->>API: GET /api/places?lang=vi
+    end
+
+    alt Tầng 1 thành công (Online)
+        API-->>App: JSON tours + tourPois + places
+
+        App->>LS: localStorage.setItem(cache_tours, JSON)
+        App->>LS: localStorage.setItem(cache_tour_pois, JSON)
+        App->>LS: localStorage.setItem(cache_places_vi, JSON)
+        Note over LS: Cache cho lần offline tiếp theo
+
+        App->>App: setTours, setPlaces, setOrderedPlaces
+        App->>App: Render giao diện với dữ liệu mới
+
+    else Tầng 1 thất bại (Offline hoặc API lỗi)
+        Note over App,LS: TẦNG 2: localStorage cache
+
+        App->>LS: getItem(cache_tours)
+        App->>LS: getItem(cache_tour_pois)
+        App->>LS: getItem(cache_places_vi)
+
+        alt Tầng 2 có dữ liệu cache
+            LS-->>App: JSON từ phiên online gần nhất
+            App->>App: Parse JSON và render giao diện
+        else Tầng 2 trống (lần đầu mở app)
+            Note over App,SQL: TẦNG 3: SQLite WebAssembly (dòng 483-535)
+
+            App->>SQL: loadFileXHR(sql-wasm.wasm)
+            SQL-->>App: WebAssembly binary
+
+            App->>SQL: loadFileXHR(food_narration_poc.db)
+            SQL-->>App: Database bytes
+
+            App->>SQL: new SQL.Database(dbBytes)
+            App->>SQL: SELECT tours, food_places JOIN narration_points
+            SQL-->>App: Offline data rows
+
+            App->>App: Render giao diện từ SQLite data
+        end
     end
                 </pre>
             </div>
@@ -1900,19 +1983,25 @@ sequenceDiagram
             <div class="mermaid-container">
                 <pre class="mermaid">
 flowchart TD
-    A([User nhấn mở Mobile App Apk]) --> B[Đợi SplashScreen chạy]
-    B --> C{Check trạng thái kết nối mạng navigator.onLine}
-    C -->|Online| D[Fetch song song 3 API: Tours, Places, Translation]
-    D --> E{API trả data thành công?}
-    E -->|Thành công| F[Chuyển data thành chuỗi JSON.stringify]
-    F --> G[Lưu chuỗi biến mạnh này vào LocalStorage trình duyệt]
-    G --> H[Đọc data lên React useState nội bộ Render giao diện]
-    E -->|Thất bại/Crash| I[Kích hoạt cơ chế Fallback Offline]
-    C -->|Offline| I
-    I --> J[Đọc Object JSON lưu trong LocalStorage]
-    J --> K{Có dữ liệu không?}
-    K -->|Không| L([Báo lỗi App trắng yêu cầu cắm mạng lần đầu])
-    K -->|Có đầy đủ| H
+    A([User mở App FoodMap]) --> B["Promise.all: Fetch 3 API song song<br/>(tours + tourPois + places)"]
+    B --> C{API trả data thành công?}
+
+    C -->|Thành công| D[Lưu JSON vào localStorage 3 keys]
+    D --> E[setTours + setPlaces setState]
+    E --> F[Render giao diện]
+
+    C -->|Thất bại/Offline| G[Đọc localStorage cache]
+    G --> H{Có dữ liệu cache?}
+
+    H -->|Có| I[Parse JSON từ cache]
+    I --> E
+
+    H -->|Không có| J[Kích hoạt SQLite WebAssembly]
+    J --> K[Load sql-wasm.wasm binary]
+    K --> L[Load food_narration_poc.db từ assets]
+    L --> M["SQL: SELECT food_places<br/>JOIN narration_points<br/>LEFT JOIN narration_translations"]
+    M --> N[Convert rows thành JavaScript objects]
+    N --> E
                 </pre>
             </div>
         </div>
@@ -2037,36 +2126,60 @@ flowchart TD
                 <pre class="mermaid">
 sequenceDiagram
     participant S as Server API Port 6111
+    participant LS as localStorage
     participant A as Thiết bị A - Khách 1
     participant B as Thiết bị B - Khách 2
     participant N as Thiết bị N - Khách 1000
 
-    Note over S: Giai đoạn 1 - Phân phối dữ liệu tĩnh lúc khởi động
-    S->>A: GET /api/Places trả JSON 10MB chứa tọa độ và mô tả toàn bộ POI
-    S->>B: GET /api/Places trả JSON 10MB (bản sao giống hệt)
-    S->>N: GET /api/Places trả JSON 10MB (bản sao giống hệt)
-    Note over A,N: Mỗi thiết bị lưu JSON vào RAM riêng của mình
+    Note over S: PHASE 1 — Boot: Phân phối dữ liệu 1 lần (dòng 427-431)
 
-    Note over S: Giai đoạn 2 - Xử lý hoàn toàn trên Client
-    par Tất cả thiết bị xử lý song song và độc lập
-        A->>A: GPS watchPosition đọc tọa độ thiết bị A
-        A->>A: Haversine tính khoảng cách với từng POI
-        A->>A: Nếu POI trong 50m thì gọi SpeechSynthesis phát loa A
-    and
-        B->>B: GPS watchPosition đọc tọa độ thiết bị B
-        B->>B: Haversine tính khoảng cách với từng POI
-        B->>B: Nếu POI trong 50m thì gọi SpeechSynthesis phát loa B
-    and
-        N->>N: GPS watchPosition đọc tọa độ thiết bị N
-        N->>N: Haversine tính khoảng cách với từng POI
-        N->>N: Nếu POI trong 50m thì gọi SpeechSynthesis phát loa N
+    par Promise.all song song
+        S->>A: GET /api/tours + places + pois
+        S->>B: GET /api/tours + places + pois
+        S->>N: GET /api/tours + places + pois
     end
 
-    Note over S: Giai đoạn 3 - Heartbeat nhẹ Fire and Forget
-    A-->>S: POST /api/ping {userId, lat, lng} mỗi 5 giây
-    B-->>S: POST /api/ping {userId, lat, lng} mỗi 5 giây
-    N-->>S: POST /api/ping {userId, lat, lng} mỗi 5 giây
-    Note over S: Server chỉ ghi log file JSON, không phản hồi nặng
+    A->>LS: localStorage.setItem(cache) — cache cho offline
+    B->>LS: localStorage.setItem(cache)
+    N->>LS: localStorage.setItem(cache)
+
+    Note over A,N: Sau boot, TẤT CẢ xử lý chạy LOCAL — Server KHÔNG tham gia
+
+    Note over S: PHASE 2 — Runtime: 100% Client-Side (dòng 625-813)
+
+    par Tất cả xử lý song song trên riêng mỗi thiết bị
+        rect rgb(232, 245, 233)
+            A->>A: GPS: AndroidBridge.getLatitude() (dòng 627)
+            A->>A: Haversine: calculateDistance() x N POI (dòng 241)
+            A->>A: Heading: bearing prev → current (dòng 735)
+            A->>A: Sort 4 tiêu chí: chọn bestPOI (dòng 771)
+            A->>A: TTS: AndroidBridge.speak() phát loa A (dòng 347)
+        end
+    and
+        rect rgb(227, 242, 253)
+            B->>B: GPS: AndroidBridge.getLatitude()
+            B->>B: Haversine: calculateDistance() x N POI
+            B->>B: Heading: bearing prev → current
+            B->>B: Sort 4 tiêu chí: chọn bestPOI
+            B->>B: TTS: AndroidBridge.speak() phát loa B
+        end
+    and
+        rect rgb(255, 243, 224)
+            N->>N: GPS: AndroidBridge.getLatitude()
+            N->>N: Haversine: calculateDistance() x N POI
+            N->>N: Heading: bearing prev → current
+            N->>N: Sort 4 tiêu chí: chọn bestPOI
+            N->>N: TTS: AndroidBridge.speak() phát loa N
+        end
+    end
+
+    Note over S: PHASE 3 — Heartbeat: chỉ ~100 bytes/5 giây (dòng 698)
+
+    A-->>S: POST /ping {deviceId, lat, lng} fire-and-forget
+    B-->>S: POST /ping {deviceId, lat, lng} fire-and-forget
+    N-->>S: POST /ping {deviceId, lat, lng} fire-and-forget
+    Note over S: Ghi active_users.json — 20 req/s (100 user)
+    Note over S: ASP.NET capacity: 10,000+ req/s — tải chỉ 0.2%
                 </pre>
             </div>
 

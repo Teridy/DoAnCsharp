@@ -316,13 +316,26 @@ function App() {
     logVisitor();
   }, [WEB_API_BASE]);
 
-  // HÀM ĐỌC ÂM THANH XỊN (CHỐNG LỖI ANDROID)
+  // ========================================================================================
+  // 🔊 CÂU 4 - TEXT-TO-SPEECH ENGINE (CHẠY 100% TRÊN THIẾT BỊ - KHÔNG GỌI SERVER)
+  // ========================================================================================
+  // TẠI SAO KHÔNG LAG KHI 100 DU KHÁCH CÙNG 1 POI?
+  // → Vì TTS chạy trên CPU/GPU của TỪNG ĐIỆN THOẠI, server hoàn toàn không liên quan.
+  // → 100 du khách = 100 engine TTS độc lập chạy song song trên 100 thiết bị.
+  //
+  // CƠ CHẾ FALLBACK 3 TẦNG (đảm bảo luôn có âm thanh):
+  //   Tầng 1: AndroidBridge.speak() → Android Native TTS (offline, nhanh nhất)
+  //   Tầng 2: Web Speech API       → Browser engine tự đọc (offline)
+  //   Tầng 3: Google Translate TTS  → Online fallback (cần mạng)
+  // ========================================================================================
   const speak = useCallback((textToSpeak, onEnd) => {
+    // Hủy mọi audio cũ trước khi phát mới (tránh chồng chéo)
     if (speakTimeoutRef.current) { clearTimeout(speakTimeoutRef.current); speakTimeoutRef.current = null; }
     if (window.tourAudio) { window.tourAudio.pause(); window.tourAudio.src = ""; }
     const synth = typeof window !== 'undefined' ? (window.speechSynthesis || window.webkitSpeechSynthesis) : null;
     if (synth) synth.cancel();
 
+    // Tầng 3: Google Translate TTS (online fallback cuối cùng)
     const playGoogleOnline = () => {
       if (navigator.onLine) {
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(textToSpeak)}&tl=${lang}&client=tw-ob`;
@@ -332,14 +345,16 @@ function App() {
       } else { if (onEnd) onEnd(); }
     };
 
+    // Tầng 1: Android Native TTS (ưu tiên cao nhất - OFFLINE, chạy trên thiết bị)
     if (window.AndroidBridge && window.AndroidBridge.speak) {
-      window.AndroidBridge.stop();
-      window.AndroidBridge.speak(textToSpeak, lang);
+      window.AndroidBridge.stop(); // Hủy audio đang phát
+      window.AndroidBridge.speak(textToSpeak, lang); // ← CHẠY TRÊN CPU ĐIỆN THOẠI, KHÔNG GỌI SERVER
       if (onEnd) {
-        const estimatedTime = textToSpeak.length * 90;
+        const estimatedTime = textToSpeak.length * 90; // Ước tính thời gian đọc (90ms/ký tự)
         speakTimeoutRef.current = setTimeout(onEnd, Math.max(estimatedTime, 2000));
       }
     } else {
+      // Tầng 2: Web Speech API (browser engine - OFFLINE)
       if (synth) {
         const msg = new SpeechSynthesisUtterance(textToSpeak);
         window.currentUtterance = msg;
@@ -350,8 +365,8 @@ function App() {
           const estimatedTime = textToSpeak.length * 90;
           speakTimeoutRef.current = setTimeout(() => { synth.cancel(); onEnd(); }, Math.max(estimatedTime, 2000) + 2000);
         }
-        msg.onerror = () => playGoogleOnline();
-        setTimeout(() => { synth.speak(msg); }, 50);
+        msg.onerror = () => playGoogleOnline(); // Lỗi → fallback tầng 3
+        setTimeout(() => { synth.speak(msg); }, 50); // Delay 50ms tránh bug Android WebView
       } else { playGoogleOnline(); }
     }
   }, [lang]);
@@ -622,36 +637,50 @@ function App() {
   const userLocationRef = useRef(null);
   useEffect(() => { userLocationRef.current = userLocation; }, [userLocation]);
 
+  // ========================================================================================
+  // 📡 CÂU 4 - GPS + HEARTBEAT (CHẠY TRÊN CLIENT - SERVER CHỈ NHẬN PING NHẸ)
+  // ========================================================================================
+  // TẠI SAO KHÔNG CẦN HÀNG ĐỢI PHÍA SERVER?
+  // → GPS tracking chạy 100% trên thiết bị (Android Native hoặc HTML5 Geolocation)
+  // → Server CHỈ nhận 1 POST nhỏ (~100 bytes) mỗi 5 giây để tracking vị trí
+  // → 100 du khách = 20 requests/giây → ASP.NET xử lý dễ dàng (capacity: 10,000+ req/s)
+  //
+  // GPS FALLBACK 3 TẦNG:
+  //   Tầng 1: AndroidBridge (FusedLocation) → chính xác nhất, offline
+  //   Tầng 2: navigator.geolocation (HTML5) → Wi-Fi/Cell tower
+  //   Tầng 3: IP Geolocation (ipwhois.app)  → dự phòng khi GPS bị khóa phần cứng
+  // ========================================================================================
   useEffect(() => {
-    // --- GPS: Ưu tiên Android Native, fallback navigator.geolocation ---
+    // --- Tầng 1: Android Native GPS (ưu tiên cao nhất) ---
     const getNativeGPS = () => {
       if (window.AndroidBridge && window.AndroidBridge.hasGPS && window.AndroidBridge.hasGPS()) {
         const lat = window.AndroidBridge.getLatitude();
         const lon = window.AndroidBridge.getLongitude();
         if (lat && lon && lat !== 0 && lon !== 0) {
-          return [lat, lon];
+          return [lat, lon]; // ← Lấy tọa độ từ FusedLocationProvider (Android Native)
         }
       }
       return null;
     };
 
-    // Poll GPS Native mỗi 3 giây (nhanh hơn và ổn định hơn watchPosition trong WebView)
+    // Poll GPS Native mỗi 3 giây (ổn định hơn watchPosition trong WebView)
     const gpsInterval = setInterval(() => {
       const native = getNativeGPS();
       if (native) {
-        setUserLocation(native);
+        setUserLocation(native); // ← Cập nhật React state → trigger Smart POI Queue
       }
     }, 3000);
 
-    // Fallback BẤT CHẤP (cả Mobile webview và Desktop): dùng navigator.geolocation
-    // Quan trọng: enableHighAccuracy = false để ÉP dùng Wi-Fi định vị (bắt cực nhanh và chuẩn trong nhà)
+    // --- Tầng 2: HTML5 Geolocation (fallback cho mọi thiết bị) ---
+    // enableHighAccuracy = false → dùng Wi-Fi/Cell tower (nhanh, hoạt động trong nhà)
     const locId = navigator.geolocation.watchPosition(
       (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
       (err) => console.log("HTML5 GPS Error:", err),
       { enableHighAccuracy: false, maximumAge: 0, timeout: 10000 }
     );
 
-    // --- Heartbeat (Real-time Online Tracking) ---
+    // --- HEARTBEAT: Gửi vị trí lên server mỗi 5 giây (tracking realtime) ---
+    // ĐÂY LÀ THỨ DUY NHẤT GỬI LÊN SERVER — chỉ ~100 bytes/request
     let deviceId = localStorage.getItem("foodmap_device_id");
     if (!deviceId) {
       deviceId = "device_" + Math.random().toString(36).substring(2, 15);
@@ -659,21 +688,21 @@ function App() {
     }
 
     const sendPing = async () => {
-      // Ưu tiên 1: Native GPS (nhanh, đáng tin cậy)
+      // Ưu tiên 1: Native GPS
       let lat = null, lon = null;
       const native = getNativeGPS();
       if (native) {
         lat = native[0]; lon = native[1];
-        setUserLocation(native); // cập nhật state luôn
+        setUserLocation(native);
       } else {
-        // Ưu tiên 2: từ ref (watchPosition)
+        // Ưu tiên 2: từ watchPosition (HTML5)
         const loc = userLocationRef.current;
         if (loc && loc[0] && loc[1]) {
           lat = loc[0]; lon = loc[1];
         }
       }
 
-      // Ưu tiên 3: IP Geolocation (Đỉnh cao dự phòng khi máy khoá GPS phần cứng)
+      // Ưu tiên 3 (Tầng 3): IP Geolocation — dự phòng khi phần cứng khóa GPS
       if (!lat || !lon) {
         try {
           const res = await fetch('https://ipwhois.app/json/');
@@ -689,20 +718,21 @@ function App() {
         }
       }
 
-      // GPS: Nếu không có tọa độ thực → không gửi ping (tránh hiển thị sai trên admin heatmap)
+      // Không có tọa độ → bỏ qua (tránh hiển thị sai trên admin heatmap)
       if (!lat || !lon) {
           console.log("📍 Không có dữ liệu GPS — bỏ qua ping lần này");
           return;
       }
+      // ↓ PING NHẸ: Chỉ gửi deviceId + lat + lon (~100 bytes) — server ghi vào active_users.json
       const params = (lat && lon) ? `&lat=${lat}&lon=${lon}` : '';
       fetch(`${API_BASE}/tours/ping?deviceId=${deviceId}${params}`, {
         method: "POST",
         headers: { "ngrok-skip-browser-warning": "true", "Bypass-Tunnel-Reminder": "true" }
-      }).catch(() => { });
+      }).catch(() => { }); // ← fire-and-forget: không await, không block UI
       console.log(`📡 Ping sent: lat=${lat}, lon=${lon}`);
     };
 
-    // Đợi 3 giây cho GPS lock trước khi ping lần đầu
+    // Đợi 3 giây cho GPS lock → ping lần đầu → sau đó mỗi 5 giây
     setTimeout(sendPing, 3000);
     const pingInterval = setInterval(sendPing, 5000);
 
@@ -711,90 +741,129 @@ function App() {
       else setIsMobileDevice(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     } catch { setIsMobileDevice(false); }
 
+    // Cleanup: hủy GPS watcher + heartbeat khi unmount
     return () => {
       clearInterval(gpsInterval);
       if (locId !== null) navigator.geolocation.clearWatch(locId);
       clearInterval(pingInterval);
     };
-  }, []); // ← EMPTY DEPS: chạy 1 lần duy nhất
+  }, []); // ← EMPTY DEPS: chạy 1 lần duy nhất, không bao giờ restart
 
-  // 📐 HEADING: Lưu vị trí trước đó để tính hướng di chuyển
+  // ========================================================================================
+  // 🎯 CÂU 3 - SMART POI QUEUE: XỬ LÝ TRÙNG POI (HEADING-AWARE DETECTION)
+  // ========================================================================================
+  // VẤN ĐỀ: Khi 2-3 quán ăn nằm sát nhau (VD: Ốc Oanh và Ốc Thảo cách 15m),
+  //          GPS bán kính 50m bao trùm TẤT CẢ → phải chọn đúng 1 quán để đọc.
+  //
+  // GIẢI PHÁP: Thu thập TẤT CẢ POI trong bán kính → Sắp xếp 4 tiêu chí → Chọn tốt nhất
+  //
+  // 4 TIÊU CHÍ SẮP XẾP (theo thứ tự ưu tiên):
+  //   1. Chưa ghé thăm   → POI mới ưu tiên hơn POI đã visit
+  //   2. Hướng trước mặt  → Quán trước mặt (<90°) ưu tiên hơn quán sau lưng (>90°)
+  //   3. Khoảng cách      → Quán gần hơn (mét) được chọn
+  //   4. ID database      → Quán có ID nhỏ hơn thắng (deterministic, luôn xác định)
+  //
+  // CÁCH TÍNH HƯỚNG:
+  //   - Lưu vị trí GPS trước đó (prevLocationRef)
+  //   - Tính bearing (góc 0-360°) từ vị trí cũ → vị trí mới = hướng di chuyển
+  //   - So sánh hướng di chuyển với hướng tới mỗi POI → angleDiff
+  //   - angleDiff = 0° (trước mặt), 90° (bên cạnh), 180° (sau lưng)
+  //   - Chỉ tính khi di chuyển > 2m (tránh GPS jitter khi đứng yên)
+  //
+  // CHỐNG ĐỌC LẶP:
+  //   - currentShopId lưu ID quán vừa đọc
+  //   - Nếu bestPOI.id === currentShopId → SKIP, không đọc lại
+  // ========================================================================================
+
+  // Lưu vị trí GPS lần trước để tính hướng đi (heading/bearing)
   const prevLocationRef = useRef(null);
 
   useEffect(() => {
+    // Guard: chỉ chạy khi có GPS + đang ở tab Map + có dữ liệu + không phải tour ảo
     if (!userLocation || activeTab !== "map" || allPlacesBackup.length === 0 || isVirtualTour) return;
 
     const userLat = userLocation[0];
     const userLon = userLocation[1];
 
-    // 📐 Tính hướng di chuyển (bearing) từ vị trí trước → vị trí hiện tại
+    // ─── BƯỚC 1: TÍNH HƯỚNG DI CHUYỂN (BEARING) ───────────────────────────────
+    // So sánh vị trí GPS lần trước với lần này → biết du khách đang đi hướng nào
+    // Công thức: Forward Azimuth (bearing) giữa 2 điểm GPS
+    // Kết quả: userHeading = 0° (Bắc), 90° (Đông), 180° (Nam), 270° (Tây)
     let userHeading = null;
     if (prevLocationRef.current) {
       const prevLat = prevLocationRef.current[0];
       const prevLon = prevLocationRef.current[1];
       const movedDist = calculateDistance(prevLat, prevLon, userLat, userLon) * 1000;
-      if (movedDist > 2) { // Chỉ tính heading khi di chuyển > 2m (tránh GPS jitter)
+      if (movedDist > 2) { // > 2 mét mới tính heading (GPS jitter thường < 2m)
         const dLon = (userLon - prevLon) * Math.PI / 180;
         const lat1 = prevLat * Math.PI / 180;
         const lat2 = userLat * Math.PI / 180;
         const y = Math.sin(dLon) * Math.cos(lat2);
         const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-        userHeading = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; // 0-360 độ
+        userHeading = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; // Chuẩn hóa 0-360°
       }
     }
-    prevLocationRef.current = userLocation;
+    prevLocationRef.current = userLocation; // Lưu lại cho lần GPS tiếp theo
 
-    // ✅ SMART POI QUEUE: Thu thập TẤT CẢ POI trong bán kính kích hoạt
+    // ─── BƯỚC 2: THU THẬP TẤT CẢ POI TRONG BÁN KÍNH ──────────────────────────
+    // Khác với cách cũ (chỉ tìm 1 gần nhất), cách mới thu thập TẤT CẢ rồi xếp hạng
     const nearbyPOIs = allPlacesBackup
       .map((p) => {
+        // Tính khoảng cách từ du khách → quán (Haversine, đơn vị: mét)
         const distMet = calculateDistance(userLat, userLon, p.latitude, p.longitude) * 1000;
 
-        // 📐 Tính góc từ user → POI
-        let angleDiff = 180; // Mặc định: đằng sau (nếu không có heading)
+        // Tính góc chênh lệch giữa hướng đi và hướng tới quán
+        let angleDiff = 180; // Mặc định 180° (sau lưng) nếu đứng yên
         if (userHeading !== null) {
+          // Tính bearing từ du khách → quán (cùng công thức Forward Azimuth)
           const dLon = (p.longitude - userLon) * Math.PI / 180;
           const lat1 = userLat * Math.PI / 180;
           const lat2 = p.latitude * Math.PI / 180;
           const y = Math.sin(dLon) * Math.cos(lat2);
           const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
           const bearingToPOI = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+          // angleDiff = chênh lệch giữa hướng đi và hướng tới quán
           angleDiff = Math.abs(userHeading - bearingToPOI);
-          if (angleDiff > 180) angleDiff = 360 - angleDiff; // 0° = trước mặt, 180° = sau lưng
+          if (angleDiff > 180) angleDiff = 360 - angleDiff; // Chuẩn hóa: 0°=trước mặt, 180°=sau lưng
         }
 
         return { ...p, distMet, angleDiff };
       })
-      .filter((p) => p.distMet <= (p.activation_radius || 50));
+      .filter((p) => p.distMet <= (p.activation_radius || 50)); // Chỉ giữ POI trong vùng kích hoạt
 
-    if (nearbyPOIs.length === 0) return;
+    if (nearbyPOIs.length === 0) return; // Không có quán nào gần → chờ GPS tick tiếp
 
-    // ✅ SẮP XẾP ƯU TIÊN: Chưa ghé → Hướng trước mặt → Khoảng cách
+    // ─── BƯỚC 3: SẮP XẾP 4 TIÊU CHÍ (SMART PRIORITY QUEUE) ───────────────────
     nearbyPOIs.sort((a, b) => {
-      // 1. Ưu tiên POI chưa ghé thăm
+      // TIÊU CHÍ 1: Chưa ghé thăm → ưu tiên cao nhất
+      // Lý do: du khách muốn khám phá quán MỚI, không muốn nghe lại quán cũ
       const aVisited = visitedPlaces.has(a.id) ? 1 : 0;
       const bVisited = visitedPlaces.has(b.id) ? 1 : 0;
-      if (aVisited !== bVisited) return aVisited - bVisited;
+      if (aVisited !== bVisited) return aVisited - bVisited; // 0 (chưa ghé) < 1 (đã ghé)
 
-      // 2. Ưu tiên POI nằm trước mặt (góc < 90° = phía trước)
-      const aFront = a.angleDiff <= 90 ? 0 : 1;
+      // TIÊU CHÍ 2: Hướng trước mặt (< 90°) → ưu tiên hơn sau lưng (> 90°)
+      // Lý do: du khách đang ĐI VỀ HƯỚNG NÀO thì quán hướng đó sẽ được đọc
+      const aFront = a.angleDiff <= 90 ? 0 : 1; // 0 = trước mặt, 1 = sau lưng
       const bFront = b.angleDiff <= 90 ? 0 : 1;
       if (aFront !== bFront) return aFront - bFront;
 
-      // 3. Khoảng cách gần hơn
+      // TIÊU CHÍ 3: Khoảng cách (mét) → gần hơn thắng
       if (a.distMet !== b.distMet) return a.distMet - b.distMet;
 
-      // 4. ID nhỏ hơn trong database (tie-breaker cuối cùng)
+      // TIÊU CHÍ 4: ID database → nhỏ hơn thắng (tie-breaker cuối, luôn deterministic)
       return a.id - b.id;
     });
 
-    const bestPOI = nearbyPOIs[0];
+    // ─── BƯỚC 4: CHỌN POI TỐT NHẤT + CHỐNG ĐỌC LẶP ──────────────────────────
+    const bestPOI = nearbyPOIs[0]; // Phần tử đầu tiên sau sort = tốt nhất
 
+    // currentShopId = ID quán vừa đọc. Nếu bestPOI giống → SKIP (không đọc lại)
     if (bestPOI && currentShopId !== bestPOI.id) {
-      console.log(`🎯 ĐÃ KHÓA MỤC TIÊU: ${bestPOI.name} (${Math.round(bestPOI.distMet)}m, heading:${Math.round(bestPOI.angleDiff)}°, priority:${bestPOI.priority || 0}, nearby:${nearbyPOIs.length})`);
-      setCurrentShopId(bestPOI.id);
-      setSelectedPlace(bestPOI);
-      speakGPS(bestPOI.name, bestPOI.description);
-      recordHistory(bestPOI.id, 'gps_checkin');
+      console.log(`🎯 ĐÃ KHÓA MỤC TIÊU: ${bestPOI.name} (${Math.round(bestPOI.distMet)}m, heading:${Math.round(bestPOI.angleDiff)}°, nearby:${nearbyPOIs.length})`);
+      setCurrentShopId(bestPOI.id);    // ← Lock: đánh dấu đã đọc quán này
+      setSelectedPlace(bestPOI);       // ← Hiển thị thông tin quán trên UI
+      speakGPS(bestPOI.name, bestPOI.description); // ← Phát TTS (chạy LOCAL trên thiết bị)
+      recordHistory(bestPOI.id, 'gps_checkin');     // ← Ghi lịch sử (fire-and-forget)
     }
   }, [userLocation, activeTab, allPlacesBackup, isVirtualTour, currentShopId, speakGPS, recordHistory, visitedPlaces]);
 
